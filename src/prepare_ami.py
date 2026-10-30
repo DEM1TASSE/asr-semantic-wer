@@ -8,7 +8,7 @@ import json
 import pandas as pd
 import pyarrow.parquet as pq
 
-from common import AMI_DIR, DATA, normalize
+from common import AMI_DIR, DATA, EVAL_AUDIO, normalize
 
 
 def main():
@@ -52,7 +52,7 @@ def main():
     full = pq.read_table(files).to_pandas()
     full = full[full.audio_id.isin(keep)].set_index("audio_id").loc[sel.audio_id].reset_index()
     full["ref_norm"] = sel.ref_norm.values
-    full.to_parquet(DATA / "eval_subset.parquet")
+    full.to_parquet(EVAL_AUDIO)
 
     with open(DATA / "eval_subset.jsonl", "w") as f:
         for r in sel.to_dict("records"):

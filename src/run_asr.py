@@ -13,7 +13,7 @@ import soundfile as sf
 import torch
 from tqdm import tqdm
 
-from common import DATA, OUT, normalize
+from common import DATA, EVAL_AUDIO, OUT, normalize
 
 MODELS = {
     "whisper-large-v3": ("whisper", "openai/whisper-large-v3"),
@@ -65,7 +65,7 @@ def main():
     kind, model_id = MODELS[args.model]
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    df = pd.read_parquet(DATA / "eval_subset.parquet")
+    df = pd.read_parquet(EVAL_AUDIO)
     audios = [load_audio(a) for a in df.audio]
     # Sort by length for efficient batching, then restore order.
     order = np.argsort([len(a) for a in audios])

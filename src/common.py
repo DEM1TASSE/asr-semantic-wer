@@ -8,6 +8,7 @@ WORK = Path(os.environ.get("SEMWER_WORK", "/work/hdd/bjdh/dwang30/semwer"))
 AMI_DIR = WORK / "data" / "ami" / "ihm"
 DATA = ROOT / "data"
 OUT = ROOT / "outputs"
+EVAL_AUDIO = WORK / "data" / "eval_subset.parquet"  # audio stays out of git, on shared Delta storage
 for d in (DATA, OUT):
     d.mkdir(exist_ok=True)
 

@@ -7,7 +7,7 @@ Delta setup: environment via `pixi` (manifest in this directory); large files li
 
 | step | command | output |
 |---|---|---|
-| 1. eval subset (500 utts, oracle segmentation, 16 AMI IHM test meetings) | `pixi run python src/prepare_ami.py` | `data/eval_subset.{parquet,jsonl}` |
+| 1. eval subset (500 utts, oracle segmentation, 16 AMI IHM test meetings) | `pixi run python src/prepare_ami.py` | `data/eval_subset.jsonl` (+ audio parquet on `/work`) |
 | 2. ASR (Whisper large-v3, wav2vec2-large-960h-lv60-self) | `sbatch slurm/asr.sbatch` | `outputs/hyp_*.jsonl` |
 | 3. normalize + align + error spans | `pixi run python src/align.py` | `outputs/wer_summary.json`, `outputs/errors.jsonl` |
 | 4. sample human pilot / LLM sets | `pixi run python src/make_sets.py` | `annotation/human_pilot_{A,B}.csv`, `outputs/*_ids.txt` |
