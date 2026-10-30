@@ -17,6 +17,8 @@ Delta setup: environment via `pixi` (manifest in this directory); large files li
 | 8. Semantic-WER + figures + cases | `pixi run python src/semwer.py` | `outputs/semwer_summary.json`, `outputs/fig_*.png`, `outputs/cases.md` |
 | 9. DistilBERT severity predictor | `sbatch slurm/train.sbatch` | `outputs/severity_model_<tag>.json` |
 
+Project docs: `docs/plan.md`, `docs/progress.md`, `docs/todo.md`.
+
 The annotation rubric is `annotation/rubric.md`; it is inserted verbatim into the LLM prompt.
 
 ## Design decisions (for the Experimental Setup section)
@@ -25,3 +27,12 @@ The annotation rubric is `annotation/rubric.md`; it is inserted verbatim into th
 - Adjacent S/D/I alignment chunks merged into one error span; severity is judged per span.
 - Context = 3 previous + 1 following utterance from the full meeting reference (all speakers).
 - Whisper: beam 5, fp16, language=en. wav2vec2: greedy CTC.
+
+## Setup for teammates
+```bash
+git clone <repo> && cd <repo>
+pixi install                                   # creates the env from pixi.lock
+echo "AZURE_API_KEY=..." > .env && chmod 600 .env   # never commit this
+```
+Eval audio is not in git: on Delta it is read from `/work/hdd/bjdh/dwang30/semwer`; elsewhere, rerun
+`src/prepare_ami.py` (downloads AMI IHM test from HuggingFace, ~1.3 GB).
