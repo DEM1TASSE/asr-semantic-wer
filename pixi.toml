@@ -1,0 +1,27 @@
+[workspace]
+name = "semwer"
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+
+[dependencies]
+python = "3.11.*"
+ffmpeg = "*"
+
+[pypi-dependencies]
+torch = ">=2.4"
+transformers = ">=4.46,<5"
+accelerate = "*"
+datasets = ">=3"
+soundfile = "*"
+librosa = "*"
+jiwer = ">=3.0"
+pandas = "*"
+pyarrow = "*"
+numpy = "*"
+matplotlib = "*"
+scikit-learn = "*"
+scipy = "*"
+openai = ">=1.40"
+tqdm = "*"
+krippendorff = "*"

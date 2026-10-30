@@ -1,0 +1,10 @@
+# secrets
+.env
+*.key
+# environment
+.pixi/
+__pycache__/
+# large / regenerable
+data/*.parquet
+logs/
+outputs/archive_v0/
