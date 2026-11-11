@@ -2,6 +2,14 @@
 
 Newest first. Record what was done, the numbers, and anything surprising.
 
+## 2026-11-11
+**Yixiang completed all 50 official human-pilot items independently under rubric v2.3.**
+
+- Exported the browser's completed annotations to `annotation/human_pilot_B.xlsx`; this submission uses B for Yixiang. Annotator A's file is unchanged.
+- Preserved the original JSON export (including separate legacy backups) in `annotation/submissions/yixiang_pilot_v23_2026-11-11.json`.
+- Verified all 50 IDs and their order against `outputs/pilot_ids.txt`; severity and content_type are complete, and severity, content_type, flags, and notes match the JSON export exactly.
+- Severity counts: 1 = 20, 2 = 12, 3 = 10, 4 = 7, 5 = 1. These are the original independent ratings, with no post-discussion edits. Inter-annotator agreement has not been computed for this submission.
+
 ## 2026-10-29
 **Pipeline built and run end-to-end through alignment.**
 
