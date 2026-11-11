@@ -1,6 +1,8 @@
 """Inter-annotator agreement on the human pilot, and LLM-vs-human agreement.
 
-Reads annotation/human_pilot_{A,B}.xlsx and any outputs/llm_annotations_*.jsonl.
+Reads annotation/human_pilot_{A,B}.xlsx and any outputs/llm_annotations_*.jsonl. Reports agreement on
+distortion (D, 1-5), importance (I, 1-3; only items where both raters gave one) and the derived
+severity S = combine_severity(D, I), on all items and without items any human flagged `uncertain`.
 """
 import json
 
@@ -10,84 +12,90 @@ import pandas as pd
 from scipy.stats import spearmanr
 from sklearn.metrics import cohen_kappa_score
 
-from common import OUT, ROOT
+from common import OUT, ROOT, combine_severity
+
+SCORES = ["distortion", "importance", "severity"]
 
 
-def pair_stats(a, b):
+def pair_stats(a, b, ordinal=True):
     m = a.notna() & b.notna()
-    a, b = a[m].astype(int), b[m].astype(int)
-    return {"n": int(m.sum()),
-            "qwk": cohen_kappa_score(a, b, weights="quadratic"),
-            "alpha_ordinal": krippendorff.alpha(np.vstack([a, b]), level_of_measurement="ordinal"),
-            "spearman": spearmanr(a, b).statistic,
-            "exact": float((a == b).mean()),
-            "within1": float(((a - b).abs() <= 1).mean()),
-            "mae": float((a - b).abs().mean())}
+    a, b = a[m], b[m]
+    if len(a) < 3:
+        return {"n": int(m.sum())}
+    out = {"n": int(m.sum()), "spearman": spearmanr(a, b).statistic,
+           "mae": float((a - b).abs().mean()), "within1": float(((a - b).abs() <= 1).mean())}
+    if ordinal:  # integer scales (D, I); S is continuous
+        a, b = a.astype(int), b.astype(int)
+        out["qwk"] = cohen_kappa_score(a, b, weights="quadratic")
+        out["alpha_ordinal"] = (krippendorff.alpha(np.vstack([a, b]), level_of_measurement="ordinal")
+                                if len(set(a) | set(b)) > 1 else np.nan)
+        out["exact"] = float((a == b).mean())
+    else:
+        out["alpha_interval"] = krippendorff.alpha(np.vstack([a, b]), level_of_measurement="interval")
+    return out
 
 
-def nominal_alpha(x, y):
-    m = x.notna() & y.notna() & (x != "") & (y != "")
-    if m.sum() < 2:
-        return np.nan
-    cats = {c: i for i, c in enumerate(sorted(set(x[m]) | set(y[m])))}
-    if len(cats) < 2:  # alpha is undefined when everyone used a single category
-        return np.nan
-    return krippendorff.alpha(np.vstack([x[m].map(cats), y[m].map(cats)]).astype(float),
-                              level_of_measurement="nominal")
-
-
-def main():
-    sev, cat, form, flags = {}, {}, {}, {}
+def load_raters():
+    raters, flags = {}, {}
     for who in "AB":
         p = ROOT / "annotation" / f"human_pilot_{who}.xlsx"
         d = pd.read_excel(p).set_index("error_id")
-        d["severity"] = pd.to_numeric(d.severity, errors="coerce")
-        if d.severity.notna().sum() == 0:
+        if pd.to_numeric(d.distortion, errors="coerce").notna().sum() == 0:
             print(f"{p.name}: not annotated yet")
             continue
-        sev[who], cat[who], form[who] = d.severity, d.content_type, d.error_form
+        raters[who] = d
         flags[who] = d.flag.fillna("").astype(str)
     for p in sorted(OUT.glob("llm_annotations_*.jsonl")):
         d = pd.DataFrame([json.loads(l) for l in open(p)]).set_index("error_id")
-        tag = "llm:" + p.stem.removeprefix("llm_annotations_")
-        sev[tag], cat[tag], form[tag] = d.severity, d.content_type, d.error_form
-    if "A" in sev and "B" in sev:
-        sev["human_mean"] = (sev["A"] + sev["B"]) / 2
+        raters["llm:" + p.stem.removeprefix("llm_annotations_")] = d
+    for d in raters.values():
+        d["distortion"] = pd.to_numeric(d.distortion, errors="coerce")
+        d["importance"] = pd.to_numeric(d.importance, errors="coerce")
+        d["severity"] = combine_severity(d.distortion, d.importance)
+    return raters, flags
 
+
+def main():
+    raters, flags = load_raters()
     all_ids = pd.read_csv(OUT / "pilot_ids.txt", header=None)[0]
     uncertain = set()
     for f in flags.values():
         uncertain |= set(f[f.str.contains("uncertain")].index)
-    rows = []
     subsets = [("all", all_ids)]
     if uncertain:
         subsets.append(("no_uncertain", all_ids[~all_ids.isin(uncertain)]))
+
+    names = list(raters)
+    rows = []
     for subset, ids in subsets:
-        S = pd.DataFrame({k: v.reindex(ids) for k, v in sev.items()})
-        C = pd.DataFrame({k: v.reindex(ids) for k, v in cat.items()})
-        F = pd.DataFrame({k: v.reindex(ids) for k, v in form.items()})
-        names = [k for k in S if k != "human_mean"]
-        for i, x in enumerate(names):
-            for y in names[i + 1:]:
-                r = {"subset": subset, "pair": f"{x} vs {y}", **pair_stats(S[x], S[y])}
-                r["content_type_alpha"] = nominal_alpha(C[x], C[y])
-                r["error_form_alpha"] = nominal_alpha(F[x], F[y])
-                rows.append(r)
-        if "human_mean" in S:
-            for k in names:
-                if k.startswith("llm:"):
-                    m = S[k].notna()
-                    rows.append({"subset": subset, "pair": f"{k} vs human_mean", "n": int(m.sum()),
-                                 "spearman": spearmanr(S[k][m], S.human_mean[m]).statistic})
+        for score in SCORES:
+            X = pd.DataFrame({k: raters[k][score].reindex(ids) for k in names})
+            for i, x in enumerate(names):
+                for y in names[i + 1:]:
+                    rows.append({"subset": subset, "score": score, "pair": f"{x} vs {y}",
+                                 **pair_stats(X[x], X[y], ordinal=score != "severity")})
+            if {"A", "B"} <= set(names):
+                mean = X[["A", "B"]].mean(axis=1)
+                for k in names:
+                    if k.startswith("llm:"):
+                        rows.append({"subset": subset, "score": score, "pair": f"{k} vs human_mean",
+                                     **pair_stats(X[k], mean, ordinal=False)})
     res = pd.DataFrame(rows)
-    print(res.to_string(index=False, float_format=lambda v: f"{v:.3f}"))
+    cols = ["subset", "score", "pair", "n", "qwk", "alpha_ordinal", "alpha_interval", "spearman",
+            "exact", "within1", "mae"]
+    res = res[[c for c in cols if c in res]]
+    print(res.to_string(index=False, float_format=lambda v: f"{v:.3f}", na_rep="-"))
     res.to_csv(OUT / "agreement.csv", index=False)
-    S = pd.DataFrame({k: v.reindex(all_ids) for k, v in sev.items()})
-    if {"A", "B"} <= set(S):
-        diff = S[(S.A - S.B).abs() >= 2].index
-        print(f"\n{len(diff)} items where A and B differ by >= 2 (discuss these):")
-        for i in diff:
-            print(f"  {i}  A={S.A[i]:.0f} B={S.B[i]:.0f}")
+
+    if {"A", "B"} <= set(names):
+        A, B = raters["A"].reindex(all_ids), raters["B"].reindex(all_ids)
+        print("\nItems to discuss (D differs by >= 2, or I differs by 2):")
+        big = ((A.distortion - B.distortion).abs() >= 2) | ((A.importance - B.importance).abs() >= 2)
+        # D = 1 vs D > 1 also means one rater saw no change at all
+        big |= (A.distortion == 1) != (B.distortion == 1)
+        for i in all_ids[big.values]:
+            print(f"  {i}  A: D={A.distortion[i]:.0f} I={A.importance[i]}   "
+                  f"B: D={B.distortion[i]:.0f} I={B.importance[i]}")
 
 
 if __name__ == "__main__":

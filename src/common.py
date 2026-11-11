@@ -44,3 +44,17 @@ def normalize(text: str) -> str:
 _EXTRA = {"cause": "because", "'cause": "because", "kinda": "kind of", "alright": "all right",
           "onto": "on to", "aaa": "triple a", "aa": "double a", "okay": "ok", "dunno": "do not know",
           "ohh": "oh", "oclock": "o'clock"}
+
+
+def combine_severity(distortion, importance):
+    """Severity S = 1 + (D - 1) * I / 3, in [1, 5]. D = 1 gives S = 1 whatever I is (I is left empty
+    then); D > 1 with I missing gives NaN. Initial heuristic, compared against alternatives later.
+    Accepts scalars or array-likes."""
+    import numpy as np
+    import pandas as pd
+    scalar = np.ndim(distortion) == 0
+    d = pd.to_numeric(pd.Series(np.atleast_1d(distortion)), errors="coerce").to_numpy(dtype=float)
+    i = pd.to_numeric(pd.Series(np.atleast_1d(np.asarray(importance, dtype=object))),
+                      errors="coerce").to_numpy(dtype=float)
+    s = np.where(d == 1, 1.0, 1 + (d - 1) * i / 3)
+    return float(s[0]) if scalar else s

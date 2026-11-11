@@ -32,12 +32,10 @@ def targeted_pool(df):
     }
 
 
-CONTENT_TYPES = ["disfluency", "function_word", "content_word", "named_entity", "number", "negation", "other"]
-ERROR_FORMS = ["morph_variant", "nonword", "real_word", "garbled", "other"]
 FLAGS = ["ref_issue", "crosstalk", "uncertain", "multi_issue"]
 WIDTHS = {"#": 4, "context (reference transcript)": 45, "error in reference: [[reference → ASR]]": 45,
           "reference said": 16, "ASR output": 16, "edit_operation": 12, "full ASR sentence": 35,
-          "severity": 9, "content_type": 15, "error_form": 14, "flag": 14, "note": 30}
+          "distortion": 10, "importance": 11, "flag": 14, "note": 30}
 
 
 def write_sheet(sheet, path):
@@ -59,7 +57,7 @@ def write_sheet(sheet, path):
             for c in row:
                 c.alignment = Alignment(wrap_text=True, vertical="top")
         fill = PatternFill("solid", fgColor="FFF2CC")
-        for name in ["severity", "content_type", "error_form", "flag", "note"]:
+        for name in ["distortion", "importance", "flag", "note"]:
             ws[f"{col[name]}1"].fill = fill
             for r in range(2, n + 1):
                 ws[f"{col[name]}{r}"].fill = fill
@@ -72,9 +70,8 @@ def write_sheet(sheet, path):
                                 showErrorMessage=strict)
             ws.add_data_validation(dv)
             dv.add(f"{col[name]}2:{col[name]}{n}")
-        dropdown("severity", ["1", "2", "3", "4", "5"])
-        dropdown("content_type", CONTENT_TYPES)
-        dropdown("error_form", ERROR_FORMS)
+        dropdown("distortion", ["1", "2", "3", "4", "5"])
+        dropdown("importance", ["1", "2", "3"])
         dropdown("flag", FLAGS, strict=False)  # several values allowed: type e.g. "ref_issue;crosstalk"
 
 
@@ -115,7 +112,7 @@ def main():
         "ASR output": pilot.hyp_span.replace("", "∅").values,
         "edit_operation": pilot.op.values,
         "full ASR sentence": pilot.hyp.values,
-        "severity": "", "content_type": "", "error_form": "", "flag": "", "note": "",
+        "distortion": "", "importance": "", "flag": "", "note": "",
         "error_id": pilot.error_id.values,
         # alignment word indices (normalized ref/hyp), to trace spans if alignment changes
         "ref_start": pilot.ref_start.values, "ref_end": pilot.ref_end.values,

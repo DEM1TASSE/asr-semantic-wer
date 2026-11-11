@@ -1,6 +1,7 @@
-"""Fine-tune a small encoder (DistilBERT by default) to predict error severity from LLM labels.
+"""Fine-tune a small encoder (DistilBERT by default) to predict an error score from LLM labels.
 
-Input text: "<context> [SEP] <ref with [[ref → hyp]] marked>". Regression on severity (1-5).
+Input text: "<context> [SEP] <ref with [[ref → hyp]] marked>". Regression on --target: severity
+(derived, 1-5), distortion (1-5) or importance (1-3; spans with distortion 1 have none and are dropped).
 Split by meeting to avoid context leakage; human-pilot items are never trained on and are
 evaluated against human labels if available.
 """
@@ -14,7 +15,7 @@ from scipy.stats import spearmanr
 from torch.utils.data import DataLoader
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_linear_schedule_with_warmup
 
-from common import OUT, ROOT
+from common import OUT, ROOT, combine_severity
 
 
 def text_of(e):
@@ -41,7 +42,8 @@ def metrics(pred, gold):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tag", default="gpt-4o")
+    ap.add_argument("--tag", default="gpt-5.4-mini")
+    ap.add_argument("--target", choices=["severity", "distortion", "importance"], default="severity")
     ap.add_argument("--model", default="distilbert-base-uncased")
     ap.add_argument("--epochs", type=int, default=5)
     ap.add_argument("--lr", type=float, default=3e-5)
@@ -53,7 +55,8 @@ def main():
 
     err = pd.DataFrame([json.loads(l) for l in open(OUT / "errors.jsonl")])
     ann = pd.DataFrame([json.loads(l) for l in open(OUT / f"llm_annotations_{args.tag}.jsonl")])
-    df = err.merge(ann[["error_id", "severity", "flag"]], on="error_id")
+    df = err.merge(ann[["error_id", args.target, "flag"]], on="error_id").rename(columns={args.target: "y"})
+    df = df[df.y.notna()].reset_index(drop=True)
     # Reference errors have no reliable ground truth: never train or evaluate on them.
     is_ref = df.flag.map(lambda f: "ref_issue" in (f if isinstance(f, list) else str(f).split(";")))
     print(f"excluding {is_ref.sum()} ref_issue spans")
@@ -85,31 +88,33 @@ def main():
             b = train.iloc[idx.numpy()]
             enc = tok(list(b.ctx), list(b.tgt), truncation=True, max_length=256, padding=True,
                       return_tensors="pt").to(device)
-            y = torch.tensor(b.severity.values, dtype=torch.float, device=device)
+            y = torch.tensor(b.y.values, dtype=torch.float, device=device)
             loss = torch.nn.functional.mse_loss(model(**enc).logits.squeeze(-1), y)
             loss.backward(); opt.step(); sched.step(); opt.zero_grad(); losses.append(loss.item())
-        m = metrics(evaluate(model, tok, test, device), test.severity.values) if len(test) else {}
+        m = metrics(evaluate(model, tok, test, device), test.y.values) if len(test) else {}
         print(f"epoch {ep+1} train_mse {np.mean(losses):.3f} test {m}")
 
-    results = {"test_vs_llm": metrics(evaluate(model, tok, test, device), test.severity.values)}
+    results = {"test_vs_llm": metrics(evaluate(model, tok, test, device), test.y.values)}
     # Majority-class baseline on the same test split
-    maj = train.severity.mode()[0]
-    results["majority_baseline_vs_llm"] = metrics(np.full(len(test), float(maj)), test.severity.values)
+    maj = train.y.mode()[0]
+    results["majority_baseline_vs_llm"] = metrics(np.full(len(test), float(maj)), test.y.values)
     P = df[is_pilot].reset_index(drop=True)
     pred_p = evaluate(model, tok, P, device)
-    results["pilot_vs_llm"] = metrics(pred_p, P.severity.values)
+    results["pilot_vs_llm"] = metrics(pred_p, P.y.values)
     hs = []
     for who in "AB":
         p = ROOT / "annotation" / f"human_pilot_{who}.xlsx"
-        h = pd.read_excel(p).set_index("error_id").severity
+        h = pd.read_excel(p).set_index("error_id")
+        h = (pd.Series(combine_severity(h.distortion, h.importance), index=h.index)
+             if args.target == "severity" else pd.to_numeric(h[args.target], errors="coerce"))
         hs.append(pd.to_numeric(h, errors="coerce"))
     human = pd.concat(hs, axis=1).mean(axis=1).reindex(P.error_id)
     if human.notna().sum() > 5:
         m = human.notna().values
         results["pilot_vs_human_mean"] = metrics(pred_p[m], human.values[m])
-        results["llm_vs_human_mean"] = metrics(P.severity.values[m].astype(float), human.values[m])
+        results["llm_vs_human_mean"] = metrics(P.y.values[m].astype(float), human.values[m])
     print(json.dumps(results, indent=2))
-    json.dump(results, open(OUT / f"severity_model_{args.tag}.json", "w"), indent=2)
+    json.dump(results, open(OUT / f"model_{args.target}_{args.tag}.json", "w"), indent=2)
 
 
 if __name__ == "__main__":

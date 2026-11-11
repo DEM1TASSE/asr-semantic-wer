@@ -19,13 +19,25 @@ Examples that do **not** come from the data (constructed to illustrate a rule):
 - `we should [[cancel → ∅ / continue]] the launch` (loss vs. misinformation)
 - `a [[big → large]] screen`, `the budget was [[approved → rejected]]` (meaning vs. word identity)
 - `it would be [[very → ∅]] expensive` (lost modifier)
-- a wrong name mentioned in passing → 3; a wrong number mentioned in passing → 3–4 (high-risk types)
-- context says 12 but ASR wrote 20 (conflicting context)
 - `[[we cannot buy 12 → we can buy 20]] units` (content_type tie-break)
 
 All other examples are real spans from our eval subset.
 
 ## Design decisions
+- **Two scores instead of one (v2.0).** Annotators give distortion D (1–5: how much of the utterance's
+  meaning is changed or lost) and importance I (1–3: how important the affected original information is
+  in the conversation; empty when D = 1). Readability is not scored. One mixed severity score had to
+  carry two concepts, which made the rules hard to keep consistent.
+  - **Combination:** severity `S = 1 + (D − 1) · I / 3` ∈ [1, 5]; D = 1 ⇒ S = 1 (`common.combine_severity`).
+    This is an initial heuristic. Annotators never see it, so they cannot tune D or I toward a target S.
+  - **Ablation this enables:** WER vs. distortion-only Semantic-WER vs. D×I Semantic-WER vs. LLM vs.
+    DistilBERT. Research question: *does contextual importance improve alignment with human judgments
+    beyond semantic distortion alone?*
+  - **Avoid circular validation:** sentence-level human judgments must be collected with an independent
+    question (e.g. "how much of the original utterance's meaning is changed or lost?" or "how much does
+    the ASR output misrepresent the important information?"), never by asking for the combined S.
+    Choose the question to match what the final metric claims to measure.
+  - Humans label only D, I, flag, note; `content_type` and `error_form` are LLM-only (error profiles).
 - **What severity measures (v1.3): semantic distortion weighted by contextual importance**, i.e. how
   much an ASR error changes or removes the meaning of the original utterance, weighted by how important
   the affected information is in the conversation. Principle: *context determines importance, but does
@@ -63,12 +75,18 @@ All other examples are real spans from our eval subset.
 - Sampling: ~70% random (stratified by ASR system) + ~30% targeted (spans with digits or negation words,
   long spans of ≥3 word errors, and substitutions). The sampling type of each item is recorded in
   `outputs/pilot_sampling.csv`, **not** shown in the annotation sheets. Never sample by LLM labels.
-- Agreement (`src/agreement.py`): severity quadratic weighted κ, Krippendorff's α (ordinal), exact,
-  within-1, MAE; nominal α for content_type and error_form; list of items differing by ≥ 2.
+- Agreement (`src/agreement.py`): for D and I, quadratic weighted κ, Krippendorff's α (ordinal), exact,
+  within-1, MAE; for the derived S, interval α, Spearman, MAE; items to discuss = D differs by ≥ 2,
+  I differs by 2, or one rater gave D = 1 and the other did not.
   Look at all of them together. Rough trigger for another round: α < 0.6 or within-1 < 85%.
 - Then discuss large disagreements, revise the rubric, and annotate a **new** batch if needed.
 
 ## Changelog
+- **v2.0**: severity split into distortion D (1–5) and importance I (1–3, empty when D = 1), combined
+  in code as S = 1 + (D − 1)·I/3; D levels defined without reference to importance (1 none, 2 slight,
+  3 partial, 4 major, 5 reversed) and I levels as background / supporting / core; readability explicitly
+  not scored; humans label D, I, flag, note only (content_type and error_form are LLM-only);
+  `okay that is → g let us he` moved to D = 2, I = 1.
 - **v1.3**: severity redefined as semantic distortion weighted by contextual importance; the
   context-recoverability adjustment is removed (context sets importance but never lowers severity);
   levels 2–5 reworded without "can the reader recover it"; examples moved accordingly

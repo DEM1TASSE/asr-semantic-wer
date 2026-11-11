@@ -1,4 +1,4 @@
-# 标注规则：ASR 错误的语义严重度
+# 标注规则：ASR 错误的语义影响
 
 ## 1. 标注对象
 
@@ -25,93 +25,71 @@
 
 `[[ ]]` 外面的词都识别正确。
 
-## 2. 要回答的问题
+## 2. 要打哪些分
 
-**这个 ASR 错误让说话人原话的意思改变或丢失了多少？这部分信息在这段对话里有多重要？**
+每条打**两个独立的分数**：
 
-### 2.1 评分单位：单个错误的影响
+| 分数 | 问题 | 范围 |
+|---|---|---|
+| **失真度（D）** | 这个错误让说话人原话的意思改变或丢失了多少？ | 1–5 |
+| **重要性（I）** | 被这个错误影响的原始信息，在这段对话里有多重要？ | 1–3（D = 1 时留空） |
 
-只评这**一个**错误：假设同一句里的其他识别错误都已经纠正。一句话里多个错误同时出现时的整体影响不在这里考虑，后面会单独研究。
+两个分数**各自独立判断**：D 不管这部分内容对会议重不重要；I 不管这部分内容被破坏得有多厉害。
 
-### 2.2 决定严重度的两个因素
+**评分单位：只评这一个错误。** 假设同一句里的其他识别错误都已经纠正。
 
-1. **语义失真。** ASR 输出把原话的意思改变或丢失了多少？
-   - 看**意思**，不看字面差了多少。意思不变的同义词不算失真（*a [[big → large]] screen*）；只改一个词也可能把一句话的意思完全反过来（*the budget was [[approved → rejected]]*）。
-   - 如果**从错误的词本身**就能认出原词（比如拼写相近的 `[[concepts → consepts]]`），丢失的意思就很少。
-2. **受影响的信息在这段对话里有多重要。** 它是不是核心事实、决策、行动、责任人、关键数量，或者说话人的立场？还是背景细节、客套话？
+**不评可读性。** ASR 输出是否通顺好读、读者容不容易发现这个错误，都不影响这两个分数。
 
-**信息丢失**（内容被删掉或变成乱码）和**错误信息**（内容被换成了别的内容，可能还读得很通顺）都要算。打分看的是有多少重要的意思被改变或丢失，**不是**读者容不容易发现这个错误。例如，*we should [[cancel → ∅]] the launch* 和 *we should [[cancel → continue]] the launch* 都可能给 4–5。
+## 3. 失真度（D，1–5）
 
-### 2.3 上下文怎么用
+**说话人原话的意思被改变或丢失了多少？**
 
-**上下文用来判断重要性，但不能抵消错误。**
-- **要用**上下文（包括后一句）来理解说话人想表达什么，以及受影响的信息有多重要。
-- **不要**因为正确的信息在对话别处重复出现、被确认过、或者能从别处推断出来，就降低严重度。例：即使下一句又正确地说了一遍预算，这一句里把预算识别错了，仍然是严重错误。
+- 看**意思**，不看字面差了多少。意思不变的同义词不算失真（*a [[big → large]] screen*）；只改一个词也可能把意思完全反过来（*the budget was [[approved → rejected]]*）。
+- **信息丢失**（内容被删掉或变成乱码）和**错误信息**（内容被换成了别的内容）都算失真。*We should [[cancel → ∅]] the launch* 丢掉了行动；*we should [[cancel → continue]] the launch* 把行动反过来了。
+- 如果**从错误的词本身**就能认出原词（比如拼写相近的 `[[concepts → consepts]]`），丢失的意思就很少。
+- **上下文可以用来理解说话人想说什么，但不能用来抵消错误。** 不要因为正确的信息在对话别处重复出现或者能推断出来，就降低 D。
+- **这里不考虑重要性。** 同样是把一个数字识别错，不管是预算还是顺带提到的数字，D 都一样。
 
-### 2.4 内容类型不决定严重度
+| D | 等级 | 定义 | 例子 |
+|---|---|---|---|
+| **1** | 无 | 意思完全相同。 | 重复和说了一半的话 `i [[am i → ∅]] was a bit worried`、`the [[the the → ∅]] week`、`dogs can [[som → ∅]] sometimes`；语气词和附和词 `[[yeah → ∅]] i have got one at home`、`75 [[i mean → ∅]]`；不增加意思的插入 `[[∅ → ha ha ha]]`、`[[∅ → like]]`；同义词 `a [[big → large]] screen` |
+| **2** | 轻微 | 意思基本保留，只改变了一点细微含义，或者拼错的词仍然认得出来。 | 拼写相近的非词 `[[concepts → consepts]]`、`[[probably → probly]]`、`in [[euros → uros]]`；词形变化 `all [[animals → animal]] shapes`、`different [[kind → kinds]]`；冠词和介词 `with [[the → a]] touch screen`；不改变要点的时态 `we [[are → were]] doing the kinetic thing`；程度词 `it would be [[very → ∅]] expensive`；信息量低的词变成乱码，但实词保留了下来 `[[okay that is → g let us he]] good timing` |
+| **3** | 部分 | 这句话的次要部分被改变或丢失，但主要意思还在。 | 代词指代的对象变了 `write down a few of [[its → his]] characteristics`；多出一点内容，但不改变主要意思 `no [[∅ → well maybe there is]]` |
+| **4** | 重大 | 这句话的主要部分（主要动作、关键对象、数值、身份）被替换或丢失；或者整句变成乱码；或者加入了说话人没说过的内容。 | `so if you want to have less [[buttons → pitence]]`、`for the [[whole → horror]] of the language`、`[[pen → ben]] is here on the table`、`[[yeah i → you have]] forgot that actually`、`it is split over [[22 → 2]] different layers`、`as you already know i am [[betty → betsy]]`、`[[is it 12 point fif → at 125th]] was it 12.50`、`then that [[is going to be kind of fun → cannow becanaphone]]`、`so basically [[∅ → a person will]] not point or click` |
+| **5** | 反转 | 这句话现在表达的意思与原话相反或矛盾。 | 极性反转 `i kinda doubt just that it would [[ever → never]] be done`、`there are a few but in general [[not → now]]`、`so it is just kind of does [[not → ∅]] really do anything`；评价或决策反转 `so yeah that is less [[crude → great]]`、`we should [[cancel → continue]] the launch` |
 
-数字、人名、否定属于**高风险内容类型**：这类内容出错时往往很严重，但**绝不自动给 5**。所有内容类型都按上面两个因素来打分。例如，`as you already know i am [[betty → betsy]]` 改掉的是说话人的自我介绍，给 5；如果是一个与讨论无关、只是顺带提到的人名被识别错，可能只给 3。同样，`it is split over [[22 → 2]] different layers` 改掉的是正在讨论的设计参数，给 5；如果是顺带一提、不影响任何结论的数字被识别错，可能给 3。
+## 4. 重要性（I，1–3）
 
-## 3. 严重度（1–5）
+**被这个错误影响的原始信息，在这段对话里有多重要？**
 
-下面列的是典型情况。第 2 节的原则优先：同样的错误形式，放在不同的上下文里，分数可以不同。
+- 评的是被改变或丢失的**原文内容**（箭头左边那部分，结合它所在的句子），不是评这个错误本身，也不是评整句话。
+- 用上下文判断对话在讨论什么，以及这部分内容起什么作用。
+- 内容类型不决定重要性：顺带提到的数字可以是 1；说明谁负责的代词可以是 3。
+- **D = 1 时，I 留空。**
 
-### 1 = 意思没有改变
-- **重复、口吃片段、说了一半放弃的话**，即使有好几个词：`i [[am i → ∅]] was a bit worried`、`the [[the the → ∅]] week`、`dogs can [[som → ∅]] sometimes`、`[[the sort of → ∅]] i had a quick look`
-- **语气词、话语标记、附和词**：`[[yeah → ∅]] i have got one at home`、`75 [[i mean → ∅]]`、`a 5 actually [[cause → ∅]]`（句末没说完的词）
-- **不增加任何意思的插入**：笑声 `[[∅ → ha ha ha]]`、单个虚词 `[[∅ → the]]`、`[[∅ → like]]`
-- **意思完全相同的同义词或改写**；**拼写或格式上的变体**
+| I | 等级 | 定义 | 例子 |
+|---|---|---|---|
+| **1** | 背景 | 闲聊、话语填充、题外话，或者在讨论中不起作用的细节。 | `okay that is good timing`（回应"还剩五分钟"）；`yeah pen is here on the table`；`then that is going to be kind of fun` |
+| **2** | 支撑 | 支撑讨论的细节、理由、例子或描述，但本身不是核心事实或结论。 | `write down a few of its characteristics`；`for the whole of the language`；`it would be very expensive` |
+| **3** | 核心 | 正在讨论的话题中的核心事实、决策、行动、责任人、关键数量，或者说话人的立场。 | 设计参数 `it is split over 22 different layers`；正在讨论的价格 `is it 12 point fif`；自我介绍 `i am betty`；对可行性的态度 `i kinda doubt just that it would ever be done`；决策 `we should cancel the launch` |
 
-### 2 = 轻微失真：意思基本保留，只有少量信息丢失或改变
-- **拼写相近、从词本身就能认出原词的非词**：`[[concepts → consepts]]`、`[[probably → probly]]`、`[[thing → ting]]`、`in [[euros → uros]]`、`[[sony → soni]]`
-- **词形变化**：`all [[animals → animal]] shapes`、`double [[curved → curves]]`、`different [[kind → kinds]]`
-- **冠词或介词互换；不影响要点的时态变化**：`with [[the → a]] touch screen`、`we [[are → were]] doing the kinetic thing`
-- **词被合并或拆开**：`[[i was → iwas]]`
+## 5. 补充规则
 
-### 3 = 中等：部分意思被改变或丢失，但受影响的信息重要性有限
-- **信息量低的短语丢失或变成乱码**：`[[okay that is → g let us he]] good timing`
-- **丢了修饰词或程度词**：`it would be [[very → ∅]] expensive`
-- **代词变了，但指代的是次要对象**：`and i have got to write down a few of [[its → his]] characteristics`
-- **插入了少量内容，但不改变主要意思**（常见于串音）：`no [[∅ → well maybe there is]]`
-- **属于高风险内容类型，但内容在这段对话里不重要**，比如次要的人名或顺带提到的数字被换成了另一个
+1. **否定指命题的极性。** 只有当错误改变了一句话的真假时，才算极性反转（D = 5）。感叹或附和用的 "no"（`otherwise it goes oh [[no → ∅]]`）属于话语标记：D = 1–2。
+2. **乱码 span：** D 看这段乱码破坏了多少意思，I 看它破坏的内容里最重要的那部分有多重要。不按词数计。
+3. **在两个相邻分数之间拿不准时，选较低的那个**，并在 `note` 里写明原因。
 
-### 4 = 严重：重要信息被改变或丢失
-- **对讨论有意义的实词被换掉或丢失**：`so if you want to have less [[buttons → pitence]]`、`for the [[whole → horror]] of the language`、`take some [[notes → not]]`、`[[pen → ben]] is here on the table`（一件物品变成了一个人）
-- **指代对象变了（谁做的、在对谁说）**：`[[yeah i → you have]] forgot that actually`、`so [[you → he]] would not be pressing`
-- **整句的核心命题丢失或变成乱码**：`then that [[is going to be kind of fun → cannow becanaphone]]`；`[[i kinda doubt just that → commondor she said]] it would ever be done`（说话人的态度丢了，还多出一个错误的 "she said"）
-- **幻觉插入，加入了说话人没说过的内容**：`so basically [[∅ → a person will]] not point or click`
+## 6. 字段
 
-### 5 = 关键：**核心事实、决策、行动、责任人或关键数量**被改变或丢失
-- **正在讨论的数值被改变或丢失**：`it is split over [[22 → 2]] different layers`（正在讨论的设计参数）、`we can like think of [[56 → physics]] designs`、`[[is it 12 point fif → at 125th]] was it 12.50`（正在讨论的价格）
-- **身份或责任人被改**：`as you already know i am [[betty → betsy]]`（自我介绍）
-- **命题的极性反转**：`i kinda doubt just that it would [[ever → never]] be done`、`there are a few but in general [[not → now]]`、`so it is just kind of does [[not → ∅]] really do anything`
-- **评价或决策被反转或丢失**：`so yeah that is less [[crude → great]]`
+| 字段 | 谁填 | 取值 |
+|---|---|---|
+| `distortion` | 人工和 LLM | 整数 1–5；一定要填，带 flag 的条目也要填 |
+| `importance` | 人工和 LLM | 整数 1–3；`distortion` = 1 时留空 |
+| `flag` | 人工和 LLM（选填；多个值用 `;` 分隔） | `ref_issue`：参考转写本身看起来有错或无法读懂，ASR 可能才是对的，例如 `[[on a val of → out of all]] 76`、`[[nlssd → this is the]]` · `crosstalk`：ASR 转写的是其他说话人的声音 · `uncertain`：无法仅凭文字可靠地打分（例如这句话的意思或作用不清楚）· `multi_issue`：这个 span 合并了几个相互独立的错误 |
+| `note` | 人工和 LLM（人工选填） | 自由填写：为什么犹豫，在哪两个分数之间拿不准 |
+| `content_type` | **只由 LLM 填** | 受影响内容的类型：`disfluency`（语气词、重复、口吃、话语标记、附和词）· `function_word`（冠词、介词、代词、助动词、连词）· `content_word`（有实际意义的名词、动词、形容词、副词）· `named_entity` · `number`（数字、价格、时间、日期）· `negation`（命题极性）· `other`。选决定失真程度的那一类；几类影响一样大时，按 negation > number > named_entity > content_word > function_word > disfluency > other 的顺序取最靠前的 |
+| `error_form` | **只由 LLM 填** | `morph_variant`（同一个词的另一种形式）· `nonword`（不是真实存在的词）· `real_word`（另一个真词，包括同音词）· `garbled`（多个词变成无意义的内容）· `other`；纯删除和纯插入留空；`mixed` 类型的 span 按其中被替换的部分填 |
 
-## 4. 补充规则
+## 7. 人工标注须知
 
-1. **否定指的是命题的极性。** 只有当错误改变了一句话的真假时，才标 `negation`，并按极性反转来判断。感叹或附和用的 "no"（`otherwise it goes oh [[no → ∅]]`）属于话语标记：严重度 1–2，`content_type = disfluency`。
-2. **乱码 span 按它破坏的最重要的内容打分**，不按词数计。
-3. **实体或数字被识别成相近的非词。** 如果从错误的词本身就能认出原来的实体或数字（`teletext → teletex`、`pernilla → penila`），通常给 2。如果变成了**另一个真实存在的实体或数值**，按这条信息在对话中的重要性给 3–5。
-4. **在两个相邻分数之间拿不准时，选较低的那个**，并在 `note` 里写明原因。
-
-## 5. 字段
-
-| 字段 | 取值 |
-|---|---|
-| `severity` | 整数 1–5。一定要填，带 flag 的条目也要填（给出你的暂定分数）。 |
-| `content_type`：**受影响的是哪类内容** | `disfluency`（语气词、重复、口吃、话语标记、附和词）· `function_word` · `content_word` · `named_entity` · `number`（数字、价格、时间、日期）· `negation`（命题极性）· `other` |
-| `error_form`：**错误长什么样** | `morph_variant`（同一个词的另一种形式）· `nonword`（不是真实存在的词）· `real_word`（另一个真词，包括同音词）· `garbled`（多个词变成无意义的内容）· `other`。**纯删除和纯插入留空。** `mixed` 类型的 span 按其中被替换的部分填。 |
-| `flag`（选填；多个值用 `;` 分隔） | `ref_issue`：参考转写本身看起来有错或无法读懂，ASR 可能才是对的，例如 `[[on a val of → out of all]] 76`、`[[nlssd → this is the]]` · `crosstalk`：ASR 转写的是其他说话人的声音 · `uncertain`：无法仅凭文字可靠判断严重度（例如这句话的意思或重要性不清楚）· `multi_issue`：这个 span 合并了几个相互独立的错误 |
-| `note`（选填） | 自由填写：为什么犹豫，在哪两个分数之间拿不准 |
-
-### 5.1 `content_type` 只选一个
-
-只选**一个**主要内容类型，即决定严重度分数的那一类。如果几类内容对分数的影响**一样大**，按下面的顺序取最靠前的：
-
-**negation > number > named_entity > content_word > function_word > disfluency > other**
-
-这个顺序只是为了让类别标签保持一致，不影响严重度。例：`[[we cannot buy 12 → we can buy 20]] units` 既反转了极性，又改了数字，两者都导致 5 分，所以 `content_type = negation`。
-
-## 6. 人工标注须知
-
-**独立标注**。两人都标完之前，不要和对方讨论具体条目。只填 `severity`、`content_type`、`error_form`、`flag`，`note` 选填；其他列不要改动。
+**独立标注**。两人都标完之前，不要和对方讨论具体条目。只填 `distortion`、`importance`、`flag`，`note` 选填；其他列不要改动。
