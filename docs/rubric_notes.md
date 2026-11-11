@@ -19,14 +19,29 @@ Built from a manual reading of ~200 real error spans (AMI IHM test; Whisper larg
 then calibrated on a 10-item practice set annotated by Demi (outside the pilot set).
 
 Calibration examples that do **not** come from the data (constructed):
-- `so [[um → ∅]] we have to decide` (fillers are removed by normalization, so this never occurs as a span)
-- `we need to agree on the [[timeline → schedule]]`
-- `it would be [[very → ∅]] expensive`
-- `we should [[cancel → continue]] the launch`
+- `it would be [[very → ∅]] expensive` (2)
+- `let us use the [[blue → ∅]] pen for the logo` (3)
+- `we should [[cancel → continue]] the launch`, `the budget was [[approved → rejected]]` (5)
+- `a few → several`, `22 → 2` vs. `22 → 23` contrasts in the principles
+
+Removed as anchors because their score depends on unresolved interpretation: `will → might` (2 vs 3–4),
+`really → ∅` (1 vs 2), `are → were` (tense in a conditional), `telewest → tally west`, `pen → ben`,
+`ever → never` under "doubt", `i think → ∅` (removed by Demi).
 
 All other examples are real spans from our eval subset, outside the 50-item pilot.
 
 ## Design decisions
+- **Level boundaries (v2.3).** 3 vs. 4 = local vs. main semantic distortion (no "is the reader misled"
+  criterion, which added a second subjective dimension). 5 = reversal of the direction of the core
+  proposition only (affirmative/negative, accept/reject, cancel/continue); missing, garbled, or wrong
+  information is at most 4, so `22 → 2` is 4. Considered and not adopted: 5 for "fundamentally wrong core
+  meaning" (blurs 4/5 with degree words) and 5 for "ASR asserts a wrong core message" (compromise).
+  Consequence: the metric is somewhat contradiction-sensitive; state this in the paper.
+  - No "still recognizable from the ASR word" rule: it depends on the annotator's English and domain
+    knowledge. `morse code → mormorscot` stays a provisional 3 anchor; check agreement on it in the pilot.
+  - Different values are not automatically severe (`a few → several` vs. `22 → 2`).
+  - If pilot agreement on 5 levels is low, also analyze a post-hoc 3-level collapse (1 / 2–3 / 4–5),
+    similar to MQM minor/major/critical; no re-annotation needed.
 - **Severity = semantic distortion (v2.2).** How much the error changes, removes, or adds to the
   information in the utterance. Context is used only to understand what the speaker meant.
   - **Importance dropped.** In the 10-item practice round, importance could not be judged from a
@@ -72,6 +87,11 @@ All other examples are real spans from our eval subset, outside the 50-item pilo
 - Keep the original independent annotations; record post-discussion changes in a separate copy.
 
 ## Changelog
+- **v2.3** (frozen for the pilot): rubric restructured by Demi (definitions → decision guide → principles →
+  anchors → content type → instructions); decision step 1 asks for *any* change so that 2 is reachable;
+  3 = local and 4 = main distortion; 5 = reversal only; "different value is not automatically severe" and
+  "look up unknown words" principles; anchors reduced to ≤ 3 per level, uncontroversial ones only;
+  error_form definitions moved into the LLM prompt (`annotate_llm.py`), out of the human rubric.
 - **v2.2**: severity redefined as semantic distortion only; importance (I) dropped after the practice
   round; 5 reserved for contradiction, loss capped at 4; no mechanical (edit-distance / word-type) rules;
   "look up unknown words" rule; humans label `severity` + `content_type` (+ `flag`, `note`);

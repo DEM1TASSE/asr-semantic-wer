@@ -1,127 +1,127 @@
-# Annotation Guideline: Semantic Distortion of ASR Errors
+# ASR Semantic Distortion — Annotation Rubric
 
-## 1. What you annotate
+## 1. Severity Rubric
 
-Each item is **one error span**: a contiguous stretch where the ASR output differs from the reference transcript (adjacent substitutions, deletions, and insertions are merged into one span).
+**Objective:** Evaluate how much an individual ASR error changes, removes, or introduces semantic information in the current utterance.
 
-For each item you see:
-- the meeting context: 3 utterances before and 1 after, with speaker IDs, taken from the reference transcript;
-- the reference sentence with the error marked as `[[reference → ASR]]`;
-- the full ASR output for the sentence;
-- `edit_operation` (substitution / deletion / insertion / mixed), generated automatically by the alignment. **Do not annotate it.**
+| Score | Level | Criteria |
+|---|---|---|
+| **1** | Negligible | **No semantic change.** Only differences in spelling, grammar, repetition, or fluency; nothing the speaker said is altered. |
+| **2** | Minor | **Slight semantic change.** A small change in meaning (e.g., a slightly weaker degree), while the main meaning and specific factual information remain intact. |
+| **3** | Moderate | **Partial information distortion.** Meaningful specific information is changed or lost, while the overall meaning of the utterance remains largely preserved. |
+| **4** | Major | **Major information distortion.** The main meaning of the utterance is substantially changed, lost, or rendered unintelligible. |
+| **5** | Critical | **Reversal of the main meaning.** The direction of the core proposition is reversed, e.g., affirmative vs. negative, accept vs. reject, cancel vs. continue. |
 
-### 1.1 Notation
+### Decision Guide
 
-An error is always written **`[[reference → ASR]]`**:
-- **left of the arrow = the reference**, i.e. what the speaker actually said (human transcript);
-- **right of the arrow = what the ASR system output**;
-- **`∅` = nothing on that side.**
+Apply the following questions in order:
 
-| Written as | Meaning | Example | Explanation |
-|---|---|---|---|
-| `[[A → ∅]]` | deletion | `the [[the the → ∅]] week` | the speaker said "the the the week"; the ASR output only "the week" |
-| `[[∅ → B]]` | insertion | `flying animal [[∅ → ha ha ha]]` | the speaker did not say "ha ha ha"; the ASR added it |
-| `[[A → B]]` | substitution | `[[pen → ben]] is here` | the speaker said "pen"; the ASR output "ben" |
+1. **Is there any change in meaning at all, even a slight one?**
+   - No → **1**
+2. **Is the direction of the core proposition reversed?**
+   - Yes → **5**
+3. **Is the main meaning of the utterance substantially changed, lost, or rendered unintelligible?**
+   - Yes → **4**
+4. **Is meaningful specific information changed or lost, while the overall meaning remains largely preserved?**
+   - Yes → **3**
+   - No, there is only a slight change in meaning → **2**
 
-Words outside `[[ ]]` were recognized correctly.
+### Scoring Principles
 
-## 2. The question you answer
+- **Evaluate only the marked error span.** Assume all other ASR errors in the same utterance have been corrected.
+- **Use context to interpret meaning.** Previous and following utterances may help resolve references and ellipsis, but do not judge how important the information is to the overall meeting or use other utterances to compensate for the target error.
+- **Meaning takes precedence over surface form.** Do not assign severity based solely on singular/plural forms, tense, word order, edit distance, error length, or whether the output is a nonword. If you do not know a word in the reference, look it up.
+- **A different value is not automatically severe.** Judge how much the meaning changes: `a few → several` barely changes it, while `22 → 2` states a clearly wrong quantity.
+- **Distinguish distortion from reversal.** Missing, garbled, or wrong information can receive at most **4**; reserve **5** for reversing the direction of the core proposition.
+- **When uncertain**, assign the most reasonable integer score and add the `uncertain` flag.
 
-**How much does this error change, remove, or add to the information expressed in what the speaker said?**
+## 2. Calibration Examples
 
-Use the surrounding utterances to understand what the speaker meant. Do **not** consider how important the information is for the meeting as a whole.
+Notation: `[[reference → ASR]]`, where `∅` indicates an empty string.
 
-## 3. Severity (1–5)
-
-| Score | Definition |
-|---|---|
-| **1 — Negligible** | The meaning is essentially unchanged. Only spelling, grammar, fillers, or fluency differ. |
-| **2 — Minor** | A slight change or loss of meaning; the main information is fully preserved. |
-| **3 — Moderate** | Some meaningful information is changed or lost, but the main meaning of the utterance survives. |
-| **4 — Major** | The main information is clearly changed or lost, including when the main content can no longer be understood. |
-| **5 — Critical** | The ASR output expresses information that is the opposite of, or directly contradicts, the main meaning of the original. |
-
-## 4. Content type
-
-Choose the **one** main type of content the error affects.
-
-| Type | Definition |
-|---|---|
-| `disfluency` | fillers, repetitions, stutters, false starts, tag questions ("isn't it"), backchannels |
-| `function_word` | articles, prepositions, pronouns, auxiliaries, conjunctions |
-| `content_word` | ordinary words or phrases with lexical meaning (nouns, verbs, adjectives, adverbs) |
-| `named_entity` | names of people, places, organizations, products |
-| `number` | quantities, times, amounts of money, dates |
-| `negation` | expressions with real negative meaning (the truth of a statement depends on them) |
-| `other` | none of the above, or several types with no clear main one |
-
-Content type describes **what** the error affects. It does **not** determine severity: every type can occur at every severity level.
-
-## 5. Principles
-
-1. **Judge only the marked span**, assuming every other ASR error has been corrected.
-2. **Meaning first.** Do not decide the score from edit distance, part of speech, error length, or whether the ASR output is a real word. Decide it from the meaning that is changed, lost, or added.
-3. **Loss vs. contradiction.** Information that is lost or garbled scores **at most 4**. Score **5** only when the ASR output asserts something incompatible with the original's main meaning: a reversed proposition, or the main information replaced by a different, incompatible value or entity.
-4. **Context is for understanding.** Use the context to understand what the speaker meant. Do not use it to judge importance for the whole meeting, and do not lower the score because other utterances repeat or compensate for the information.
-5. **If you do not know a word** in the reference, look it up. Judge the meaning of the word, not how familiar it is to you.
-6. **If the item is clearly ambiguous**, give the most reasonable integer score and add the flag `uncertain`.
-
-## 6. Calibration examples
-
-Scores depend on the given context; they are not assigned by word category. Content types appear at several levels on purpose.
+These examples illustrate the scoring boundaries. They are not fixed rules for all errors of the same type.
 
 ### 1 — Negligible
-| Reference → ASR (in context) | Content type | Why |
-|---|---|---|
-| `so [[um → ∅]] we have to decide` | disfluency | no change in meaning |
-| `a sweater [[is → his]] on top or it is behind a plant` | function_word | ungrammatical, but it still says the sweater is on top |
-| `it is more idiot proof [[is not it → isn]]` | disfluency | the tag question is damaged; the statement itself is unchanged (the "not" here is not a real negation) |
-| `now we are developing a remote control which you [[probably → probly]] already know` | content_word | misspelling only |
-| `we need to agree on the [[timeline → schedule]]` | content_word | practically synonymous in this context |
+
+| Reference → ASR | Rationale |
+|---|---|
+| `i gave it [[a → ∅]] one` | Removing the article does not change the meaning. |
+| `all [[animals → animal]] shapes` | The grammatical form changes, but the intended meaning remains the same. |
+| `i [[am i → ∅]] was a bit worried` | The ASR removes an abandoned false start. |
 
 ### 2 — Minor
-| Reference → ASR (in context) | Content type | Why |
-|---|---|---|
-| `it would be [[very → ∅]] expensive` | content_word | degree is weakened; the claim is the same |
-| `we are focusing on a sort of mid range [[∅ → approach]]` | content_word | the insertion slightly reframes the phrase |
-| `we can have you know all [[animals → animal]] shapes` | content_word | plural lost; meaning preserved |
-| `if we [[are → were]] doing the kinetic thing` | function_word | tense shifts slightly; the point is the same |
-| `the [[telewest → tally west]] remote controls are silver plastic` | named_entity | the brand name is misspelled; it is probably still identifiable |
+
+| Reference → ASR | Rationale |
+|---|---|
+| `it would be [[very → ∅]] expensive` | The degree of expense is weakened, but the main judgment remains unchanged. |
 
 ### 3 — Moderate
-| Reference → ASR (in context) | Content type | Why |
-|---|---|---|
-| `when it sees the amplified [[mo morse code → mormorscot]] signal then it will know what action it has to do` | content_word | the signal type is lost; the main relation (sees signal → acts) survives |
-| `i have got to write down a few of [[its → his]] characteristics` | function_word | the pronoun now refers to a person instead of the drawn animal |
-| `so we are supposed to [[evaluate it → b evaluated]] right now` | content_word | may swap who evaluates and who is evaluated; deliberately borderline (3 or 4), add `uncertain` if unsure |
+
+| Reference → ASR | Rationale |
+|---|---|
+| `the amplified [[morse code → mormorscot]] signal` | The specific signal type becomes unclear, but the overall meaning (it sees a signal, then acts) remains. |
+| `let us use the [[blue → ∅]] pen for the logo` | The pen's color is lost, but the plan to use a pen remains intact. |
 
 ### 4 — Major
-| Reference → ASR (in context) | Content type | Why |
-|---|---|---|
-| `i would go for [[4 too → for to]]` (answering "between four or five") | number | the chosen value, the answer to the question, is lost |
-| `but we can like think of [[56 designs → fisextrasens]]` | number | the quantity and the object are lost |
-| `[[capture we do not have → keptorydon tes]] to do anything with` | content_word | the main statement is garbled; the negation is lost, not reversed |
-| `yeah [[pen → ben]] is here on the table` | content_word | the object becomes a person |
-| `[[yeah i → you have]] forgot that actually` | function_word | the person who forgot changes |
+
+| Reference → ASR | Rationale |
+|---|---|
+| `i would go for [[4 too → for to]]` (previous context: “between four or five”) | The speaker's answer is lost. |
+| `it is split over [[22 → 2]] different layers` | The number of layers, the main point of the utterance, is substantially changed. |
+| `[[capture we do not have → keptorydon tes]] to do anything with` | A major part of the proposition becomes unintelligible. |
 
 ### 5 — Critical
-| Reference → ASR (in context) | Content type | Why |
-|---|---|---|
-| `i kinda doubt just that it would [[ever → never]] be done` | negation | the stance is reversed |
-| `so it is just kind of does [[not → ∅]] really do anything` | negation | deleting "not" turns the statement into its opposite |
-| `so yeah that is less [[crude → great]]` | content_word | the evaluation is reversed |
-| `it is split over [[22 → 2]] different layers` | number | the main value is replaced by an incompatible one |
-| `we should [[cancel → continue]] the launch` | content_word | the action is reversed |
 
-## 7. Fields
-
-| Field | Values |
+| Reference → ASR | Rationale |
 |---|---|
-| `severity` | **required**, integer 1–5 |
-| `content_type` | **required**, one of the types in Section 4 |
-| `flag` | optional; several values separated by `;` · `ref_issue`: the reference itself looks wrong or unreadable, and the ASR may be right, e.g. `[[on a val of → out of all]] 76` · `crosstalk`: the ASR transcribed another speaker's voice · `uncertain`: the item is clearly ambiguous · `multi_issue`: the span merges several independent errors |
-| `note` | optional free text, e.g. which scores you were torn between and why |
+| `it does [[not → ∅]] really do anything` | A negative assertion becomes affirmative. |
+| `we should [[cancel → continue]] the launch` | The intended action is reversed. |
+| `the budget was [[approved → rejected]]` | The stated outcome is reversed. |
 
-## 8. Procedure for human annotators
+## 3. Content Type
 
-Annotate **independently**; do not discuss items with the other annotator until both of you have finished. Fill only `severity`, `content_type`, `flag`, and `note`; do not edit the other columns. Keep your original annotations: after discussion, record changes in a separate copy instead of overwriting them.
+Select **one primary content type** affected by the error. Content type does not determine severity.
+
+| Label | Definition |
+|---|---|
+| `disfluency` | Fillers, repetitions, stuttering, abandoned false starts, tag questions, backchannels |
+| `function_word` | Articles, prepositions, pronouns, auxiliary verbs, conjunctions |
+| `content_word` | Ordinary content words or phrases, including nouns, verbs, adjectives, and adverbs |
+| `named_entity` | Person names, locations, organizations, product names |
+| `number` | Quantities, dates, times, monetary amounts |
+| `negation` | Expressions that determine whether a proposition is affirmative or negative |
+| `other` | Other cases, or errors involving multiple types without a clear primary category |
+
+## 4. Annotation Instructions
+
+### Annotation Unit
+
+Each sample contains one contiguous ASR error span. Adjacent substitutions, deletions, and insertions have already been merged during preprocessing.
+
+For each sample, you will see:
+
+- The reference utterance and the complete ASR hypothesis.
+- The preceding three and following one meeting utterances, with speaker IDs.
+- The target error marked as `[[reference → ASR]]`.
+- An automatically generated `edit_operation`, which does not require manual annotation.
+
+### Required Fields
+
+| Field | Value |
+|---|---|
+| `severity` | Integer from 1 to 5 |
+| `content_type` | One category from Section 3 |
+
+### Optional Fields
+
+| Field | Value |
+|---|---|
+| `flag` | `ref_issue` / `crosstalk` / `uncertain` / `multi_issue`; multiple flags allowed |
+| `note` | Brief explanation of ambiguity or reasoning |
+
+Flag definitions:
+
+- `ref_issue`: The reference transcription may be incorrect or unusable.
+- `crosstalk`: The ASR may have transcribed speech from another speaker.
+- `uncertain`: The available context is insufficient for a reliable judgment.
+- `multi_issue`: The error span combines multiple independent errors.

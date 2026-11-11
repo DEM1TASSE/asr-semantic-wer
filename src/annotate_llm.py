@@ -26,6 +26,11 @@ Follow the annotation guideline below exactly.
 
 {rubric}
 
+In addition to the guideline, label error_form (what the error looks like; used for analysis only):
+morph_variant = another form of the same word; nonword = not a real word; real_word = a different real
+word, including homophones; garbled = several words turned into nonsense; other = anything else.
+Use null for pure deletions and pure insertions; for mixed spans, describe the substituted part.
+
 Respond with a JSON object only:
 {{"severity": integer 1-5, "content_type": one of {ct},
  "error_form": null (pure deletion or insertion) or one of {ef},
