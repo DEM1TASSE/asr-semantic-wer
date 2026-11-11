@@ -26,13 +26,24 @@ Examples that do **not** come from the data (constructed to illustrate a rule):
 All other examples are real spans from our eval subset.
 
 ## Design decisions
-- **Reader setting:** an offline reader of the ASR transcript after the meeting, allowed to use the
-  following utterance.
-- **Oracle-context severity.** Context utterances come from the reference transcript, and other errors
-  in the same sentence are assumed corrected. This matches the counterfactual single-error unit. It
-  means we measure the impact of one error in an otherwise correct transcript, **not** its impact in a
-  fully noisy ASR transcript. State this in the paper. (A noisy-context variant would require ASR
-  output for the neighbouring utterances, which we do not currently have.)
+- **What severity measures (v1.3): semantic distortion weighted by contextual importance**, i.e. how
+  much an ASR error changes or removes the meaning of the original utterance, weighted by how important
+  the affected information is in the conversation. Principle: *context determines importance, but does
+  not erase an ASR error.* Context is used to interpret meaning and judge importance, never to lower
+  severity because the information is repeated or recoverable elsewhere.
+  - Rejected alternative: reader-oriented residual information loss (what a reader still misunderstands
+    after using the context). Reasons: we evaluate ASR fidelity, not reading comprehension; it makes
+    annotators simulate a reader's inference (less reliable); and per-error scores that already absorb
+    context redundancy are hard to sum in Semantic-WER.
+  - Still allowed: if the intended word is identifiable **from the erroneous word itself** (near-miss
+    spellings such as `consepts`), little meaning is lost (severity 2). This is about the error's form,
+    not about recovery from context.
+  - Possible ablation (only if time allows): LLM scores the same items under both definitions; compare
+    against sentence-level human judgments. Those judgments must ask the matching question (e.g. "how much
+    of the original meaning does the ASR sentence preserve?"), otherwise the comparison is unfair.
+- **Oracle context.** Context utterances come from the reference transcript, and other errors in the same
+  sentence are assumed corrected. We measure the impact of one error in an otherwise correct transcript,
+  **not** its impact in a fully noisy ASR transcript. State this in the paper.
 - **content_type tie-break order** (negation > number > named_entity > content_word > function_word >
   disfluency > other) exists only for label consistency; it must not influence severity.
 - **Category independence.** Numbers, entities, and negation are high-risk but never automatically 5.
@@ -58,6 +69,11 @@ All other examples are real spans from our eval subset.
 - Then discuss large disagreements, revise the rubric, and annotate a **new** batch if needed.
 
 ## Changelog
+- **v1.3**: severity redefined as semantic distortion weighted by contextual importance; the
+  context-recoverability adjustment is removed (context sets importance but never lowers severity);
+  levels 2–5 reworded without "can the reader recover it"; examples moved accordingly
+  (`buttons → pitence` 3→4, `12 point fif → 125th` now 5; `its → his` stays 3 as a peripheral referent);
+  "detectability" no longer affects the score.
 - **v1.2**: information loss and misinformation both count, and fluency never overrides importance;
   reader fixed as an offline transcript reader with oracle (reference) context, allowed to use the
   following utterance; "judge meaning, not word identity or type" rule with synonym/one-word-reversal

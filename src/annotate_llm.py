@@ -43,9 +43,10 @@ Edit operation (from alignment): {op}
 Full ASR output for this sentence:
 {hyp}
 
-Judge ONLY the marked span (counterfactual impact): assume every other recognition error in this sentence
-has been corrected. Severity depends on how important the content is in this context and whether a reader
-could reliably recover it -- never on the content type alone."""
+Judge ONLY the marked span: assume every other recognition error in this sentence has been corrected.
+Severity depends on how much meaning is changed or lost and how important that information is in this
+conversation -- never on the content type alone, and never lowered because the correct information
+appears elsewhere in the context."""
 
 
 def build_messages(e, rubric):
