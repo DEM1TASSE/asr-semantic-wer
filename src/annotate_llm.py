@@ -2,8 +2,8 @@
 
 Backends: --backend azure (Azure OpenAI; key AZURE_API_KEY from env or project .env, model = deployment
 name) or --backend openai (any OpenAI-compatible endpoint, e.g. DeepSeek or a vLLM server on Delta).
-Each span gets distortion D (1-5) and importance I (1-3, empty when D = 1); severity is derived with
-common.combine_severity. Results are cached per error_id, so reruns resume.
+Each span gets severity (semantic distortion, 1-5), content_type, error_form and flags.
+Results are cached per error_id, so reruns resume.
 Output: outputs/llm_annotations_<tag>.jsonl
 """
 import argparse
@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from openai import AzureOpenAI, OpenAI
 from tqdm import tqdm
 
-from common import OUT, ROOT, combine_severity
+from common import OUT, ROOT
 
 CONTENT_TYPES = ["disfluency", "function_word", "content_word", "named_entity", "number", "negation", "other"]
 ERROR_FORMS = ["morph_variant", "nonword", "real_word", "garbled", "other"]
@@ -27,8 +27,7 @@ Follow the annotation guideline below exactly.
 {rubric}
 
 Respond with a JSON object only:
-{{"distortion": integer 1-5, "importance": null (when distortion is 1) or integer 1-3,
- "content_type": one of {ct},
+{{"severity": integer 1-5, "content_type": one of {ct},
  "error_form": null (pure deletion or insertion) or one of {ef},
  "flag": list of zero or more of {fl}, "rationale": one short sentence}}"""
 
@@ -46,8 +45,8 @@ Full ASR output for this sentence:
 {hyp}
 
 Judge ONLY the marked span: assume every other recognition error in this sentence has been corrected.
-Score distortion and importance independently. Never lower distortion because the correct information
-appears elsewhere in the context, and never decide importance from the content type alone."""
+Score how much meaning is changed, lost, or added -- not how important the information is for the
+meeting, and not by content type, edit distance, or whether the ASR output is a real word."""
 
 
 def build_messages(e, rubric):
@@ -61,18 +60,13 @@ def build_messages(e, rubric):
 def parse(text):
     m = re.search(r"\{.*\}", text, re.S)
     obj = json.loads(m.group(0))
-    dist = int(obj["distortion"])
-    assert 1 <= dist <= 5
-    imp = obj.get("importance")
-    imp = None if dist == 1 or imp is None else int(imp)
-    assert imp is None or 1 <= imp <= 3
-    assert dist == 1 or imp is not None
+    sev = int(obj["severity"])
+    assert 1 <= sev <= 5
     ct = obj.get("content_type") if obj.get("content_type") in CONTENT_TYPES else "other"
     ef = obj.get("error_form") if obj.get("error_form") in ERROR_FORMS else None
     fl = obj.get("flag") or []
     fl = [f for f in ([fl] if isinstance(fl, str) else fl) if f in FLAGS]
-    return {"distortion": dist, "importance": imp, "severity": combine_severity(dist, imp or 1),
-            "content_type": ct, "error_form": ef, "flag": fl,
+    return {"severity": sev, "content_type": ct, "error_form": ef, "flag": fl,
             "rationale": obj.get("rationale", "")}
 
 
