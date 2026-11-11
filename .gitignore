@@ -8,3 +8,4 @@ __pycache__/
 data/*.parquet
 logs/
 outputs/archive_v0/
+outputs/archive_v1_partial/

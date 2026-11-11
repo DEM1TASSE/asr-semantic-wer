@@ -17,8 +17,8 @@ from tqdm import tqdm
 from common import OUT, ROOT
 
 CONTENT_TYPES = ["disfluency", "function_word", "content_word", "named_entity", "number", "negation", "other"]
-ERROR_FORMS = ["deletion", "insertion", "morph_variant", "nonword", "real_word", "garbled"]
-FLAGS = ["ref_issue", "crosstalk"]
+ERROR_FORMS = ["morph_variant", "nonword", "real_word", "garbled", "other"]
+FLAGS = ["ref_issue", "crosstalk", "uncertain", "multi_issue"]
 
 SYSTEM = """You are an expert annotator of speech recognition (ASR) errors in meeting transcripts.
 Follow the annotation guideline below exactly.
@@ -26,8 +26,9 @@ Follow the annotation guideline below exactly.
 {rubric}
 
 Respond with a JSON object only:
-{{"severity": integer 1-5, "content_type": one of {ct}, "error_form": one of {ef},
- "flag": null or one of {fl}, "rationale": one short sentence}}"""
+{{"severity": integer 1-5, "content_type": one of {ct},
+ "error_form": null (pure deletion or insertion) or one of {ef},
+ "flag": list of zero or more of {fl}, "rationale": one short sentence}}"""
 
 USER = """Meeting context (speaker: utterance; [TARGET] is the reference sentence containing the error):
 {context}
@@ -37,18 +38,21 @@ Left of the arrow = reference, right = ASR; ∅ = nothing on that side (∅ on t
 ∅ on the left = insertion):
 {ref_marked}
 
+Edit operation (from alignment): {op}
+
 Full ASR output for this sentence:
 {hyp}
 
-Judge ONLY the marked span. Other differences between the reference and the ASR output are separate
-errors annotated elsewhere: ignore them and assume the rest of the sentence was recognized correctly."""
+Judge ONLY the marked span (counterfactual impact): assume every other recognition error in this sentence
+has been corrected. Severity depends on how important the content is in this context and whether a reader
+could reliably recover it -- never on the content type alone."""
 
 
 def build_messages(e, rubric):
     ctx = "\n".join(e["context_before"] + ["[TARGET] " + e["ref"]] + e["context_after"])
     return [
         {"role": "system", "content": SYSTEM.format(rubric=rubric, ct=CONTENT_TYPES, ef=ERROR_FORMS, fl=FLAGS)},
-        {"role": "user", "content": USER.format(context=ctx, ref_marked=e["ref_marked"], hyp=e["hyp"] or "∅")},
+        {"role": "user", "content": USER.format(context=ctx, ref_marked=e["ref_marked"], op=e["op"], hyp=e["hyp"] or "∅")},
     ]
 
 
@@ -59,7 +63,8 @@ def parse(text):
     assert 1 <= sev <= 5
     ct = obj.get("content_type") if obj.get("content_type") in CONTENT_TYPES else "other"
     ef = obj.get("error_form") if obj.get("error_form") in ERROR_FORMS else None
-    fl = obj.get("flag") if obj.get("flag") in FLAGS else None
+    fl = obj.get("flag") or []
+    fl = [f for f in ([fl] if isinstance(fl, str) else fl) if f in FLAGS]
     return {"severity": sev, "content_type": ct, "error_form": ef, "flag": fl,
             "rationale": obj.get("rationale", "")}
 

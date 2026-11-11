@@ -28,8 +28,9 @@ def main():
     err = err.merge(ann[["error_id", "severity", "content_type", "error_form", "flag", "rationale"]],
                     on="error_id", how="left")
     # Reference problems are not ASR errors: drop them from both WER and Semantic-WER counts.
-    n_flag = err.flag.eq("ref_issue").sum()
-    err = err[~err.flag.eq("ref_issue")]
+    is_ref = err.flag.map(lambda f: "ref_issue" in (f if isinstance(f, list) else str(f).split(";")))
+    n_flag = is_ref.sum()
+    err = err[~is_ref]
     print(f"excluded {n_flag} ref_issue spans")
     wer = json.load(open(OUT / "wer_summary.json"))
     utts = pd.DataFrame([json.loads(l) for l in open(OUT.parent / "data" / "eval_subset.jsonl")])

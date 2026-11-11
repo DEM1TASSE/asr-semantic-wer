@@ -10,7 +10,7 @@ Delta setup: environment via `pixi` (manifest in this directory); large files li
 | 1. eval subset (500 utts, oracle segmentation, 16 AMI IHM test meetings) | `pixi run python src/prepare_ami.py` | `data/eval_subset.jsonl` (+ audio parquet on `/work`) |
 | 2. ASR (Whisper large-v3, wav2vec2-large-960h-lv60-self) | `sbatch slurm/asr.sbatch` | `outputs/hyp_*.jsonl` |
 | 3. normalize + align + error spans | `pixi run python src/align.py` | `outputs/wer_summary.json`, `outputs/errors.jsonl` |
-| 4. sample human pilot / LLM sets | `pixi run python src/make_sets.py` | `annotation/human_pilot_{A,B}.csv`, `outputs/*_ids.txt` |
+| 4. sample human pilot / LLM sets | `pixi run python src/make_sets.py` | `annotation/human_pilot_{A,B}.xlsx`, `outputs/*_ids.txt` |
 | 5. LLM annotation (Azure; key `AZURE_API_KEY` in `.env`) | `pixi run python src/annotate_llm.py --ids all --model gpt-4o` (or `--model gpt-5.4-mini`) | `outputs/llm_annotations_<model>.jsonl` |
 | 6. **humans**: fill `severity`/`category` in the two pilot CSVs independently | — | |
 | 7. agreement (human-human, LLM-human) | `pixi run python src/agreement.py` | `outputs/agreement.csv` |
@@ -19,7 +19,8 @@ Delta setup: environment via `pixi` (manifest in this directory); large files li
 
 Project docs: `docs/plan.md`, `docs/progress.md`, `docs/todo.md`.
 
-The annotation rubric is `annotation/rubric.md`; it is inserted verbatim into the LLM prompt.
+The annotation rubric is `annotation/rubric.md` (English, authoritative, inserted verbatim into the LLM prompt);
+`annotation/rubric_zh.md` is the Chinese translation. Keep both in sync.
 
 ## Design decisions (for the Experimental Setup section)
 - Oracle AMI segmentation; utterances with < 5 normalized words excluded (backchannels).

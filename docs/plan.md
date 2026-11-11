@@ -25,9 +25,9 @@ track human judgments of transcript quality better than plain WER or embedding s
 | ASR | Whisper large-v3 (beam 5) vs wav2vec2-large-960h-lv60-self (greedy CTC) | different architectures and error behaviour |
 | normalization | Whisper EnglishTextNormalizer + AMI fixes (acronyms, oh/o'clock, cause, kinda, currency) | unfixed normalization inflated Whisper WER by ~2 points |
 | error unit | adjacent S/D/I merged into one span; context = 3 prev + 1 next utt | severity is a property of a phrase, not a single word |
-| rubric | `annotation/rubric.md` v1, built from ~200 real samples | severity 1–5 + content_type + error_form + flag |
+| rubric | `annotation/rubric.md` v1.2 (EN, authoritative) + `rubric_zh.md`; notes and changelog in `docs/rubric_notes.md` | severity 1–5 + content_type + error_form + flag |
 | LLM judge | Azure gpt-5.4-mini (gpt-4o dropped: rate limits) | key in `.env` (not committed) |
-| human set | 50 dev (rubric iteration) + 200 test, both annotators label all | needed for agreement; stratify by system/error form, never by LLM label |
+| human set | 50 dev (70% random + 30% targeted) + 200 test, both annotators label all | needed for agreement; never sample by LLM label |
 
 ## Shared resources
 - Delta allocation: `bjdh-delta-gpu` / `bjdh-delta-cpu`

@@ -53,7 +53,11 @@ def main():
 
     err = pd.DataFrame([json.loads(l) for l in open(OUT / "errors.jsonl")])
     ann = pd.DataFrame([json.loads(l) for l in open(OUT / f"llm_annotations_{args.tag}.jsonl")])
-    df = err.merge(ann[["error_id", "severity"]], on="error_id")
+    df = err.merge(ann[["error_id", "severity", "flag"]], on="error_id")
+    # Reference errors have no reliable ground truth: never train or evaluate on them.
+    is_ref = df.flag.map(lambda f: "ref_issue" in (f if isinstance(f, list) else str(f).split(";")))
+    print(f"excluding {is_ref.sum()} ref_issue spans")
+    df = df[~is_ref].reset_index(drop=True)
     df[["ctx", "tgt"]] = df.apply(lambda r: pd.Series(text_of(r)), axis=1)
     pilot = set(pd.read_csv(OUT / "pilot_ids.txt", header=None)[0])
     meetings = sorted(df.meeting_id.unique())
@@ -96,8 +100,8 @@ def main():
     results["pilot_vs_llm"] = metrics(pred_p, P.severity.values)
     hs = []
     for who in "AB":
-        p = ROOT / "annotation" / f"human_pilot_{who}.csv"
-        h = pd.read_csv(p).set_index("error_id").severity
+        p = ROOT / "annotation" / f"human_pilot_{who}.xlsx"
+        h = pd.read_excel(p).set_index("error_id").severity
         hs.append(pd.to_numeric(h, errors="coerce"))
     human = pd.concat(hs, axis=1).mean(axis=1).reindex(P.error_id)
     if human.notna().sum() > 5:
