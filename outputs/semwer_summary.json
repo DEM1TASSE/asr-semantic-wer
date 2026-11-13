@@ -1,5 +1,6 @@
 {
   "wav2vec2-large": {
+    "subsets": "test",
     "coverage_utts": "500/500",
     "wer_on_covered": 0.22121300908291824,
     "semwer_lin": 0.10246117784939937,
@@ -8,6 +9,7 @@
     "wer_full": 0.22238499853501317
   },
   "whisper-large-v3": {
+    "subsets": "test",
     "coverage_utts": "500/500",
     "wer_on_covered": 0.11353647817169646,
     "semwer_lin": 0.034661588045707584,

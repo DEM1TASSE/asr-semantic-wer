@@ -1,0 +1,6 @@
+error_form,wav2vec2-large,whisper-large-v3
+garbled,197,5
+morph_variant,50,55
+nonword,252,1
+other,23,11
+real_word,290,117

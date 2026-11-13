@@ -62,12 +62,16 @@ def main():
     ap.add_argument("--model", required=True, choices=MODELS)
     ap.add_argument("--bs", type=int, default=16)
     ap.add_argument("--subset", choices=SUBSETS, default="test")
+    ap.add_argument("--shard", type=int, default=0)
+    ap.add_argument("--nshards", type=int, default=1, help="split a subset into short jobs; merge with merge_shards")
     args = ap.parse_args()
     kind, model_id = MODELS[args.model]
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     paths = subset_paths(args.subset)
     df = pd.read_parquet(paths["audio"])
+    if args.nshards > 1:
+        df = df.iloc[args.shard::args.nshards].reset_index(drop=True)
     audios = [load_audio(a) for a in df.audio]
     # Sort by length for efficient batching, then restore order.
     order = np.argsort([len(a) for a in audios])
@@ -77,7 +81,10 @@ def main():
     for j, h in zip(order, hyps_sorted):
         hyps[j] = h.strip()
 
-    with open(paths["hyp"](args.model), "w") as f:
+    out = paths["hyp"](args.model)
+    if args.nshards > 1:
+        out = out.with_suffix(f".part{args.shard}of{args.nshards}")
+    with open(out, "w") as f:
         for aid, h in zip(df.audio_id, hyps):
             f.write(json.dumps({"audio_id": aid, "system": args.model, "model_id": model_id, "hyp": h,
                                 "hyp_norm": normalize(h)}) + "\n")

@@ -9,3 +9,7 @@ data/*.parquet
 logs/
 outputs/archive_v0/
 outputs/archive_v1_partial/
+
+# shard / backup files
+*.part*of*
+*.bak

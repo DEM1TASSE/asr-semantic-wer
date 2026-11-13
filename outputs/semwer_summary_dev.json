@@ -1,0 +1,20 @@
+{
+  "wav2vec2-large": {
+    "subsets": "dev",
+    "coverage_utts": "700/700",
+    "wer_on_covered": 0.2361338127928517,
+    "semwer_lin": 0.11201917838073444,
+    "semwer_hard": 0.08099051977770513,
+    "semwer_max": 0.30892857142857144,
+    "wer_full": 0.2392938868911409
+  },
+  "whisper-large-v3": {
+    "subsets": "dev",
+    "coverage_utts": "700/700",
+    "wer_on_covered": 0.12400566633976245,
+    "semwer_lin": 0.04631143075079002,
+    "semwer_hard": 0.02688787185354691,
+    "semwer_max": 0.11142857142857143,
+    "wer_full": 0.12694780429334204
+  }
+}

@@ -169,7 +169,7 @@ def main():
 
     def work(eid):
         msgs = build_messages(errors[eid], rubric, args.prompt)
-        for attempt in range(3):
+        for attempt in range(6):
             try:
                 r = client.chat.completions.create(model=args.model, messages=msgs, **gen,
                                                    response_format={"type": "json_object"})
@@ -179,6 +179,8 @@ def main():
                         **prov, "time": time.strftime("%Y-%m-%dT%H:%M:%S")}
             except Exception as ex:  # malformed JSON or transient API error
                 err = repr(ex)
+                if "429" in err or "RateLimit" in err:
+                    time.sleep(min(60, 5 * 2 ** attempt))  # back off on rate limits
         return {"error_id": eid, "model": args.model, "failed": err}
 
     n_fail = 0
