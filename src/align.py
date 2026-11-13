@@ -2,15 +2,18 @@
 
 Adjacent non-equal alignment chunks are merged into one error span, so e.g. a
 substitution followed by a deletion is judged as a single semantic error.
-Outputs: outputs/wer_summary.json, outputs/errors.jsonl
+Outputs per subset (common.subset_paths): wer_summary*.json, errors*.jsonl
 """
+import argparse
 import json
 
 import jiwer
 
-from common import DATA, OUT, normalize
+from common import SUBSETS, normalize, subset_paths
 
 SYSTEMS = ["whisper-large-v3", "wav2vec2-large"]
+MODEL_IDS = {"whisper-large-v3": "openai/whisper-large-v3",
+             "wav2vec2-large": "facebook/wav2vec2-large-960h-lv60-self"}
 
 
 def load_jsonl(p):
@@ -45,10 +48,14 @@ def extract_spans(ref_w, hyp_w, chunks):
 
 
 def main():
-    utts = {u["audio_id"]: u for u in load_jsonl(DATA / "eval_subset.jsonl")}
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--subset", choices=SUBSETS, default="test")
+    args = ap.parse_args()
+    paths = subset_paths(args.subset)
+    utts = {u["audio_id"]: u for u in load_jsonl(paths["meta"])}
     summary, errors = {}, []
     for sysname in SYSTEMS:
-        hyps = {h["audio_id"]: h for h in load_jsonl(OUT / f"hyp_{sysname}.jsonl")}
+        hyps = {h["audio_id"]: h for h in load_jsonl(paths["hyp"](sysname))}
         ids = [a for a in utts if a in hyps]
         # Re-normalize here so normalization fixes apply without re-sampling or re-running ASR.
         refs = [normalize(utts[a]["ref"]) for a in ids]
@@ -65,14 +72,19 @@ def main():
             ref_w, hyp_w = out.references[k], out.hypotheses[k]
             for j, s in enumerate(extract_spans(ref_w, hyp_w, out.alignments[k])):
                 u = utts[a]
-                errors.append({"error_id": f"{sysname}|{a}|{j}", "system": sysname, "audio_id": a,
-                               "meeting_id": u["meeting_id"], "ref": refs[k], "hyp": hs[k],
+                errors.append({"error_id": f"{sysname}|{a}|{j}", "subset": args.subset,
+                               "ami_split": u.get("ami_split", "test"), "system": sysname,
+                               "model_id": hyps[a].get("model_id", MODEL_IDS[sysname]), "audio_id": a,
+                               "meeting_id": u["meeting_id"], "speaker_id": u.get("speaker_id"),
+                               "begin_time": u.get("begin_time"), "end_time": u.get("end_time"),
+                               "ref_raw": u.get("ref_raw", u["ref"]), "hyp_raw": hyps[a]["hyp"],
+                               "ref": refs[k], "hyp": hs[k],
                                "context_before": u["context_before"], "context_after": u["context_after"],
                                "utt_n_ref_words": len(ref_w), **s})
                 n_spans += 1
         summary[sysname]["n_error_spans"] = n_spans
-    json.dump(summary, open(OUT / "wer_summary.json", "w"), indent=2)
-    with open(OUT / "errors.jsonl", "w") as f:
+    json.dump(summary, open(paths["wer"], "w"), indent=2)
+    with open(paths["errors"], "w") as f:
         for e in errors:
             f.write(json.dumps(e) + "\n")
     for s, v in summary.items():

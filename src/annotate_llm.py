@@ -7,15 +7,17 @@ Results are cached per error_id, so reruns resume.
 Output: outputs/llm_annotations_<tag>.jsonl
 """
 import argparse
+import hashlib
 import json
 import os
 import re
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from openai import AzureOpenAI, OpenAI
 from tqdm import tqdm
 
-from common import OUT, ROOT, single_error_hyp
+from common import OUT, ROOT, load_errors, single_error_hyp
 
 CONTENT_TYPES = ["disfluency", "function_word", "content_word", "named_entity", "number", "negation", "other"]
 ERROR_FORMS = ["morph_variant", "nonword", "real_word", "garbled", "other"]
@@ -57,12 +59,33 @@ Score how much meaning is changed, lost, or added -- not how important the infor
 meeting, and not by content type, edit distance, or whether the ASR output is a real word."""
 
 
-def build_messages(e, rubric):
+# Ablation only: show the complete ASR hypothesis (all errors) instead of the single-error sentence.
+USER_FULL = """Meeting context (speaker: utterance; [TARGET] is the reference sentence containing the error):
+{context}
+
+Reference (what was actually said) with the error marked as [[what was said → what ASR output]].
+Left of the arrow = reference, right = ASR; ∅ = nothing on that side (∅ on the right = deletion,
+∅ on the left = insertion):
+{ref_marked}
+
+Edit operation (from alignment): {op}
+
+Full ASR output for this sentence:
+{hyp}
+
+Judge ONLY the marked span: assume every other recognition error in this sentence has been corrected.
+Score how much meaning is changed, lost, or added -- not how important the information is for the
+meeting, and not by content type, edit distance, or whether the ASR output is a real word."""
+
+
+def build_messages(e, rubric, prompt="single"):
     ctx = "\n".join(e["context_before"] + ["[TARGET] " + e["ref"]] + e["context_after"])
     return [
         {"role": "system", "content": SYSTEM.format(rubric=rubric, ct=CONTENT_TYPES, ef=ERROR_FORMS, fl=FLAGS)},
-        {"role": "user", "content": USER.format(context=ctx, ref_marked=e["ref_marked"], op=e["op"], ref=e["ref"],
-                                                hyp_single=single_error_hyp(e))},
+        {"role": "user", "content": (USER.format(context=ctx, ref_marked=e["ref_marked"], op=e["op"], ref=e["ref"],
+                                                 hyp_single=single_error_hyp(e)) if prompt == "single" else
+                                     USER_FULL.format(context=ctx, ref_marked=e["ref_marked"], op=e["op"],
+                                                      hyp=e["hyp"] or "∅"))},
     ]
 
 
@@ -94,15 +117,17 @@ def main():
                     help="azure: deployment API; azure_v1: <resource>/openai/v1/ (e.g. DeepSeek on Azure)")
     ap.add_argument("--azure_endpoint", default="https://demi-azure.openai.azure.com/")
     ap.add_argument("--api_version", default="2024-10-21")
-    ap.add_argument("--ids", default=str(OUT / "llm_set_ids.txt"), help="file of error_ids, or 'all'")
+    ap.add_argument("--ids", default=str(OUT / "llm_set_ids.txt"), help="file of error_ids, 'all', or 'subset:<name>'")
     ap.add_argument("--model", default="gpt-4o", help="Azure deployment name or model id")
     ap.add_argument("--base_url", default="https://api.deepseek.com", help="openai backend only")
     ap.add_argument("--api_key_env", default=None, help="default: AZURE_API_KEY / DEEPSEEK_API_KEY")
     ap.add_argument("--tag", default=None, help="output tag; defaults to the model name")
     ap.add_argument("--temperature", type=float, default=0.0)
     ap.add_argument("--workers", type=int, default=16)
-    ap.add_argument("--max_tokens", type=int, default=300)
+    ap.add_argument("--max_tokens", type=int, default=16000)  # DeepSeek reasons first; long items need >4k
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--prompt", choices=["single", "full"], default="single",
+                    help="single: reference vs. single-error ASR sentence; full: complete hypothesis (ablation)")
     ap.add_argument("--rubric", default=str(ROOT / "annotation" / "rubric.md"), help="guideline inserted in the prompt")
     args = ap.parse_args()
 
@@ -123,8 +148,16 @@ def main():
     gen = ({"max_completion_tokens": 4000} if reasoning
            else {"max_tokens": args.max_tokens, "temperature": args.temperature})
     rubric = open(args.rubric).read()
-    errors = {e["error_id"]: e for e in map(json.loads, open(OUT / "errors.jsonl"))}
-    ids = list(errors) if args.ids == "all" else [l.strip() for l in open(args.ids) if l.strip()]
+    errors = load_errors()
+    if args.ids == "all":
+        ids = list(errors)
+    elif args.ids.startswith("subset:"):  # e.g. subset:train
+        ids = [i for i, e in errors.items() if e.get("subset", "test") == args.ids.split(":", 1)[1]]
+    else:
+        ids = [l.strip() for l in open(args.ids) if l.strip()]
+    sha = lambda s: hashlib.sha1(s.encode()).hexdigest()[:12]
+    prov = {"rubric_file": os.path.basename(args.rubric), "rubric_sha": sha(rubric),
+            "prompt": args.prompt, "prompt_sha": sha(SYSTEM + (USER if args.prompt == "single" else USER_FULL)), "max_tokens": args.max_tokens, "temperature": args.temperature}
     ids = ids[:args.limit]
 
     out_path = OUT / f"llm_annotations_{args.tag}.jsonl"
@@ -135,14 +168,15 @@ def main():
     print(f"{len(ids)} requested, {len(done)} cached, {len(todo)} to annotate with {args.model}")
 
     def work(eid):
-        msgs = build_messages(errors[eid], rubric)
+        msgs = build_messages(errors[eid], rubric, args.prompt)
         for attempt in range(3):
             try:
                 r = client.chat.completions.create(model=args.model, messages=msgs, **gen,
                                                    response_format={"type": "json_object"})
                 u = r.usage
                 return {"error_id": eid, "model": args.model, **parse(r.choices[0].message.content),
-                        "usage": {"prompt": u.prompt_tokens, "completion": u.completion_tokens}}
+                        "usage": {"prompt": u.prompt_tokens, "completion": u.completion_tokens},
+                        **prov, "time": time.strftime("%Y-%m-%dT%H:%M:%S")}
             except Exception as ex:  # malformed JSON or transient API error
                 err = repr(ex)
         return {"error_id": eid, "model": args.model, "failed": err}

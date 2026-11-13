@@ -13,7 +13,7 @@ import soundfile as sf
 import torch
 from tqdm import tqdm
 
-from common import DATA, EVAL_AUDIO, OUT, normalize
+from common import SUBSETS, normalize, subset_paths
 
 MODELS = {
     "whisper-large-v3": ("whisper", "openai/whisper-large-v3"),
@@ -61,11 +61,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True, choices=MODELS)
     ap.add_argument("--bs", type=int, default=16)
+    ap.add_argument("--subset", choices=SUBSETS, default="test")
     args = ap.parse_args()
     kind, model_id = MODELS[args.model]
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    df = pd.read_parquet(EVAL_AUDIO)
+    paths = subset_paths(args.subset)
+    df = pd.read_parquet(paths["audio"])
     audios = [load_audio(a) for a in df.audio]
     # Sort by length for efficient batching, then restore order.
     order = np.argsort([len(a) for a in audios])
@@ -75,9 +77,9 @@ def main():
     for j, h in zip(order, hyps_sorted):
         hyps[j] = h.strip()
 
-    with open(OUT / f"hyp_{args.model}.jsonl", "w") as f:
+    with open(paths["hyp"](args.model), "w") as f:
         for aid, h in zip(df.audio_id, hyps):
-            f.write(json.dumps({"audio_id": aid, "system": args.model, "hyp": h,
+            f.write(json.dumps({"audio_id": aid, "system": args.model, "model_id": model_id, "hyp": h,
                                 "hyp_norm": normalize(h)}) + "\n")
     print(f"wrote {len(hyps)} hyps for {args.model} ({model_id})")
 

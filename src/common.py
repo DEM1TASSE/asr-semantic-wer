@@ -9,6 +9,30 @@ AMI_DIR = WORK / "data" / "ami" / "ihm"
 DATA = ROOT / "data"
 OUT = ROOT / "outputs"
 EVAL_AUDIO = WORK / "data" / "eval_subset.parquet"  # audio stays out of git, on shared Delta storage
+SUBSETS = ["test", "test_extra", "dev", "train"]  # AMI test, test (more utts), validation, train; meetings never overlap across splits
+
+
+def subset_paths(name):
+    """Files for one subset. 'test' keeps the original names so existing annotations stay valid."""
+    sfx = "" if name == "test" else f"_{name}"
+    return {"meta": DATA / ("eval_subset.jsonl" if name == "test" else f"subset_{name}.jsonl"),
+            "audio": EVAL_AUDIO if name == "test" else WORK / "data" / f"subset_{name}.parquet",
+            "hyp": lambda model: OUT / f"hyp_{model}{sfx}.jsonl",
+            "errors": OUT / f"errors{sfx}.jsonl",
+            "wer": OUT / f"wer_summary{sfx}.json"}
+
+
+def load_errors(subsets=None):
+    """All error spans of the given subsets (default: every subset that has been aligned), keyed by error_id."""
+    import json
+    out = {}
+    for s in subsets or SUBSETS:
+        p = subset_paths(s)["errors"]
+        if p.exists():
+            out.update({e["error_id"]: e for e in map(json.loads, open(p))})
+    return out
+
+
 for d in (DATA, OUT):
     d.mkdir(exist_ok=True)
 
