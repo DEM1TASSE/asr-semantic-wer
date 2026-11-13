@@ -2,6 +2,32 @@
 
 Newest first. Record what was done, the numbers, and anything surprising.
 
+## 2026-11-12
+**Pilot agreement (rubric v2.3, 50 items) and adjudication of the items with a gap of 2 or more.**
+
+- A's #1 was an entry error (1 → 5, confirmed by Demi); corrected in `human_pilot_A.xlsx` with a note.
+  The original export stays in `annotation/raw/human_pilot_A_original.csv`.
+- Human A vs B, severity: α (ordinal) 0.789, QWK 0.837, Spearman 0.831, exact 64%, within-1 96%, MAE 0.40.
+  Mean severity A 1.94, B 2.14; B is higher on 14 items, A on 4. Most of the gap is recognizable misspellings
+  (`trend → trand`, `cover → cofer`), which B scores one point higher.
+- content_type A vs B: exact 62%, nominal α 0.49. Mostly disfluency / function_word / content_word on
+  repetitions and false starts; the ordered content_type rules in the v2.4 draft address these.
+- Adjudication (`docs/pilot_adjudication.md`): #1 = 5; #31 = 4 + crosstalk; #6 (`scroll → scrawl`) kept as a
+  legitimate subjective disagreement (A 1, B 3; single label 2 + uncertain). Gaps of 1 are not adjudicated.
+- LLMs with the single-error prompt (dev set: the same 50 items were used to choose the prompt and model, so these
+  numbers are optimistic):
+
+| model | α vs A | α vs B | Spearman vs human mean | within-1 vs human mean | n |
+|---|---|---|---|---|---|
+| deepseek-v4-1-flash | 0.745 | 0.720 | 0.763 | 88% | 50 |
+| gpt-4o | 0.767 | 0.772 | 0.826 | 83% | 46 (4 rate-limit failures) |
+| gpt-5.4-mini | 0.615 | 0.507 | 0.578 | 78% | 50 |
+
+- Decisions for v2.4: misspellings are scored 1–3 by how much they interfere with understanding (no fixed
+  "clear = 1 / effortful = 2" cut-off); repetitions and abandoned starts are 1, but not automatically: judge the
+  full meaning of the original (e.g. #43); in a self-repair the repaired part is content; inserted speech from
+  another speaker is scored by what it adds to this utterance, and flagged `crosstalk`.
+
 ## 2026-11-11
 **Yixiang completed all 50 official human-pilot items independently under rubric v2.3.**
 

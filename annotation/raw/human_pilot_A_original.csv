@@ -1,0 +1,251 @@
+﻿#,context (reference transcript),error in reference: [[reference → ASR]],reference said,ASR output,edit_operation,full ASR sentence,severity,content_type,flag,note,error_id,ref_start,ref_end,hyp_start,hyp_end,,,,
+1,"FEO070: like just like yeah
+FEO072: i don't think it's gonna take long to to produce anyway
+FEO070: no
+[TARGET] no no i do not think that is i think it is true
+FEO072: it's just another um i mean these meetings are not endlessly long it's just words and to print all of them out selectively",no no i do not think that is [[i think it → nothing]] is true,i think it,nothing,mixed,oh no i do not think that is nothing is t,1,disfluency,,,wav2vec2-large|AMI_EN2002b_H01_MEE071_0132163_0132382|1,8,11,8,9,,,,
+2,"MTD012ME: um we've done some market research
+MTD012ME: we distributed some more enquetes questionnaires
+MTD012ME: and um besides that um i deployed some trend watchers to milan and paris to well get all of the newest trends
+[TARGET] and i have consulted some additional trend watch trend watchers after the original trend watchers return about what the
+MTD012ME: the best design would be",and i have consulted some additional [[trend → trand]] watch trend watchers after the original trend watchers return about what the,trend,trand,substitution,and i have consulted some additional trand watch trend watchers after the original trand watchers return about what the,2,content_word,,,wav2vec2-large|AMI_TS3003c_H03_MTD012ME_0022728_0023525|0,6,7,6,7,,,,
+3,"MTD011UID: uh okay
+MTD011UID: um i've been looking at uh the user interface of it
+MTD009PM: yeah
+[TARGET] f for the techno f functions of of it
+MTD011UID: um",f for the techno f functions of [[of it → op]],of it,op,mixed,m for adthe technia functions of op,,,,,wav2vec2-large|AMI_TS3003b_H01_MTD011UID_0056775_0057117|2,7,9,6,7,,,,
+4,"MTD011UID: so it's yeah
+MTD009PM: yeah
+MTD009PM: so i suggest uh
+[TARGET] i think it would definitely be a bad idea not to include teletext
+MTD011UID: it's",i think it [[would definitely be → definitelyb]] a bad idea not to include teletext,would definitely be,definitelyb,mixed,i think it definitelyb a bad idea not to include teletex,1,function_word,,,wav2vec2-large|AMI_TS3003b_H03_MTD012ME_0146664_0146971|0,3,6,3,4,,,,
+5,"FIO084: yeah
+FIO089: yeah
+FIE088: so that remains to s to be seen but uh the target group as a whole is is basically everybody with a t. v.
+[TARGET] that is right and can we can we is it even feasible to make 11 remote control with something for everyone
+FIO087: yes",that is right and can we can we is it even feasible to make [[11 → one]] remote control with something for everyone,11,one,substitution,that is right and can we is it even feasible to make one remote control with something for everyone,4,number,,,whisper-large-v3|AMI_IS1009b_H03_FIO089_0184362_0185216|1,14,15,12,13,,,,
+6,"MTD011UID: mm
+MTD009PM: okay but then you you can push uh some other button as well
+MTD012ME: but yeah
+[TARGET] you could just not scroll for a half a 2nd
+MTD009PM: yeah",you could just not [[scroll → scrawl]] for a half a 2nd,scroll,scrawl,substitution,could just not scrawl for her half a 2nd,1,content_word,,,wav2vec2-large|AMI_TS3003d_H02_MTD0010ID_0097381_0097608|1,4,5,3,4,,,,
+7,"MTD009PM: yeah
+MTD009PM: 'kay
+MTD009PM: and default materials
+[TARGET] i think that is a good idea as well because elderly people do not mind if it is a titanium cover or just a plastic one
+MTD009PM: so that doesn't really matter",i think that is a good idea as well because elderly people do not mind if it is a titanium [[cover → cofer]] or just a plastic one,cover,cofer,substitution,i think that is a good idea as well because a eldy people do not mind if it is a titanium cofer or just a plastic one,2,content_word,,,wav2vec2-large|AMI_TS3003b_H00_MTD009PM_0196452_0197489|1,20,21,21,22,,,,
+8,"MTD009PM: then we will look at the finance
+MTD009PM: uh we will have to see if everything we wanna do is also possible within our budget
+MTD009PM: because everything costs money and the more functions you wanna have the more money it will cost
+[TARGET] so we have to see if it fits within the 12.5 euro per remote
+MTD009PM: but we will see that later",so we have to see if it fits within the [[12.5 euro per → 12 and the hall bura ber]] remote,12.5 euro per,12 and the hall bura ber,mixed,so we will see if it fits within the 12 and the hall bura ber remote,4,number,,,wav2vec2-large|AMI_TS3003d_H00_MTD009PM_0012264_0012897|1,10,13,9,15,,,,
+9,"FIE088: uh technically this thing would also have a resistor and a capacitor diode transistor resonator and if possible a rechargeable battery
+FIE088: uh and of course a circuit board
+FIE088: and how it would works you press the button
+[TARGET] the chip is morse morse code related relays the to the generat to the generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to to to consider
+FIO089: okay",the chip is morse morse code related relays the to the [[generat to the → ∅]] generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to to to consider,generat to the,∅,deletion,and the chip is morse code related relays to the generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to consider,1,disfluency,,,whisper-large-v3|AMI_IS1009d_H00_FIE088_0019852_0022001|3,11,14,10,10,,,,
+10,"MEE073: the
+FEO070: can i have it
+MEE073: if even if we could just
+[TARGET] because you n you do not you only ever have one meeting open and those results will be op i well i suppose if you have a if you have a local search
+FEO070: well the one meeting",because you n you do not [[you → ∅]] only ever have one meeting open and those results will be op i well i suppose if you have a if you have a local search,you,∅,deletion,because you do not only ever have one meeting open and those resorts will be oh well i suppose if you have if you have a local search,1,disfluency,,,wav2vec2-large|AMI_EN2002d_H01_FEO072_0189484_0190231|1,6,7,4,4,,,,
+11,"FEO070: okay
+FEO072: yep so that's me done
+FEO072: someone else wanna talk about their stuff
+[TARGET] do not all jump at once
+FEO070: i could tell you what i done in s. p. two",[[do not all jump at once → playin with john footland]],do not all jump at once,playin with john footland,mixed,playin with john footland,4,other,,,whisper-large-v3|AMI_EN2002a_H03_MEE071_0099194_0099473|0,0,6,0,4,,,,
+12,"FEE016: you know focus on where the idea will be taken up
+FEE016: first it's most likely to be taken up first of all where the main purchasing power is coming from for a product like this
+FEE013: okay so the remote control functions
+[TARGET] we have got the tv we have got the video now there is
+MEO015: mm-hmm",we have got the [[tv → t b]] we have got the video now there is,tv,t b,mixed,am we have got the t b we have got the vidio now there is am,3,content_word,,,wav2vec2-large|AMI_ES2004b_H01_FEE013_0160942_0161612|1,4,5,5,7,,,,
+13,"MEO015: for the inside and uh rubber as a padding or for the grip something like to add to the design
+MEE014: yeah
+FEE013: mm-hmm
+[TARGET] so we decided on a rubber casing for the plastic shell a variety of designs ok
+MEO015: plast right",so we decided on a rubber casing for the plastic shell a variety of designs [[ok → ∅]],ok,∅,deletion,so we decided on a rubber casing for the plastic shell a variety of designs,1,disfluency,,,whisper-large-v3|AMI_ES2004c_H03_FEE016_0198820_0199377|0,15,16,15,15,,,,
+14,"FEO072: right so anyone else got anything to say
+MEE073: hmm
+MEE073: um not really just gonna keep on going
+[TARGET] do we yeah do we want another meeting at the end of the week with pernilla
+MEE073: like friday afternoon or something",do we yeah do we want another meeting at the end of the week with [[pernilla → penila]],pernilla,penila,substitution,do we ye do we want another meeting at the end of the week with penila,2,named_entity,,？人名错了咋办，取决于是否知道这个人的名字？,wav2vec2-large|AMI_EN2002c_H01_FEO072_0242119_0242579|1,15,16,15,16,,,,
+15,"FEO072: at the moment as well the whole windows that pop up are not pretty at all
+FEO072: but um you know i would make them a bit nice if i had more time but at the moment it doesn't look like that
+MEE073: mm-hmm
+[TARGET] no it is not it is not it is not a it is not the top priority is it
+FEO072: so i will if",no it is not it is not [[it is not a it is not → ∅]] the top priority is it,it is not a it is not,∅,deletion,nice no te snow of snowt oms not the top party,1,disfluency,multi_issue,,wav2vec2-large|AMI_EN2002d_H02_MEE071_0038021_0038352|2,7,14,8,8,,,,
+16,"MTD009PM: you can sell the cases
+MTD009PM: yeah
+MTD009PM: i think that's a very good option
+[TARGET] because then you can advertise as well with the give your grandfather a new case for his remote control or whatever
+MTD011UID: yeah",because then you can advertise as well with [[the → ∅]] give your grandfather a new case for his remote control or whatever,the,∅,deletion,because then you can advertise as well with give your grandfather a new case for his remote control or whatever,1,function_word,,,whisper-large-v3|AMI_TS3003c_H00_MTD009PM_0143794_0144768|0,8,9,8,8,,,,
+17,"MEO015: uh maybe you can guess what i'm trying to make
+FEE016: a kind of dog
+MEO015: yep
+[TARGET] it is actually sitting so it is sitting it is not standing
+MEE014: it's sitting down",it is actually sitting [[so → ∅]] it is sitting it is not standing,so,∅,deletion,it is actually sitting it is sitting it is not standing,2,function_word,,,whisper-large-v3|AMI_ES2004a_H00_MEO015_0031347_0031914|0,4,5,4,4,,,,
+18,"FEO072: it shouldn't be to difficult
+FEO072: i mean
+FEO070: yeah
+[TARGET] so what courses should i pick to be not doing any work at the moment
+FEO070: yeah",so what courses should i pick to be not doing any [[work at the moment → question]],work at the moment,question,mixed,what course should i have picked ar we not doing any question,4,content_word,,,wav2vec2-large|AMI_EN2002a_H03_MEE071_0151690_0152141|3,11,15,11,12,,,,
+19,"FEO070: like just like yeah
+FEO072: i don't think it's gonna take long to to produce anyway
+FEO070: no
+[TARGET] no no i do not think that is i think it is true
+FEO072: it's just another um i mean these meetings are not endlessly long it's just words and to print all of them out selectively",[[no → oh]] no i do not think that is i think it is true,no,oh,substitution,oh no i do not think that is nothing is t,1,function_word,,,wav2vec2-large|AMI_EN2002b_H01_MEE071_0132163_0132382|0,0,1,0,1,,,,
+20,"FIE088: no now this was our evaluation criteria which we uh just have done
+FIO089: okay
+FIE088: now we're gonna talk about financing
+[TARGET] ah but in my instructions i think it said i was supposed to go to the board and do something
+FIE088: well there is a production evaluation",[[ah → ∅]] but in my instructions i think it said i was supposed to go to the board and do something,ah,∅,deletion,but in my instructions i think it said i was supposed to go to the board and do something,1,function_word,,function word or negation？我感觉不用标content type其实,whisper-large-v3|AMI_IS1009d_H03_FIO089_0085663_0086259|0,0,1,0,0,,,,
+21,"MEE073: um
+FEO072: so you think it shouldn't be too difficult
+FEO070: i don't know
+[TARGET] i am i was a bit worried about when well when he talked about this with the file messing around with files
+FEO070: i mean uh how much do we actually need to do",i am i was a bit worried about when well when he talked about this [[with → way]] the file messing around with files,with,way,substitution,i i was a bit worried about one well when he talked about this way the fowl mest on wid fowls,2,function_word,,,wav2vec2-large|AMI_EN2002a_H01_FEO070_0106053_0106854|2,15,16,14,15,,,,
+22,"MEO015: so what the concept is to have a flip top model
+MEO015: the main functions such as which are like often used will be on the top and the complex functions which say you you can say like the y young generation or trendy generation want to pr say programme their favourite channels or whatever
+MEO015: can be put in the middle part of the f flip top
+[TARGET] so it is like it could be accessed by a wide ra range of audience and we can punch in new f features such as added features such as shock proof body and maybe a design to appeal to a lot of people
+MEO015: findings most people prefer us user friendly rather than complex remote controls because there are times like uh people have used a remote control for say a year or something and they they are not used maybe thirty to forty percent of the buttons so it's not of no use of punching in the uh trying to put in those things in on the top of the remote control and try to confuse the user",so it is like it could be accessed by a wide ra range of audience and we can punch in new f features such as added features such as [[shock proof → shockproof]] body and maybe a design to appeal to a lot of people,shock proof,shockproof,mixed,so it could be accessed by a wider range of audience and we can punch in new features such as added features such as shockproof body and maybe a design to appeal to a lot of people,1,content_word,,,whisper-large-v3|AMI_ES2004b_H00_MEO015_0069351_0070654|3,29,31,24,25,,,,
+23,"MTD011UID: s um it's uh not uh in colour or something
+MTD011UID: uh it's just uh um one colo uh yeah
+MTD011UID: uh i seen uh w uh something on the internet uh not today but uh a few uh weeks ago
+[TARGET] you got yeah quite an
+MTD011UID: a kind of uh touchscreen um and it's uh for",you got [[yeah → and]] quite an,yeah,and,substitution,you have got and quite and,1,disfluency,,,whisper-large-v3|AMI_TS3003b_H01_MTD011UID_0086683_0086961|1,2,3,3,4,,,,
+24,"MEE014: if you to
+MEO015: it's internal nobody looks into the battery
+MEE014: yeah
+[TARGET] but shape and colors that is something we should not comprimi
+FEE016: and people are used to buying batteries they're not gonna say i'm not getting this 'cause i've got to buy a battery for a remote control",but shape and [[colors → color]] that is something we should not comprimi,colors,color,substitution,but shape and color that is something we should not compromise,1,content_word,,,whisper-large-v3|AMI_ES2004d_H00_MEO015_0144939_0145209|0,3,4,3,4,,,,
+25,"MTD012ME: could you explain that a little more
+MTD0010ID: well the the general like most older remotes are flat just straight
+MTD012ME: mm-hmm
+[TARGET] and our d manufacturing department can also deliver single curved or double curved ca curved cases
+MTD012ME: and what would single curved and double curved mean",and [[our d → r are the]] manufacturing department can also deliver single curved or double curved ca curved cases,our d,r are the,mixed,and r are the manufacturing department can also deliver single curved or double curved curved cases,3,function_word,ref_issue,,wav2vec2-large|AMI_TS3003c_H02_MTD0010ID_0154060_0154699|0,1,3,1,4,,,,
+26,"MTD011UID: so it's yeah
+MTD009PM: yeah
+MTD009PM: so i suggest uh
+[TARGET] i think it would definitely be a bad idea not to include teletext
+MTD011UID: it's",i think it would definitely be a bad idea not to include [[teletext → teletex]],teletext,teletex,substitution,i think it definitelyb a bad idea not to include teletex,1,content_word,,,wav2vec2-large|AMI_TS3003b_H03_MTD012ME_0146664_0146971|1,12,13,10,11,,,,
+27,"FIO089: okay
+FIO089: well um
+FIO089: it looks like we've got got ourselves a pretty good product
+[TARGET] the functionality is the only place where maybe we have to think about m m maybe heaven forbid having another meeting
+FIO084: yeah",the functionality is the only place where maybe we have to think about m m maybe heaven forbid having another [[meeting → meetingha ha ha ha]],meeting,meetingha ha ha ha,mixed,functionality is the only place where maybe we have to think about maybe heaven forbid having another meetingha ha ha ha,1,disfluency,,,wav2vec2-large|AMI_IS1009d_H03_FIO089_0160156_0161362|2,20,21,17,21,,,,
+28,"MTD009PM: uh piece of drawing
+MTD009PM: a blank new document for each person
+MTD009PM: uh select a pen eraser
+[TARGET] capture we do not have to do anything with
+MTD009PM: uh then we've got our pen",capture [[we do not have → redundance]] to do anything with,we do not have,redundance,mixed,capture redundance to do anything with,5,negation,,,whisper-large-v3|AMI_TS3003a_H00_MTD009PM_0037144_0037423|0,1,5,1,2,,,,
+29,"FIE088: mm-hmm
+FIO087: which can be recognised by as voice recogniser in the television for example
+FIO087: if you want to see we if you want to see the ninth channel if you say just say ninth channel
+[TARGET] th now the the yeah the remote will automatically it will switch to the ninth channel
+FIE088: mm-hmm",th now the [[the yeah the → ∅]] remote will automatically it will switch to the ninth channel,the yeah the,∅,deletion,the remote will automatically switch to the 9th channel,1,disfluency,,,whisper-large-v3|AMI_IS1009c_H01_FIO087_0052189_0052811|1,3,6,1,1,,,,
+30,"FIO087: so can you go on t t uh to the next slide
+FIO087: yeah so this is one of the interface or one of the remote which has this vi voice recogniser
+FIE088: mm-hmm
+[TARGET] and this has multi purpose use it can be used for tv it can be used for cable satellite it can be used for vcrdvd s and audio
+FIO087: and this has in built voice recogniser",and this has multi purpose use it can be used for tv it can be used for cable [[satellite → satellites]] it can be used for vcrdvd s and audio,satellite,satellites,substitution,and this has multi purpose use it can be used for tv it can be used for cable satellites it can be used for vcr dvds and audio,1,content_word,,,whisper-large-v3|AMI_IS1009c_H01_FIO087_0058505_0059282|0,18,19,18,19,,,,
+31,"FIO089: and in that case we could probabl moulded plastic isn't all that expensive is it
+FIO089: um you as an industrial person
+FIO084: uh no
+[TARGET] i i i do not think no
+FIE088: well maybe there's there's an idea you know t the new for example new portable phones",i i i do not think no [[∅ → well maybe there is]],∅,well maybe there is,insertion,i do not think no well maybe there is,4,other,,,whisper-large-v3|AMI_IS1009b_H02_FIO084_0186661_0186947|1,7,7,5,9,,,,
+32,"MEE014: well a device which basically just sends the signal to the t. v. to change its state
+MEE014: whether that be the power or the channel um or the volume
+MEE014: everything is just um some sort of signal to change the state of the t. v. or other appliance that it's sending the signal to
+[TARGET] so i decided i would have a look at what th other people have designed and try and take some inspiration from that
+MEE014: but uh although we will want to be taking",[[∅ → and]] so i decided i would have a look at what th other people have designed and try and take some inspiration from that,∅,and,insertion,and so i decided i would have a look at what other people have designed and try and take some inspiration from that,1,disfluency,,,wav2vec2-large|AMI_ES2004b_H02_MEE014_0024903_0025738|0,0,0,0,1,,,,
+33,"FIE088: yeah i i th i think
+FIO087: okay
+FIO089: it's it's gonna be a little bit too unwieldy
+[TARGET] no i think the these are her presentations
+FIO089: yeah mm",no i think [[the → ∅]] these are her presentations,the,∅,deletion,no i think these are her presentations,1,function_word,,,whisper-large-v3|AMI_IS1009c_H00_FIE088_0074936_0075179|0,3,4,3,3,,,,
+34,"FEO072: yeah that that was the plan for the disfluencies anyway
+MEE073: yeah
+FEO072: so d
+[TARGET] yeah do you want to do that with summaries in
+FEO072: put the summaries in in the same window",yeah do you want to do that with [[summaries in → some reason]],summaries in,some reason,substitution,yeah do you want to do that with some reason,4,content_word,,,whisper-large-v3|AMI_EN2002a_H02_FEO072_0078405_0078674|0,8,10,8,10,,,,
+35,"FEE013: to do with that already but we'll just go over it
+FEE013: um
+FEE013: the minutes from the last time
+[TARGET] we had a couple of changes in our plans in that we could not use teletext
+FEE013: it wasn't gonna be a control for everything um and that we had to incorporate the image of the company into it somehow",we had a couple of changes in our plans in that we could not use [[teletext → telly text]],teletext,telly text,mixed,a we had a couple of am changes in our plans in that we could not use telly text,2,content_word,,,wav2vec2-large|AMI_ES2004c_H01_FEE013_0012602_0013372|2,15,16,17,19,,,,
+36,"FEE013: 'kay
+MEE014: um and then we we're loo looking into battery options
+MEE014: there's um actually no rechargeable option available
+[TARGET] so we i saw the the standard double a and triple a which we thought were a bit bit too bulky at the moment
+MEE014: dynamo charging i thought that that might be a bit silly to be to be honest people won't it's it's basically like wind up radio",so we i saw the the standard double a and [[triple a → tripola]] which we thought were a bit bit too bulky at the moment,triple a,tripola,mixed,so we i saw the am the standard double a and tripola which we thought were a bit bit too bulky at the moment,2,content_word,,,wav2vec2-large|AMI_ES2004c_H02_MEE014_0048454_0049370|1,10,12,11,12,,,,
+37,"MTD009PM: i had some role indications on here
+MTD009PM: but i think you know it already by yourself
+MTD009PM: the industrial designer is going to work on the working design uh components design and a bit of the look and feel design
+[TARGET] the user interface designer is going to do the technical function design user interface concept and user interface design
+MTD009PM: and the marketing expert is doing a little bit of user requirement specification trend watching and project uh product ev evaluation",the [[user interface designer is → us int face designers]] going to do the technical function design user interface concept and user interface design,user interface designer is,us int face designers,substitution,the us int face designers going to do the technical function design use inte face concept and use inte face design,2,content_word,,,wav2vec2-large|AMI_TS3003a_H00_MTD009PM_0030124_0031102|0,1,5,1,5,,,,
+38,"FIO084: mm-hmm
+FIO084: mm
+FIE088: and then and then the other thing would basically be sh shape or practicality of use
+[TARGET] yep well i think that everybody is going to say their remote control is practical
+FIE088: you know",[[yep → yeah]] well i think that everybody is going to say their remote control is practical,yep,yeah,substitution,yeah well i think that everybody is going to say their remote control is practical,1,disfluency,,,whisper-large-v3|AMI_IS1009d_H03_FIO089_0080981_0081579|0,0,1,0,1,,,,
+39,"MEE014: well a device which basically just sends the signal to the t. v. to change its state
+MEE014: whether that be the power or the channel um or the volume
+MEE014: everything is just um some sort of signal to change the state of the t. v. or other appliance that it's sending the signal to
+[TARGET] so i decided i would have a look at what th other people have designed and try and take some inspiration from that
+MEE014: but uh although we will want to be taking",so i decided i would have a look at what [[th → ∅]] other people have designed and try and take some inspiration from that,th,∅,deletion,so i decided i would have a look at what other people have designed and try and take some inspiration from that,1,content_word,,,whisper-large-v3|AMI_ES2004b_H02_MEE014_0024903_0025738|0,10,11,10,10,,,,
+40,"MEE073: hmm
+MEE073: did you wanna take a look at comments
+MEE073: there's more uh
+[TARGET] did we get 7 out of 10 for the other one
+MEE071: yep",did we [[get 7 out of → gue he now]] 10 for the other one,get 7 out of,gue he now,mixed,did we gue he now 10 for the elon,4,number,,,wav2vec2-large|AMI_EN2002c_H01_FEO072_0005327_0005656|0,2,6,2,5,,,,
+41,"MTD012ME: um we've done some market research
+MTD012ME: we distributed some more enquetes questionnaires
+MTD012ME: and um besides that um i deployed some trend watchers to milan and paris to well get all of the newest trends
+[TARGET] and i have consulted some additional trend watch trend watchers after the original trend watchers return about what the
+MTD012ME: the best design would be",and i have consulted some additional trend [[watch trend → ∅]] watchers after the original trend watchers return about what the,watch trend,∅,deletion,and i have consulted some additional trend watchers after the original trend watchers returned about what the,1,disfluency,,,whisper-large-v3|AMI_TS3003c_H03_MTD012ME_0022728_0023525|0,7,9,7,7,,,,
+42,"MTD011UID: um uh let's see
+MTD011UID: um yeah and
+MTD011UID: uh we uh need some uh new a attractive functions uh uh which attract uh uh people for using it
+[TARGET] so it is like a speak speech recognition and a special button for selecting subtitles
+MTD011UID: just uh what we uh mentioned uh last uh meeting",so it is like a speak speech recognition and a special button for selecting [[subtitles → a subtitle]],subtitles,a subtitle,mixed,so a it is like a speak a speech recognation and a special burton for selecting a subtitle,1,content_word,,,wav2vec2-large|AMI_TS3003c_H01_MTD011UID_0055076_0055904|4,14,15,16,18,,,,
+43,"MTD009PM: i don't know
+MTD009PM: it lives for the fun
+MTD009PM: so
+[TARGET] it is my characteristic characteristic about the dolphin
+MTD009PM: it lives for the fun",[[it is → ∅]] my characteristic characteristic about the dolphin,it is,∅,deletion,my characteristic an characteristic about the dolphin,1,function_word,,,wav2vec2-large|AMI_TS3003a_H00_MTD009PM_0070024_0070319|0,0,2,0,0,,,,
+44,"FIE088: what with
+FIO089: well because you're s because you're silly
+FIO087: then in that case
+[TARGET] i i we can not do it
+FIO089: because people are silly",[[i i → ∅]] we can not do it,i i,∅,deletion,we can not do anything,1,disfluency,,,whisper-large-v3|AMI_IS1009a_H02_FIO084_0066611_0066715|0,0,2,0,0,,,,
+45,"FEO070: i think so
+MEE073: um i thought the evaluation maybe for the report
+FEO070: well uh
+[TARGET] so th and that is due on the 25th
+MEE071: when's the report hand in",so th and that is [[due → do]] on the 25th,due,do,substitution,so an that is do on the 25th,2,content_word,,,wav2vec2-large|AMI_EN2002d_H03_MEE073_0140610_0140752|1,5,6,4,5,,,,
+46,"FEE016: with menus yeah yeah
+MEO015: and if it's s somewhat similar to what you have on mobile phone people might find it easier to browse and navigate also maybe
+FEE016: yeah
+[TARGET] what about the older generation
+FEE013: what about granny and grandads",[[what → or]] about the older generation,what,or,substitution,or about the older generation,2,function_word,,,wav2vec2-large|AMI_ES2004a_H01_FEE013_0081235_0081365|0,0,1,0,1,,,,
+47,"MEE073: um then that's gonna be kind of fun
+MEE073: like i'm just wondering have you had to well the way you're doi i was gonna ask if the way you were doing it
+MEE073: you were loading like a new corpus each time for each meeting but you're doing the objects
+[TARGET] so you do not need to just because if we are if we do have t like if the inverted search says that there is you know
+MEE073: ten documents are we gonna have to load each of these ten corp corpora just to um do the individual next uh n. x. t. search",so you do not need to just because if we are if we do have t like [[if → ∅]] the inverted search says that there is you know,if,∅,deletion,you do not need to just because if we if we do act like the inverted church says that there is,1,disfluency,,,wav2vec2-large|AMI_EN2002c_H03_MEE073_0087588_0088289|3,17,18,14,14,,,,
+48,"FIO087: yes
+FIO089: or would we have to use the same electronics and make three different shapes
+FIE088: yeah well that's that's the question
+[TARGET] the same electronics and basically all that is going to be different is the plastic case
+FIO084: hmm-hmm",the same electronics and [[basically → basi]] all that is going to be different is the plastic case,basically,basi,substitution,a the same electronics and basi all that can be different is the plastic case,1,disfluency,,,wav2vec2-large|AMI_IS1009b_H03_FIO089_0185658_0186120|1,4,5,5,6,,,,
+49,"MEO015: yeah so
+MEE014: can i just nick your
+FEE013: yes yes you can
+[TARGET] wait a 2nd i will get it out
+MEE014: whoa",wait a 2nd i will [[get it out → geto]],get it out,geto,mixed,we say i will geto,4,other,,,wav2vec2-large|AMI_ES2004d_H01_FEE013_0010995_0011086|1,5,8,4,5,,,,
+50,"FEE016: s
+MEO015: i think we could change the battery also
+MEO015: instead of going for kinetic how about going for a standard battery
+[TARGET] has that not made any d if you click off that square now has that not made any difference
+MEE014: well yes",[[has that not made any d → ∅]] if you click off that square now has that not made any difference,has that not made any d,∅,deletion,if you click off that square now has that not made any difference,1,disfluency,,,whisper-large-v3|AMI_ES2004d_H03_FEE016_0137735_0138224|0,0,6,0,0,,,,
