@@ -15,25 +15,30 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from common import OUT, normalize
+from common import OUT, SUBSETS, normalize, subset_paths
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tag", default="gpt-5.4-mini")
+    ap.add_argument("--tag", default="deepseek-v4-1-flash_v2.4")
+    ap.add_argument("--subset", nargs="+", default=["test"], choices=SUBSETS,
+                    help="one or more subsets, pooled (e.g. test test_extra)")
     args = ap.parse_args()
 
-    err = pd.DataFrame([json.loads(l) for l in open(OUT / "errors.jsonl")])
+    sfx = "" if args.subset == ["test"] else "_" + "+".join(args.subset)
+    P = [subset_paths(s) for s in args.subset]
+    err = pd.DataFrame([json.loads(l) for q in P for l in open(q["errors"])])
     ann = pd.DataFrame([json.loads(l) for l in open(OUT / f"llm_annotations_{args.tag}.jsonl")])
     err = err.merge(ann[["error_id", "severity", "content_type", "error_form", "flag", "rationale"]],
                     on="error_id", how="left")
     # Reference problems are not ASR errors: drop them from both WER and Semantic-WER counts.
     is_ref = err.flag.map(lambda f: "ref_issue" in (f if isinstance(f, list) else str(f).split(";")))
     n_flag = is_ref.sum()
+    err_all = err
     err = err[~is_ref]
     print(f"excluded {n_flag} ref_issue spans")
-    wer = json.load(open(OUT / "wer_summary.json"))
-    utts = pd.DataFrame([json.loads(l) for l in open(OUT.parent / "data" / "eval_subset.jsonl")])
+    wer = {k: v for q in P for k, v in json.load(open(q["wer"])).items()}  # system names only
+    utts = pd.DataFrame([json.loads(l) for q in P for l in open(q["meta"])])
 
     rows = []
     for sysname in wer:
@@ -44,41 +49,45 @@ def main():
             covered = es.severity.notna().all()
             rows.append({"system": sysname, "audio_id": u.audio_id, "n_ref": n, "covered": covered,
                          "word_errors": es.n_word_errors.sum(),
+                         "word_errors_all": err_all[(err_all.system == sysname) & (err_all.audio_id == u.audio_id)].n_word_errors.sum(),
                          "w_lin": (es.n_word_errors * es.severity / 5).sum(),
                          "w_hard": (es.n_word_errors * (es.severity - 1) / 4).sum(),
                          "max_sev": es.severity.max() if len(es) else 1.0})
     U = pd.DataFrame(rows)
-    U.to_csv(OUT / "utt_scores.csv", index=False)
+    U.to_csv(OUT / f"utt_scores{sfx}.csv", index=False)
 
     summary = {}
     for sysname, g in U.groupby("system"):
         c = g[g.covered]
         N = c.n_ref.sum()
+        N_all = g.n_ref.sum()
+        g = g.assign(word_errors_all=g.word_errors_all)
         summary[sysname] = {
+            "subsets": "+".join(args.subset),
             "coverage_utts": f"{len(c)}/{len(g)}",
             "wer_on_covered": c.word_errors.sum() / N,
             "semwer_lin": c.w_lin.sum() / N,
             "semwer_hard": c.w_hard.sum() / N,
             "semwer_max": ((c.max_sev - 1) / 4).mean(),
-            "wer_full": wer[sysname]["wer"],
+            "wer_full": g.word_errors_all.sum() / N_all,
         }
-    json.dump(summary, open(OUT / "semwer_summary.json", "w"), indent=2)
+    json.dump(summary, open(OUT / f"semwer_summary{sfx}.json", "w"), indent=2)
     print(pd.DataFrame(summary).T.to_string(float_format=lambda v: f"{v:.3f}"))
 
     a = err[err.severity.notna()]
     # Severity distribution per system
     pd.crosstab(a.system, a.severity.astype(int), normalize="index").T.plot.bar(figsize=(6, 3.5), rot=0)
     plt.xlabel("severity"); plt.ylabel("fraction of error spans"); plt.tight_layout()
-    plt.savefig(OUT / "fig_severity_dist.png", dpi=200); plt.close()
+    plt.savefig(OUT / f"fig_severity_dist{sfx}.png", dpi=200); plt.close()
     # Category x system counts and mean severity
     cat = a.groupby(["content_type", "system"]).severity.agg(["count", "mean"]).unstack("system")
-    cat.to_csv(OUT / "category_by_system.csv")
+    cat.to_csv(OUT / f"category_by_system{sfx}.csv")
     print("\n", cat.to_string(float_format=lambda v: f"{v:.2f}"))
-    pd.crosstab(a.error_form, a.system).to_csv(OUT / "error_form_by_system.csv")
+    pd.crosstab(a.error_form, a.system).to_csv(OUT / f"error_form_by_system{sfx}.csv")
     print("\n", pd.crosstab(a.error_form, a.system).to_string())
     pd.crosstab(a.content_type, a.system).plot.barh(figsize=(6, 4))
     plt.xlabel("# error spans"); plt.tight_layout()
-    plt.savefig(OUT / "fig_category_counts.png", dpi=200); plt.close()
+    plt.savefig(OUT / f"fig_category_counts{sfx}.png", dpi=200); plt.close()
     # Utterance-level WER vs Semantic-WER scatter
     c = U[U.covered & (U.word_errors > 0)]
     fig, ax = plt.subplots(figsize=(4.5, 4))
@@ -86,10 +95,10 @@ def main():
         ax.scatter(g.word_errors / g.n_ref, g.w_hard / g.n_ref, s=8, alpha=.5, label=s)
     ax.plot([0, 1], [0, 1], "k--", lw=.8); ax.set_xlim(0, 1); ax.set_ylim(0, 1)
     ax.set_xlabel("utterance WER"); ax.set_ylabel("utterance Semantic-WER (hard)"); ax.legend(fontsize=7)
-    plt.tight_layout(); plt.savefig(OUT / "fig_wer_vs_semwer.png", dpi=200); plt.close()
+    plt.tight_layout(); plt.savefig(OUT / f"fig_wer_vs_semwer{sfx}.png", dpi=200); plt.close()
 
     # Representative cases: same/low WER but very different severity
-    with open(OUT / "cases.md", "w") as f:
+    with open(OUT / f"cases{sfx}.md", "w") as f:
         f.write("# Representative cases\n\n")
         for title, q in [("High-severity single-word errors", (a.n_word_errors == 1) & (a.severity >= 5)),
                          ("Multi-word errors judged harmless", (a.n_word_errors >= 2) & (a.severity == 1))]:
