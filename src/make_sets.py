@@ -12,7 +12,7 @@ import re
 
 import pandas as pd
 
-from common import OUT, ROOT
+from common import OUT, ROOT, single_error_hyp
 
 
 def fmt_context(e):
@@ -35,7 +35,7 @@ def targeted_pool(df):
 CONTENT_TYPES = ["disfluency", "function_word", "content_word", "named_entity", "number", "negation", "other"]
 FLAGS = ["ref_issue", "crosstalk", "uncertain", "multi_issue"]
 WIDTHS = {"#": 4, "context (reference transcript)": 45, "error in reference: [[reference → ASR]]": 45,
-          "reference said": 16, "ASR output": 16, "edit_operation": 12, "full ASR sentence": 35,
+          "reference said": 16, "ASR output": 16, "edit_operation": 12, "ASR sentence with only this error": 40,
           "severity": 9, "content_type": 15, "flag": 14, "note": 30}
 
 
@@ -112,7 +112,8 @@ def main():
         "reference said": pilot.ref_span.replace("", "∅").values,
         "ASR output": pilot.hyp_span.replace("", "∅").values,
         "edit_operation": pilot.op.values,
-        "full ASR sentence": pilot.hyp.values,
+        "ASR sentence with only this error": pilot.apply(single_error_hyp, axis=1).values,
+        "full ASR sentence (all errors)": pilot.hyp.values,
         "severity": "", "content_type": "", "flag": "", "note": "",
         "error_id": pilot.error_id.values,
         # alignment word indices (normalized ref/hyp), to trace spans if alignment changes

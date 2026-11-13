@@ -87,6 +87,19 @@ All other examples are real spans from our eval subset, outside the 50-item pilo
 - Keep the original independent annotations; record post-discussion changes in a separate copy.
 
 ## Changelog
+- **v2.4** (frozen 2026-11-12 for full LLM annotation, after the human pilot; see `docs/pilot_adjudication.md`):
+  annotators and the LLM compare the reference with the ASR sentence containing **only this error**;
+  misrecognized words: no separate score ranges; read the ASR sentence without the reference, judge how much of
+  the intended meaning is recoverable, then apply the normal 1–5 scale (not spelling similarity or dictionary
+  membership); between-annotator differences here are accepted (cf. #6 `scroll → scrawl`; B scored recognizable
+  misspellings one point above A on ~10 items); level-1 wording "nothing the speaker said is altered" →
+  "the conveyed meaning remains unchanged";
+  disfluency deletions are 1 only if the words add no meaning (cf. #43); self-repair: the repaired part is content
+  (cf. #1); insertions incl. likely crosstalk are scored by what they add to this utterance (cf. #31);
+  content_type chosen by ordered questions, repetitions always disfluency, merged spans follow the order
+  (motivated by 19/50 content_type disagreements, mostly disfluency / function_word / content_word);
+  `morse code → mormorscot` moved from the level-3 anchors into the misrecognized-words table.
+  Pilot items are referenced here only, never used as anchors.
 - **v2.3** (frozen for the pilot): rubric restructured by Demi (definitions → decision guide → principles →
   anchors → content type → instructions); decision step 1 asks for *any* change so that 2 is reachable;
   3 = local and 4 = main distortion; 5 = reversal only; "different value is not automatically severe" and

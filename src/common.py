@@ -45,3 +45,10 @@ _EXTRA = {"cause": "because", "'cause": "because", "kinda": "kind of", "alright"
           "onto": "on to", "aaa": "triple a", "aa": "double a", "okay": "ok", "dunno": "do not know",
           "ohh": "oh", "oclock": "o'clock"}
 
+
+def single_error_hyp(e):
+    """The reference with only this span replaced by the ASR output: what the ASR sentence would be if
+    every other recognition error in the utterance were corrected."""
+    ref_w = e["ref"].split()
+    out = ref_w[:e["ref_start"]] + e["hyp_span"].split() + ref_w[e["ref_end"]:]
+    return " ".join(out) or "∅"
