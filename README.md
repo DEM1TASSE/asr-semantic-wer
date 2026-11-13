@@ -72,7 +72,14 @@ halves of Mixed-10K). Same number of errors per system, so the student does not 
 | `test_all` | 574 + 1,122 | test, natural distribution |
 | `pilot_human` | 50 | test against **human** labels (mean of A and B) |
 
-Severity is skewed: in `train_mixed_10k` 1/2/3/4/5 = 6,058 / 1,347 / 1,659 / 880 / 56.
+**What "balanced" means:** the same number of errors from each **ASR system** (e.g. `test_balanced` =
+500 Whisper + 500 wav2vec2). It is *not* balanced by severity. Why: on the same utterances wav2vec2
+makes about twice as many errors as Whisper, so pooling all errors would let wav2vec2 dominate both
+training and the "all" test score. The `*_all` files keep the natural distribution; report them too.
+
+**Severity is not balanced** (natural distribution, so test scores reflect reality): in
+`train_mixed_10k` 1/2/3/4/5 = 6,058 / 1,347 / 1,659 / 880 / 56. If the model rarely predicts 4–5,
+re-weight or over-sample high severities **in training only**; never change the dev / test sets.
 
 ---
 
