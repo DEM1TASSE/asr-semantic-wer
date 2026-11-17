@@ -1,6 +1,6 @@
-error_form,wav2vec2-large,whisper-large-v3
-garbled,2378,88
-morph_variant,488,507
-nonword,2343,29
-other,217,127
-real_word,2899,1528
+error_form,parakeet-tdt-0.6b-v2,wav2vec2-large,whisper-large-v3
+garbled,149,2378,88
+morph_variant,481,488,507
+nonword,263,2343,29
+other,294,217,127
+real_word,1699,2899,1528

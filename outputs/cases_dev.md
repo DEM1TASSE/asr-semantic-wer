@@ -10,6 +10,10 @@
   _Substituting the antonym 'realistic' for 'surrealistic' reverses the core description of the movie, contradicting the following clause about dream-like parts._
 - **wav2vec2-large** sev=5 [negation/nan] `yeah but you can not choo you can [[not → ∅]] choose it when you buy it`  
   _Deleting the second 'not' turns the assertion 'you can not choose it when you buy it' into 'you can choose it', reversing the core proposition._
+- **parakeet-tdt-0.6b-v2** sev=5 [negation/real_word] `it is weird because it kind of is [[and → not]] kind of is not`  
+  _Substituting "and" with "not" flips the first clause from affirmative ("kind of is") to negative ("kind of is not"), reversing the polarity of the core proposition._
+- **parakeet-tdt-0.6b-v2** sev=5 [negation/real_word] `suggestion if possible we could move me and yalina to the office where andrei and nancy are [[now → not]]`  
+  _Replacing "now" with "not" negates the location clause, reversing the proposition from the office where Andrei and Nancy currently are to one where they are not._
 
 ## Multi-word errors judged harmless
 
@@ -30,7 +34,7 @@
 
 - **whisper-large-v3** WER=2.20 SemWER=1.10: `∅ → we have got some time we have got some time now` (3)
 - **wav2vec2-large** WER=1.17 SemWER=0.17: `ah that is → thas` (1); `∅ → wher dos the to` (2)
-- **wav2vec2-large** WER=0.80 SemWER=0.00: `∅ → am` (1); `price is → prices` (1); `euro → uro` (1)
+- **parakeet-tdt-0.6b-v2** WER=1.00 SemWER=0.11: `no → i know` (2); `∅ → the` (1); `b → ba it is` (1); `surname → name` (2)
 - **whisper-large-v3** WER=0.17 SemWER=0.17: `keep → give` (5)
 - **whisper-large-v3** WER=0.83 SemWER=0.83: `or how how → no no no there is no terrace in that building` (5)
 - **wav2vec2-large** WER=1.00 SemWER=1.00: `it is quite horrible actually → its great oribishing` (5)

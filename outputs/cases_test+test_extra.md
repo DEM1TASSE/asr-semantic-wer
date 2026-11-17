@@ -32,7 +32,7 @@
 
 - **whisper-large-v3** WER=1.00 SemWER=0.00: `maximal 12.5 euro → maximum 12 and a half euros` (1)
 - **wav2vec2-large** WER=1.00 SemWER=0.00: `which are let us see → torletsee` (1)
-- **whisper-large-v3** WER=0.88 SemWER=0.00: `you ha you have t yeah y → ∅` (1)
+- **parakeet-tdt-0.6b-v2** WER=1.00 SemWER=0.00: `you ha you have t yeah y yes → <empty>` (1)
 - **whisper-large-v3** WER=0.11 SemWER=0.11: `crude → great` (5)
 - **wav2vec2-large** WER=0.33 SemWER=0.33: `that then → nothing` (5)
 - **wav2vec2-large** WER=0.17 SemWER=0.17: `removable → immovable` (5)

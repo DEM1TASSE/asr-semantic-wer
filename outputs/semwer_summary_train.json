@@ -1,4 +1,13 @@
 {
+  "parakeet-tdt-0.6b-v2": {
+    "subsets": "train",
+    "coverage_utts": "6000/6000",
+    "wer_on_covered": 0.09776777340086287,
+    "semwer_lin": 0.03710873507159383,
+    "semwer_hard": 0.021943975489276558,
+    "semwer_max": 0.11766666666666667,
+    "wer_full": 0.10280747827174389
+  },
   "wav2vec2-large": {
     "subsets": "train",
     "coverage_utts": "6000/6000",

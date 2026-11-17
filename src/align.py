@@ -11,8 +11,8 @@ import jiwer
 
 from common import SUBSETS, normalize, subset_paths
 
-SYSTEMS = ["whisper-large-v3", "wav2vec2-large"]
-MODEL_IDS = {"whisper-large-v3": "openai/whisper-large-v3",
+SYSTEMS = ["whisper-large-v3", "wav2vec2-large", "parakeet-tdt-0.6b-v2"]
+MODEL_IDS = {"whisper-large-v3": "openai/whisper-large-v3", "parakeet-tdt-0.6b-v2": "nvidia/parakeet-tdt-0.6b-v2",
              "wav2vec2-large": "facebook/wav2vec2-large-960h-lv60-self"}
 
 
@@ -55,6 +55,9 @@ def main():
     utts = {u["audio_id"]: u for u in load_jsonl(paths["meta"])}
     summary, errors = {}, []
     for sysname in SYSTEMS:
+        if not paths["hyp"](sysname).exists():
+            print(f"skip {sysname}: no hypotheses for {args.subset}")
+            continue
         hyps = {h["audio_id"]: h for h in load_jsonl(paths["hyp"](sysname))}
         ids = [a for a in utts if a in hyps]
         # Re-normalize here so normalization fixes apply without re-sampling or re-running ASR.

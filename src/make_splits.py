@@ -4,8 +4,10 @@ All lists live in data/splits/*.txt (one error_id per line) plus data/splits/man
 (counts, severity distribution, seed). Rules:
   * spans flagged ref_issue by the teacher are dropped everywhere (the reference itself is wrong);
   * the 50 human-pilot items are dropped from train / dev / test (they are a separate eval set);
-  * samples are stratified by meeting and NESTED: Mixed-1K ⊂ Mixed-2.5K ⊂ Mixed-5K ⊂ Mixed-10K, and
-    Whisper-5K / wav2vec2-5K are the two halves of Mixed-10K. So larger sets only add data.
+  * three ASR systems (Whisper, wav2vec2, Parakeet-TDT); "balanced" = equal number of errors per system;
+  * main training sets all have 9,000 errors: All-3 (3 x 3,000) and leave-one-system-out (2 x 4,500);
+  * samples are stratified by meeting and NESTED (1.5k ⊂ 3k ⊂ 6k ⊂ 9k for All-3; only-<system> 4.5k ⊂
+    the leave-one-out sets that contain that system), so larger sets only add data.
 Run: pixi run python src/make_splits.py
 """
 import json
@@ -17,7 +19,9 @@ from common import DATA, OUT, load_errors
 
 SEED = 751
 TAG = "deepseek-v4-1-flash_v2.4"
-SYSTEMS = {"whisper": "whisper-large-v3", "wav2vec2": "wav2vec2-large"}
+SYSTEMS = {"whisper": "whisper-large-v3", "wav2vec2": "wav2vec2-large", "parakeet": "parakeet-tdt-0.6b-v2"}
+TRAIN_TOTAL = 9000   # every main training set has 9,000 errors: All-3 = 3 x 3,000, leave-one-out = 2 x 4,500
+EVAL_PER_SYSTEM = 400  # Parakeet has only ~440 test and ~480 dev errors
 
 
 def stratified_order(ids, errors, rng):
@@ -47,30 +51,39 @@ def main():
     order = {(part, s): stratified_order(pool(subs, s), errors, rng)
              for part, subs in [("train", {"train"}), ("dev", {"dev"}), ("test", {"test", "test_extra"})]
              for s in SYSTEMS}
-    W, V = (lambda part, n: order[(part, "whisper")][:n]), (lambda part, n: order[(part, "wav2vec2")][:n])
-
-    splits = {
-        # --- training sets (main experiments) ---
-        "train_whisper_5k": W("train", 5000),
-        "train_wav2vec2_5k": V("train", 5000),
-        "train_mixed_5k": W("train", 2500) + V("train", 2500),
-        "train_mixed_10k": W("train", 5000) + V("train", 5000),
-        # --- learning curve ---
-        "train_mixed_1k": W("train", 500) + V("train", 500),
-        "train_mixed_2.5k": W("train", 1250) + V("train", 1250),
-        # --- only if 10K is not enough: every usable train span (unbalanced, more wav2vec2) ---
-        "train_all": order[("train", "whisper")] + order[("train", "wav2vec2")],
-        # --- model selection (early stopping, hyper-parameters): dev only ---
-        "dev_balanced": W("dev", 500) + V("dev", 500),
-        "dev_all": order[("dev", "whisper")] + order[("dev", "wav2vec2")],
-        # --- final evaluation against teacher labels: never used for any decision ---
-        "test_balanced": W("test", 500) + V("test", 500),
-        "test_all": order[("test", "whisper")] + order[("test", "wav2vec2")],
-        # --- 50 human-labelled pilot items (evaluate against human labels) ---
-        "pilot_human": sorted(i for i in pilot if i in errors),
-    }
+    take = lambda part, sysname, n: order[(part, sysname)][:n]
+    for part, need in [("train", TRAIN_TOTAL // 2), ("dev", EVAL_PER_SYSTEM), ("test", EVAL_PER_SYSTEM)]:
+        for sname in SYSTEMS:
+            assert len(order[(part, sname)]) >= need, f"{part}/{sname}: only {len(order[(part, sname)])} < {need}"
+    per3, per2 = TRAIN_TOTAL // 3, TRAIN_TOTAL // 2
+    k = lambda n: f"{n / 1000:g}k"
+    splits = {}
+    # --- main: all three systems, equal share ---
+    splits[f"train_all3_{k(TRAIN_TOTAL)}"] = [i for s in SYSTEMS for i in take("train", s, per3)]
+    # --- leave-one-system-out: same total size, held-out system never seen in training ---
+    for held in SYSTEMS:
+        splits[f"train_loo_no_{held}_{k(TRAIN_TOTAL)}"] = [i for s in SYSTEMS if s != held for i in take("train", s, per2)]
+    # --- learning curve (All-3, nested in the 9k set) ---
+    for n in (500, 1000, 2000):
+        splits[f"train_all3_{k(3 * n)}"] = [i for s in SYSTEMS for i in take("train", s, n)]
+    # --- optional: one system only (subset of the leave-one-out sets) ---
+    for s in SYSTEMS:
+        splits[f"train_only_{s}_{k(per2)}"] = take("train", s, per2)
+    # --- only if more data is needed: every usable train error (unbalanced) ---
+    splits["train_all"] = [i for s in SYSTEMS for i in order[("train", s)]]
+    # --- model selection: dev only ---
+    splits["dev_balanced"] = [i for s in SYSTEMS for i in take("dev", s, EVAL_PER_SYSTEM)]
+    splits["dev_all"] = [i for s in SYSTEMS for i in order[("dev", s)]]
+    # --- final evaluation against teacher labels ---
+    splits["test_balanced"] = [i for s in SYSTEMS for i in take("test", s, EVAL_PER_SYSTEM)]
+    splits["test_all"] = [i for s in SYSTEMS for i in order[("test", s)]]
+    # --- 50 human-labelled pilot errors (Whisper + wav2vec2 only) ---
+    splits["pilot_human"] = sorted(i for i in pilot if i in errors)
     out = DATA / "splits"
     out.mkdir(exist_ok=True)
+    for old in out.glob("*.txt"):
+        if old.stem != "human_test":  # written by make_human_test.py
+            old.unlink()
     manifest = {"seed": SEED, "labels": f"outputs/llm_annotations_{TAG}.jsonl",
                 "excluded": "teacher flag ref_issue; the 50 pilot items (except in pilot_human)", "splits": {}}
     for name, ids in splits.items():

@@ -18,6 +18,8 @@ from common import SUBSETS, normalize, subset_paths
 MODELS = {
     "whisper-large-v3": ("whisper", "openai/whisper-large-v3"),
     "wav2vec2-large": ("ctc", "facebook/wav2vec2-large-960h-lv60-self"),
+    # Transducer (FastConformer-TDT); needs NeMo: run with /work/.../venv_nemo/bin/python
+    "parakeet-tdt-0.6b-v2": ("nemo", "nvidia/parakeet-tdt-0.6b-v2"),
 }
 
 
@@ -57,6 +59,25 @@ def run_ctc(model_id, audios, bs, device):
     return outs
 
 
+@torch.inference_mode()
+def run_nemo(model_id, audios, bs, device):
+    import nemo.collections.asr as nemo_asr
+    from omegaconf import open_dict
+    model = nemo_asr.models.ASRModel.from_pretrained(model_id).to(device).eval()  # greedy TDT decoding
+    # The CUDA-graph greedy decoder crashed (illegal memory access) on the train subset; the plain loop
+    # gives the same greedy output.
+    dec = model.cfg.decoding
+    with open_dict(dec):
+        dec.greedy.use_cuda_graph_decoder = False
+    model.change_decoding_strategy(dec)
+    outs = []
+    for i in tqdm(range(0, len(audios), bs)):
+        res = model.transcribe(audios[i:i + bs], batch_size=bs, verbose=False)
+        res = res[0] if isinstance(res, tuple) else res
+        outs += [r.text if hasattr(r, "text") else r for r in res]
+    return outs
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True, choices=MODELS)
@@ -75,7 +96,7 @@ def main():
     audios = [load_audio(a) for a in df.audio]
     # Sort by length for efficient batching, then restore order.
     order = np.argsort([len(a) for a in audios])
-    fn = run_whisper if kind == "whisper" else run_ctc
+    fn = {"whisper": run_whisper, "ctc": run_ctc, "nemo": run_nemo}[kind]
     hyps_sorted = fn(model_id, [audios[j] for j in order], args.bs, device)
     hyps = [None] * len(audios)
     for j, h in zip(order, hyps_sorted):

@@ -3,167 +3,235 @@
   "labels": "outputs/llm_annotations_deepseek-v4-1-flash_v2.4.jsonl",
   "excluded": "teacher flag ref_issue; the 50 pilot items (except in pilot_human)",
   "splits": {
-    "train_whisper_5k": {
-      "n": 5000,
+    "train_all3_9k": {
+      "n": 9000,
       "by_system": {
-        "whisper-large-v3": 5000
+        "whisper-large-v3": 3000,
+        "wav2vec2-large": 3000,
+        "parakeet-tdt-0.6b-v2": 3000
       },
       "meetings": 29,
       "severity": {
-        "1": 3626,
-        "2": 569,
-        "3": 566,
-        "4": 213,
-        "5": 26
+        "1": 5490,
+        "2": 1326,
+        "3": 1419,
+        "4": 705,
+        "5": 60
       }
     },
-    "train_wav2vec2_5k": {
-      "n": 5000,
+    "train_loo_no_whisper_9k": {
+      "n": 9000,
       "by_system": {
-        "wav2vec2-large": 5000
+        "wav2vec2-large": 4500,
+        "parakeet-tdt-0.6b-v2": 4500
       },
       "meetings": 29,
       "severity": {
-        "1": 2432,
-        "2": 778,
-        "3": 1093,
-        "4": 667,
-        "5": 30
+        "1": 5036,
+        "2": 1423,
+        "3": 1622,
+        "4": 854,
+        "5": 65
       }
     },
-    "train_mixed_5k": {
-      "n": 5000,
+    "train_loo_no_wav2vec2_9k": {
+      "n": 9000,
       "by_system": {
-        "whisper-large-v3": 2500,
-        "wav2vec2-large": 2500
+        "whisper-large-v3": 4500,
+        "parakeet-tdt-0.6b-v2": 4500
       },
       "meetings": 29,
       "severity": {
-        "1": 2981,
-        "2": 703,
-        "3": 835,
-        "4": 451,
-        "5": 30
+        "1": 6131,
+        "2": 1226,
+        "3": 1142,
+        "4": 441,
+        "5": 60
       }
     },
-    "train_mixed_10k": {
-      "n": 10000,
+    "train_loo_no_parakeet_9k": {
+      "n": 9000,
       "by_system": {
-        "whisper-large-v3": 5000,
-        "wav2vec2-large": 5000
+        "whisper-large-v3": 4500,
+        "wav2vec2-large": 4500
       },
       "meetings": 29,
       "severity": {
-        "1": 6058,
-        "2": 1347,
-        "3": 1659,
-        "4": 880,
-        "5": 56
+        "1": 5417,
+        "2": 1239,
+        "3": 1506,
+        "4": 787,
+        "5": 51
       }
     },
-    "train_mixed_1k": {
-      "n": 1000,
+    "train_all3_1.5k": {
+      "n": 1500,
       "by_system": {
         "whisper-large-v3": 500,
-        "wav2vec2-large": 500
+        "wav2vec2-large": 500,
+        "parakeet-tdt-0.6b-v2": 500
       },
       "meetings": 29,
       "severity": {
-        "1": 614,
-        "2": 137,
-        "3": 155,
-        "4": 88,
-        "5": 6
+        "1": 956,
+        "2": 218,
+        "3": 208,
+        "4": 109,
+        "5": 9
       }
     },
-    "train_mixed_2.5k": {
-      "n": 2500,
+    "train_all3_3k": {
+      "n": 3000,
       "by_system": {
-        "whisper-large-v3": 1250,
-        "wav2vec2-large": 1250
+        "whisper-large-v3": 1000,
+        "wav2vec2-large": 1000,
+        "parakeet-tdt-0.6b-v2": 1000
       },
       "meetings": 29,
       "severity": {
-        "1": 1507,
-        "2": 362,
-        "3": 405,
-        "4": 214,
+        "1": 1852,
+        "2": 444,
+        "3": 458,
+        "4": 234,
         "5": 12
       }
     },
-    "train_all": {
-      "n": 18386,
+    "train_all3_6k": {
+      "n": 6000,
       "by_system": {
-        "whisper-large-v3": 6805,
-        "wav2vec2-large": 11581
+        "whisper-large-v3": 2000,
+        "wav2vec2-large": 2000,
+        "parakeet-tdt-0.6b-v2": 2000
       },
       "meetings": 29,
       "severity": {
-        "1": 10556,
-        "2": 2629,
-        "3": 3212,
-        "4": 1880,
-        "5": 109
+        "1": 3669,
+        "2": 893,
+        "3": 940,
+        "4": 462,
+        "5": 36
+      }
+    },
+    "train_only_whisper_4.5k": {
+      "n": 4500,
+      "by_system": {
+        "whisper-large-v3": 4500
+      },
+      "meetings": 29,
+      "severity": {
+        "1": 3256,
+        "2": 521,
+        "3": 513,
+        "4": 187,
+        "5": 23
+      }
+    },
+    "train_only_wav2vec2_4.5k": {
+      "n": 4500,
+      "by_system": {
+        "wav2vec2-large": 4500
+      },
+      "meetings": 29,
+      "severity": {
+        "1": 2161,
+        "2": 718,
+        "3": 993,
+        "4": 600,
+        "5": 28
+      }
+    },
+    "train_only_parakeet_4.5k": {
+      "n": 4500,
+      "by_system": {
+        "parakeet-tdt-0.6b-v2": 4500
+      },
+      "meetings": 29,
+      "severity": {
+        "1": 2875,
+        "2": 705,
+        "3": 629,
+        "4": 254,
+        "5": 37
+      }
+    },
+    "train_all": {
+      "n": 23410,
+      "by_system": {
+        "whisper-large-v3": 6805,
+        "wav2vec2-large": 11581,
+        "parakeet-tdt-0.6b-v2": 5024
+      },
+      "meetings": 29,
+      "severity": {
+        "1": 13761,
+        "2": 3416,
+        "3": 3917,
+        "4": 2169,
+        "5": 147
       }
     },
     "dev_balanced": {
-      "n": 1000,
+      "n": 1200,
       "by_system": {
-        "whisper-large-v3": 500,
-        "wav2vec2-large": 500
+        "whisper-large-v3": 400,
+        "wav2vec2-large": 400,
+        "parakeet-tdt-0.6b-v2": 400
       },
       "meetings": 18,
       "severity": {
-        "1": 607,
-        "2": 139,
-        "3": 159,
-        "4": 88,
-        "5": 7
+        "1": 736,
+        "2": 149,
+        "3": 188,
+        "4": 114,
+        "5": 13
       }
     },
     "dev_all": {
-      "n": 1808,
+      "n": 2275,
       "by_system": {
         "whisper-large-v3": 641,
-        "wav2vec2-large": 1167
+        "wav2vec2-large": 1167,
+        "parakeet-tdt-0.6b-v2": 467
       },
       "meetings": 18,
       "severity": {
-        "1": 1055,
-        "2": 255,
-        "3": 290,
-        "4": 198,
-        "5": 10
+        "1": 1330,
+        "2": 321,
+        "3": 372,
+        "4": 233,
+        "5": 19
       }
     },
     "test_balanced": {
-      "n": 1000,
+      "n": 1200,
       "by_system": {
-        "whisper-large-v3": 500,
-        "wav2vec2-large": 500
+        "whisper-large-v3": 400,
+        "wav2vec2-large": 400,
+        "parakeet-tdt-0.6b-v2": 400
       },
       "meetings": 16,
       "severity": {
-        "1": 649,
-        "2": 131,
-        "3": 147,
-        "4": 69,
-        "5": 4
+        "1": 773,
+        "2": 152,
+        "3": 197,
+        "4": 72,
+        "5": 6
       }
     },
     "test_all": {
-      "n": 1696,
+      "n": 2128,
       "by_system": {
         "whisper-large-v3": 574,
-        "wav2vec2-large": 1122
+        "wav2vec2-large": 1122,
+        "parakeet-tdt-0.6b-v2": 432
       },
       "meetings": 16,
       "severity": {
-        "1": 1027,
-        "2": 237,
-        "3": 267,
-        "4": 156,
-        "5": 9
+        "1": 1312,
+        "2": 290,
+        "3": 341,
+        "4": 174,
+        "5": 11
       }
     },
     "pilot_human": {
