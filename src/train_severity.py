@@ -1,4 +1,6 @@
-"""Fine-tune a small encoder (DistilBERT by default) to predict error severity from LLM labels.
+"""OUTDATED (pre-split pilot version): do not use for the student experiments; see README section 3.
+
+Fine-tune a small encoder (DistilBERT by default) to predict error severity from LLM labels.
 
 Input text: "<context> [SEP] <ref with [[ref → hyp]] marked>". Regression on severity (1-5).
 Split by meeting to avoid context leakage; human-pilot items are never trained on and are

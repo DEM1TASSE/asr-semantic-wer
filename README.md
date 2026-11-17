@@ -140,6 +140,11 @@ For Sentence-BERT: `pixi add --pypi sentence-transformers`.
 
 ## 3. Experiments to run (student)
 
+> **There is no ready-to-use training script yet; please write your own following this section.**
+> `src/train_severity.py` is an **old version, do not use it**: it reads only the first 500-utterance
+> test set, makes its own random split, and ignores `data/splits/`, Parakeet, and the single-error
+> sentence. Load data as in "Reading the data" (section 1) and use the split files below.
+
 **Model:** `distilbert-base-uncased`, one regression output (severity 1–5, MSE), predictions clipped to [1, 5].
 **Input:** reference with the error marked (`ref_marked`) + the ASR sentence with only this error
 (`single_error_hyp`) + previous context (`context_before`). Max length 256 is enough.
