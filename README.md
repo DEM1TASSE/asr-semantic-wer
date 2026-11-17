@@ -202,6 +202,10 @@ Result tables to fill:
   never by the teacher's labels. Both annotators fill it independently, then discuss gaps ≥ 2.
 - **Smaller teacher LLMs:** run e.g. Qwen3-4B / 8B with the same prompt (vLLM on Delta) on the human test
   set and compare their agreement with humans to DeepSeek's.
+- **(Optional, not started) sentence-level check:** no separate sentence-level model is planned, since a
+  sentence score is aggregated from span scores. If time allows, rate 100–150 utterances (1–5, meaning
+  preserved) by hand and test whether span-aggregated scores match them better than WER and Sentence-BERT
+  similarity. Details in `docs/plan.md`.
 
 ---
 

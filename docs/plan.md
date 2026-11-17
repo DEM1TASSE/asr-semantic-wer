@@ -74,8 +74,14 @@ same prompt, served with vLLM on Delta)**–human, with bootstrap 95% CIs.
 **C. System-level analysis** on all test errors: WER vs Semantic-WER (lin / hard / max), severity
 distribution, high-severity (≥ 4) error rate, error profiles by content_type and error_form, cases.
 
-**Optional (final, if time):** sentence-level human meaning-preservation ratings (100–150 utts) to correlate
-WER / Semantic-WER / embedding similarity with humans; teacher self-consistency (re-run on the human test).
+**Optional (final, if time; not started):**
+- **Sentence-level validation.** No separate sentence-level model: a sentence score is aggregated from the
+  span scores (SemWER-max / lin / hard). To check the aggregation (spans are judged one at a time, so
+  interactions between several errors in one sentence are ignored), both annotators rate 100–150
+  utterances (preferably with ≥ 2 errors, all three systems) for meaning preservation, 1–5. Then compare
+  how well WER, Sentence-BERT similarity (SemDist-style), and span-aggregated scores (teacher and student)
+  correlate with these ratings.
+- Teacher self-consistency (re-run DeepSeek on the human test).
 
 ## Not doing
 - Training every combination of ASR systems: leave-one-out answers the generalization question.
