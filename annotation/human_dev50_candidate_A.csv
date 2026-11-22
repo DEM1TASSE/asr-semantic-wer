@@ -1,0 +1,251 @@
+error_id,context,原文_said,ASR_output,原文整句_[[原文→ASR]],ASR整句,severity,content_type,error_form,flag,note
+whisper-large-v3|AMI_TS3003d_H03_MTD012ME_0098258_0098523|0,"MTD0010ID: so you won't need a button
+MTD009PM: that's right
+MTD009PM: so if you scroll to a number and then you wait a half second then it g turns to that channel
+[TARGET] i think that would be like the end of our usability
+MTD009PM: but it would definitely crop cost a lot",our,her,i think that would be like the end of [[our → her]] usability,i think that would be like the end of her usability,,,,,
+wav2vec2-large|AMI_TS3003b_H01_MTD011UID_0056775_0057117|0,"MTD011UID: uh okay
+MTD011UID: um i've been looking at uh the user interface of it
+MTD009PM: yeah
+[TARGET] f for the techno f functions of of it
+MTD011UID: um",f,m,[[f → m]] for the techno f functions of of it,m for adthe technia functions of op,,,,,
+wav2vec2-large|AMI_ES2004b_H02_MEE014_0024903_0025738|0,"MEE014: well a device which basically just sends the signal to the t. v. to change its state
+MEE014: whether that be the power or the channel um or the volume
+MEE014: everything is just um some sort of signal to change the state of the t. v. or other appliance that it's sending the signal to
+[TARGET] so i decided i would have a look at what th other people have designed and try and take some inspiration from that
+MEE014: but uh although we will want to be taking",∅,and,[[∅ → and]] so i decided i would have a look at what th other people have designed and try and take some inspiration from that,and so i decided i would have a look at what other people have designed and try and take some inspiration from that,,,,,
+whisper-large-v3|AMI_IS1009d_H03_FIO089_0141252_0141534|0,"FIE088: okay
+FIE088: so to beware of that
+FIE088: you wanna go to this next slide marketing expert
+[TARGET] well i is not this my last slide
+FIO089: maybe",i,∅,well [[i → ∅]] is not this my last slide,well is not this my last slide,,,,,
+whisper-large-v3|AMI_IS1009d_H00_FIE088_0019852_0022001|3,"FIE088: uh technically this thing would also have a resistor and a capacitor diode transistor resonator and if possible a rechargeable battery
+FIE088: uh and of course a circuit board
+FIE088: and how it would works you press the button
+[TARGET] the chip is morse morse code related relays the to the generat to the generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to to to consider
+FIO089: okay",generat to the,∅,the chip is morse morse code related relays the to the [[generat to the → ∅]] generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to to to consider,and the chip is morse code related relays to the generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to consider,,,,,
+whisper-large-v3|AMI_TS3003c_H00_MTD009PM_0143794_0144768|0,"MTD009PM: you can sell the cases
+MTD009PM: yeah
+MTD009PM: i think that's a very good option
+[TARGET] because then you can advertise as well with the give your grandfather a new case for his remote control or whatever
+MTD011UID: yeah",the,∅,because then you can advertise as well with [[the → ∅]] give your grandfather a new case for his remote control or whatever,because then you can advertise as well with give your grandfather a new case for his remote control or whatever,,,,,
+wav2vec2-large|AMI_IS1009b_H02_FIO084_0063941_0066293|1,"FIE088: mm-hmm
+FIO084: the metal is like uh in a remote controller you have a chip integrated circuit which is like a brain of the remote controller
+FIO084: it takes the power from a battery say a battery it it can be a elec an electric supply like you have to uh like uh switch connec connect connect your remote controller to uh power supply from the you know electricity or something like that
+[TARGET] it should be a battery because remote controller should be like you you you should take it t to wherever you want and then th this integrated circuitry takes energy from the power source and whatever like if you press a button it is like a input for the remote controller and it takes the input and it it transforms into a infro infrared bits and it sends it into the device
+FIO089: mm-hmm",t,∅,it should be a battery because remote controller should be like you you you should take it [[t → ∅]] to wherever you want and then th this integrated circuitry takes energy from the power source and whatever like if you press a button it is like a input for the remote controller and it takes the input and it it transforms into a infro infrared bits and it sends it into the device,it should be a battery because double a remote controller should be like you you you should take it to wherever you want and then a the disintegrated circulit takes energy from the power source and whatever like if you press a button it is like a input for the remote controller and it takes the input and it transforms into inf in frardid bits and it sends itto the devise,,,,,
+wav2vec2-large|AMI_EN2002d_H01_FEO072_0189484_0190231|1,"MEE073: the
+FEO070: can i have it
+MEE073: if even if we could just
+[TARGET] because you n you do not you only ever have one meeting open and those results will be op i well i suppose if you have a if you have a local search
+FEO070: well the one meeting",you,∅,because you n you do not [[you → ∅]] only ever have one meeting open and those results will be op i well i suppose if you have a if you have a local search,because you do not only ever have one meeting open and those resorts will be oh well i suppose if you have if you have a local search,,,,,
+whisper-large-v3|AMI_TS3003a_H00_MTD009PM_0070024_0070319|1,"MTD009PM: i don't know
+MTD009PM: it lives for the fun
+MTD009PM: so
+[TARGET] it is my characteristic characteristic about the dolphin
+MTD009PM: it lives for the fun",characteristic,∅,it is my [[characteristic → ∅]] characteristic about the dolphin,that is my characteristic about the dolphin,,,,,
+wav2vec2-large|AMI_TS3003a_H00_MTD009PM_0070024_0070319|0,"MTD009PM: i don't know
+MTD009PM: it lives for the fun
+MTD009PM: so
+[TARGET] it is my characteristic characteristic about the dolphin
+MTD009PM: it lives for the fun",it is,∅,[[it is → ∅]] my characteristic characteristic about the dolphin,my characteristic an characteristic about the dolphin,,,,,
+whisper-large-v3|AMI_ES2004a_H03_FEE016_0089871_0090564|0,"FEE013: yeah
+MEE014: you'd you'd have to sort of keep it down to a black and white l. c. d. thing anyway i'd assume
+FEE016: mm-hmm
+[TARGET] is it possible that that for the older generation you could have like an extra button that you press for large print like you do in large print books
+MEO015: okay",that,∅,is it possible that [[that → ∅]] for the older generation you could have like an extra button that you press for large print like you do in large print books,is it possible that for the older generation you could have like an extra button that you press for large print like you do in large print books,,,,,
+wav2vec2-large|AMI_TS3003b_H00_MTD009PM_0196452_0197489|1,"MTD009PM: yeah
+MTD009PM: 'kay
+MTD009PM: and default materials
+[TARGET] i think that is a good idea as well because elderly people do not mind if it is a titanium cover or just a plastic one
+MTD009PM: so that doesn't really matter",cover,cofer,i think that is a good idea as well because elderly people do not mind if it is a titanium [[cover → cofer]] or just a plastic one,i think that is a good idea as well because a eldy people do not mind if it is a titanium cofer or just a plastic one,,,,,
+wav2vec2-large|AMI_ES2004c_H02_MEE014_0048454_0049370|1,"FEE013: 'kay
+MEE014: um and then we we're loo looking into battery options
+MEE014: there's um actually no rechargeable option available
+[TARGET] so we i saw the the standard double a and triple a which we thought were a bit bit too bulky at the moment
+MEE014: dynamo charging i thought that that might be a bit silly to be to be honest people won't it's it's basically like wind up radio",triple a,tripola,so we i saw the the standard double a and [[triple a → tripola]] which we thought were a bit bit too bulky at the moment,so we i saw the am the standard double a and tripola which we thought were a bit bit too bulky at the moment,,,,,
+wav2vec2-large|AMI_ES2004c_H01_FEE013_0012602_0013372|2,"FEE013: to do with that already but we'll just go over it
+FEE013: um
+FEE013: the minutes from the last time
+[TARGET] we had a couple of changes in our plans in that we could not use teletext
+FEE013: it wasn't gonna be a control for everything um and that we had to incorporate the image of the company into it somehow",teletext,telly text,we had a couple of changes in our plans in that we could not use [[teletext → telly text]],a we had a couple of am changes in our plans in that we could not use telly text,,,,,
+wav2vec2-large|AMI_IS1009a_H00_FIE088_0060567_0060957|0,"FIE088: i'm just saying throw signal meaning just whether it's a beep or whether a light or
+FIO084: beep or uh it's a light maybe it's a light
+FIO089: and do you think a good c c um clue for that is that it would respond to a clap or it would respond to your voice or it would respond what what should you have to do to make it beep or blink
+[TARGET] ok my my idea is maybe that the minute it is really hidden
+FIE088: in in other words if it's like in a dark spot uh meaning you know like a newspaper is on top",ok,omy,[[ok → omy]] my my idea is maybe that the minute it is really hidden,omy my ideas may be that the minute it is really hidden,,,,,
+wav2vec2-large|AMI_TS3003b_H03_MTD012ME_0146664_0146971|0,"MTD011UID: so it's yeah
+MTD009PM: yeah
+MTD009PM: so i suggest uh
+[TARGET] i think it would definitely be a bad idea not to include teletext
+MTD011UID: it's",would definitely be,definitelyb,i think it [[would definitely be → definitelyb]] a bad idea not to include teletext,i think it definitelyb a bad idea not to include teletex,,,,,
+wav2vec2-large|AMI_IS1009b_H02_FIO084_0177728_0179020|0,"FIO084: children and everybody yeah
+FIO087: they would like to buy just one and um just one which can be used all the three uh
+FIO084: yeah of course that we can do
+[TARGET] but specifically if y if like elderly people want big buttons then you can not really make a bi big remote controller so maybe specifically you can design a big con remote controller for elderly and for children
+FIO089: what about the electronics",y,∅,but specifically if [[y → ∅]] if like elderly people want big buttons then you can not really make a bi big remote controller so maybe specifically you can design a big con remote controller for elderly and for children,but specifically if if like elderly people want big buttons then you can not really make a bit big remote controlle so maybe specifically you can design a big remote control for elderly and for children like,,,,,
+whisper-large-v3|AMI_IS1009b_H01_FIO087_0121036_0121146|0,"FIO087: yes
+FIO087: no no i'm three
+FIE088: you're three
+[TARGET] i can make it full
+FIE088: would you want it full full screen",i,you,[[i → you]] can make it full,you can make it full,,,,,
+whisper-large-v3|AMI_TS3003b_H01_MTD011UID_0086683_0086961|1,"MTD011UID: s um it's uh not uh in colour or something
+MTD011UID: uh it's just uh um one colo uh yeah
+MTD011UID: uh i seen uh w uh something on the internet uh not today but uh a few uh weeks ago
+[TARGET] you got yeah quite an
+MTD011UID: a kind of uh touchscreen um and it's uh for",yeah,and,you got [[yeah → and]] quite an,you have got and quite and,,,,,
+whisper-large-v3|AMI_ES2004b_H02_MEE014_0024903_0025738|0,"MEE014: well a device which basically just sends the signal to the t. v. to change its state
+MEE014: whether that be the power or the channel um or the volume
+MEE014: everything is just um some sort of signal to change the state of the t. v. or other appliance that it's sending the signal to
+[TARGET] so i decided i would have a look at what th other people have designed and try and take some inspiration from that
+MEE014: but uh although we will want to be taking",th,∅,so i decided i would have a look at what [[th → ∅]] other people have designed and try and take some inspiration from that,so i decided i would have a look at what other people have designed and try and take some inspiration from that,,,,,
+wav2vec2-large|AMI_TS3003c_H03_MTD012ME_0022728_0023525|0,"MTD012ME: um we've done some market research
+MTD012ME: we distributed some more enquetes questionnaires
+MTD012ME: and um besides that um i deployed some trend watchers to milan and paris to well get all of the newest trends
+[TARGET] and i have consulted some additional trend watch trend watchers after the original trend watchers return about what the
+MTD012ME: the best design would be",trend,trand,and i have consulted some additional [[trend → trand]] watch trend watchers after the original trend watchers return about what the,and i have consulted some additional trand watch trend watchers after the original trand watchers return about what the,,,,,
+whisper-large-v3|AMI_ES2004d_H02_MEE014_0140518_0141065|0,"FEE013: okay there we go
+FEE016: it's brought it down slightly
+FEE013: it's not a lot though
+[TARGET] c it might you might you might be assuming that that is in euros
+MEE014: it could be in dollars",c it might you might,∅,[[c it might you might → ∅]] you might be assuming that that is in euros,you might be assuming that that is in euros,,,,,
+whisper-large-v3|AMI_ES2004b_H02_MEE014_0181639_0182014|0,"MEE014: yeah i mean
+FEE013: i think so
+FEE013: um
+[TARGET] i mean instru instruction books i feel c i reckon can cover that
+FEE013: instruction manuals",instru,∅,i mean [[instru → ∅]] instruction books i feel c i reckon can cover that,i mean instruction books i feel i reckon can cover that,,,,,
+whisper-large-v3|AMI_IS1009d_H03_FIO089_0085663_0086259|0,"FIE088: no now this was our evaluation criteria which we uh just have done
+FIO089: okay
+FIE088: now we're gonna talk about financing
+[TARGET] ah but in my instructions i think it said i was supposed to go to the board and do something
+FIE088: well there is a production evaluation",ah,∅,[[ah → ∅]] but in my instructions i think it said i was supposed to go to the board and do something,but in my instructions i think it said i was supposed to go to the board and do something,,,,,
+wav2vec2-large|AMI_IS1009c_H01_FIO087_0058505_0059282|1,"FIO087: so can you go on t t uh to the next slide
+FIO087: yeah so this is one of the interface or one of the remote which has this vi voice recogniser
+FIE088: mm-hmm
+[TARGET] and this has multi purpose use it can be used for tv it can be used for cable satellite it can be used for vcrdvd s and audio
+FIO087: and this has in built voice recogniser",satellite,satellites,and this has multi purpose use it can be used for tv it can be used for cable [[satellite → satellites]] it can be used for vcrdvd s and audio,and this has multi purpose use it can be used for tevee it can be used for cable satellites it can be used for visia divides and audio,,,,,
+wav2vec2-large|AMI_ES2004a_H01_FEE013_0081235_0081365|0,"FEE016: with menus yeah yeah
+MEO015: and if it's s somewhat similar to what you have on mobile phone people might find it easier to browse and navigate also maybe
+FEE016: yeah
+[TARGET] what about the older generation
+FEE013: what about granny and grandads",what,or,[[what → or]] about the older generation,or about the older generation,,,,,
+whisper-large-v3|AMI_TS3003a_H00_MTD009PM_0132568_0133401|0,"MTD009PM: so that's a pretty handy um
+MTD009PM: thing
+MTD009PM: um but only the
+[TARGET] i think that if you can put different kind of devices in one remote control it makes it a lot easier as well
+MTD009PM: it's uh",that,∅,i think [[that → ∅]] if you can put different kind of devices in one remote control it makes it a lot easier as well,i think if you can put different kind of devices in one remote control it makes it a lot easier as well,,,,,
+whisper-large-v3|AMI_ES2004b_H01_FEE013_0146158_0146540|0,"FEE013: i think we have to design one product and then the company can take it wherever they want to uh in the sense that they can make it smaller
+MEE014: huh
+MEE014: yeah
+[TARGET] or they can make it bigger or they can change the features slightly
+MEE014: yeah",the,∅,or they can make it bigger or they can change [[the → ∅]] features slightly,or they can make it bigger or they can change features slightly,,,,,
+wav2vec2-large|AMI_ES2004b_H01_FEE013_0160942_0161612|1,"FEE016: you know focus on where the idea will be taken up
+FEE016: first it's most likely to be taken up first of all where the main purchasing power is coming from for a product like this
+FEE013: okay so the remote control functions
+[TARGET] we have got the tv we have got the video now there is
+MEO015: mm-hmm",tv,t b,we have got the [[tv → t b]] we have got the video now there is,am we have got the t b we have got the vidio now there is am,,,,,
+whisper-large-v3|AMI_IS1009d_H03_FIO089_0147227_0147341|0,"FIO089: you ready
+FIO089: so now we're all supposed to say what we think
+FIO089: um okay so on shape
+[TARGET] i gave it a one
+FIO089: wait what would you ra uh one being good and seven being the worst",a,∅,i gave it [[a → ∅]] one,i gave it one,,,,,
+whisper-large-v3|AMI_IS1009c_H01_FIO087_0058505_0059282|0,"FIO087: so can you go on t t uh to the next slide
+FIO087: yeah so this is one of the interface or one of the remote which has this vi voice recogniser
+FIE088: mm-hmm
+[TARGET] and this has multi purpose use it can be used for tv it can be used for cable satellite it can be used for vcrdvd s and audio
+FIO087: and this has in built voice recogniser",satellite,satellites,and this has multi purpose use it can be used for tv it can be used for cable [[satellite → satellites]] it can be used for vcrdvd s and audio,and this has multi purpose use it can be used for tv it can be used for cable satellites it can be used for vcr dvds and audio,,,,,
+whisper-large-v3|AMI_TS3003c_H03_MTD012ME_0022728_0023525|0,"MTD012ME: um we've done some market research
+MTD012ME: we distributed some more enquetes questionnaires
+MTD012ME: and um besides that um i deployed some trend watchers to milan and paris to well get all of the newest trends
+[TARGET] and i have consulted some additional trend watch trend watchers after the original trend watchers return about what the
+MTD012ME: the best design would be",watch trend,∅,and i have consulted some additional trend [[watch trend → ∅]] watchers after the original trend watchers return about what the,and i have consulted some additional trend watchers after the original trend watchers returned about what the,,,,,
+wav2vec2-large|AMI_TS3003d_H00_MTD009PM_0252939_0253373|0,"MTD009PM: my documents
+MTD011UID: uh maybe uh they will save it
+MTD011UID: so uh
+[TARGET] yeah i will just put it in my documents and that is ok
+MTD012ME: yeah it probably will",yeah,here,[[yeah → here]] i will just put it in my documents and that is ok,here i have just put it in my documents an te let us go,,,,,
+whisper-large-v3|AMI_ES2004b_H00_MEO015_0066741_0067462|1,"MEO015: and to summarise i i would say it's it should be user friendly by being easy to use
+MEO015: rather than having a lot of complex button because you can have an engineering maybe having hundred buttons and maybe having uh a remote control which has the main features
+MEO015: like volume control or channel ch changing the channel or whatever
+[TARGET] but we are to to make it unique so that people want to buy it will this 2 features together
+MEO015: so what the concept is to have a flip top model",∅,we,but we are to to make it unique so that people want to buy it [[∅ → we]] will this 2 features together,but we are trying to make it unique so that people want to buy it we will punch in these 2 features together,,,,,
+wav2vec2-large|AMI_ES2004b_H00_MEO015_0066741_0067462|2,"MEO015: and to summarise i i would say it's it should be user friendly by being easy to use
+MEO015: rather than having a lot of complex button because you can have an engineering maybe having hundred buttons and maybe having uh a remote control which has the main features
+MEO015: like volume control or channel ch changing the channel or whatever
+[TARGET] but we are to to make it unique so that people want to buy it will this 2 features together
+MEO015: so what the concept is to have a flip top model",this,punchin these,but we are to to make it unique so that people want to buy it will [[this → punchin these]] 2 features together,but we are to make it unique so that people wondto by it will punchin these 2 features together,,,,,
+wav2vec2-large|AMI_ES2004b_H03_FEE016_0117240_0117928|2,"MEO015: pens
+FEE016: in fact i've just called up that table there we asked those two questions the table relates to both questions so we didn't differentiate
+MEE014: alright okay
+[TARGET] would you prefer an lcd screen that is multi function remote and would you pay more for speech recognition in a remote control
+MEE014: alright okay",multi function,multifunction,would you prefer an lcd screen that is [[multi function → multifunction]] remote and would you pay more for speech recognition in a remote control,would you prefer an l c d screen at is multifunction remote and would you pay more for speech recognition in a remote control,,,,,
+whisper-large-v3|AMI_ES2004a_H03_FEE016_0045400_0045694|0,"MEE014: uh uh
+FEE016: oops this is now coming apart let me just put the top in
+MEE014: wo
+[TARGET] i hope that clicks in i will just i will hold it on ok
+FEE016: oops oh dear what happened there",just i will,∅,i hope that clicks in i will [[just i will → ∅]] hold it on ok,i hope that clicks in i will hold it on,,,,,
+wav2vec2-large|AMI_TS3003c_H02_MTD0010ID_0154060_0154699|0,"MTD012ME: could you explain that a little more
+MTD0010ID: well the the general like most older remotes are flat just straight
+MTD012ME: mm-hmm
+[TARGET] and our d manufacturing department can also deliver single curved or double curved ca curved cases
+MTD012ME: and what would single curved and double curved mean",our d,r are the,and [[our d → r are the]] manufacturing department can also deliver single curved or double curved ca curved cases,and r are the manufacturing department can also deliver single curved or double curved curved cases,,,,,
+wav2vec2-large|AMI_ES2004d_H03_FEE016_0137735_0138224|3,"FEE016: s
+MEO015: i think we could change the battery also
+MEO015: instead of going for kinetic how about going for a standard battery
+[TARGET] has that not made any d if you click off that square now has that not made any difference
+MEE014: well yes",that,it,has that not made any d if you click off that square now has [[that → it]] not made any difference,is that not mead any if you click off that square now has it not made any difference,,,,,
+whisper-large-v3|AMI_IS1009c_H01_FIO087_0052189_0052811|1,"FIE088: mm-hmm
+FIO087: which can be recognised by as voice recogniser in the television for example
+FIO087: if you want to see we if you want to see the ninth channel if you say just say ninth channel
+[TARGET] th now the the yeah the remote will automatically it will switch to the ninth channel
+FIE088: mm-hmm",the yeah the,∅,th now the [[the yeah the → ∅]] remote will automatically it will switch to the ninth channel,the remote will automatically switch to the 9th channel,,,,,
+wav2vec2-large|AMI_TS3003a_H00_MTD009PM_0030124_0031102|0,"MTD009PM: i had some role indications on here
+MTD009PM: but i think you know it already by yourself
+MTD009PM: the industrial designer is going to work on the working design uh components design and a bit of the look and feel design
+[TARGET] the user interface designer is going to do the technical function design user interface concept and user interface design
+MTD009PM: and the marketing expert is doing a little bit of user requirement specification trend watching and project uh product ev evaluation",user interface designer is,us int face designers,the [[user interface designer is → us int face designers]] going to do the technical function design user interface concept and user interface design,the us int face designers going to do the technical function design use inte face concept and use inte face design,,,,,
+wav2vec2-large|AMI_EN2002c_H02_MEE071_0204803_0204956|1,"FEO072: no that's um
+MEE073: you know
+MEE073: i don't know
+[TARGET] yeah it would be quite good if it has yeah
+FEO072: i w i wasn't gonna put any you know any any help in there any sort of a explanation of how the browser works to be honest",good,get,yeah it would be quite [[good → get]] if it has yeah,f we quite get if it hasa,,,,,
+wav2vec2-large|AMI_TS3003b_H00_MTD009PM_0109601_0110069|0,"MTD009PM: so it has to be simple
+MTD009PM: uh another point is we have to skip the teletext
+MTD009PM: because in the world of uh upcoming internet uh we think teletext is going to be uh a thing of the past
+[TARGET] and it is a function we do not need in our remote control
+MTD009PM: um internet is also mentioned in a function we can use",and,an,[[and → an]] it is a function we do not need in our remote control,an it is a function we do not neether no remorse control,,,,,
+whisper-large-v3|AMI_IS1009d_H00_FIE088_0019852_0022001|4,"FIE088: uh technically this thing would also have a resistor and a capacitor diode transistor resonator and if possible a rechargeable battery
+FIE088: uh and of course a circuit board
+FIE088: and how it would works you press the button
+[TARGET] the chip is morse morse code related relays the to the generat to the generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to to to consider
+FIO089: okay",to to,∅,the chip is morse morse code related relays the to the generat to the generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature [[to to → ∅]] to consider,and the chip is morse code related relays to the generator amplification and the circuit board is very inexpensive to build and so she thinks this is a great feature to consider,,,,,
+whisper-large-v3|AMI_IS1009d_H03_FIO089_0080981_0081579|0,"FIO084: mm-hmm
+FIO084: mm
+FIE088: and then and then the other thing would basically be sh shape or practicality of use
+[TARGET] yep well i think that everybody is going to say their remote control is practical
+FIE088: you know",yep,yeah,[[yep → yeah]] well i think that everybody is going to say their remote control is practical,yeah well i think that everybody is going to say their remote control is practical,,,,,
+whisper-large-v3|AMI_IS1009c_H02_FIO084_0125076_0126004|0,"FIO089: yes
+FIO084: next please
+FIO084: and um like uh we have uh designed uh before we have seen some uh few things like instead off buttons we have some scrolls
+[TARGET] b but a b a push button requires a simple chip underneath it but whereas a scroll wheel requires normally a regular chip which is a higher price range
+FIO089: okay",b,∅,[[b → ∅]] but a b a push button requires a simple chip underneath it but whereas a scroll wheel requires normally a regular chip which is a higher price range,but a push button requires a simple chip underneath it but whereas a scroll wheel requires normally a regular chip which is a higher price range,,,,,
+whisper-large-v3|AMI_ES2004b_H00_MEO015_0069351_0070654|3,"MEO015: so what the concept is to have a flip top model
+MEO015: the main functions such as which are like often used will be on the top and the complex functions which say you you can say like the y young generation or trendy generation want to pr say programme their favourite channels or whatever
+MEO015: can be put in the middle part of the f flip top
+[TARGET] so it is like it could be accessed by a wide ra range of audience and we can punch in new f features such as added features such as shock proof body and maybe a design to appeal to a lot of people
+MEO015: findings most people prefer us user friendly rather than complex remote controls because there are times like uh people have used a remote control for say a year or something and they they are not used maybe thirty to forty percent of the buttons so it's not of no use of punching in the uh trying to put in those things in on the top of the remote control and try to confuse the user",shock proof,shockproof,so it is like it could be accessed by a wide ra range of audience and we can punch in new f features such as added features such as [[shock proof → shockproof]] body and maybe a design to appeal to a lot of people,so it could be accessed by a wider range of audience and we can punch in new features such as added features such as shockproof body and maybe a design to appeal to a lot of people,,,,,
+whisper-large-v3|AMI_IS1009a_H02_FIO084_0070461_0070773|0,"FIE088: the working design i guess that's the function i. d. uh who is this
+FIE088: the industrial designer that's you
+FIO084: yeah
+[TARGET] yeah it is functional de yeah exactly technical
+FIE088: okay",de,∅,yeah it is functional [[de → ∅]] yeah exactly technical,yeah it is functional yeah exactly ok so,,,,,
+wav2vec2-large|AMI_IS1009c_H00_FIE088_0165479_0165739|0,"FIO084: trendy yeah
+FIO087: trendy design and compact
+FIE088: mm-hmm
+[TARGET] trendy design compact and strong
+FIO089: mm-hmm",trendy,any,[[trendy → any]] design compact and strong,any design compact and strong,,,,,
+wav2vec2-large|AMI_IS1009c_H02_FIO084_0106914_0107871|0,"FIO084: that is the use of transist transistor we which we use in the remote controller
+FIO084: it will amplify the signal and it will send it to the l. e. d. and which translates the signal into an infra infrared bits
+FIO084: the sensor on the t. v. can see the infrared light and seeing the signal seeing the signal re it reacts appropriately
+[TARGET] that when it sees the amplified mo morse code signal then it will it will know which what what action it has to do
+FIO084: then it will do the appropriate action",mo morse code,mormorscot,that when it sees the amplified [[mo morse code → mormorscot]] signal then it will it will know which what what action it has to do,that when it sees the amplified mormorscot signal then it will it will know which what what action it has to do,,,,,
