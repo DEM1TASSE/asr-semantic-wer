@@ -10,6 +10,10 @@ ready. Next: train and evaluate the student (section 3) and annotate the 200-err
 
 ---
 
+## November 21 checkpoint
+
+[Experiment results and project slides](docs/experiment_update_2026-11-21.md) cover the local DistilBERT objective comparison, four-system AMI evaluation, and LibriSpeech spot check.
+
 ## 1. Data
 
 ### How the data was made (short; full details in `docs/data.md`)

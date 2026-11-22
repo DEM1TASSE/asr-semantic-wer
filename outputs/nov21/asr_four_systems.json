@@ -1,0 +1,50 @@
+{
+  "whisper-large-v3": {
+    "n_utts": 700,
+    "n_ref_words": 9347,
+    "n_ref_chars_excluding_spaces": 36076,
+    "word_substitutions": 268,
+    "word_deletions": 737,
+    "word_insertions": 81,
+    "wer": 0.11618701187546807,
+    "cer": 0.07581217429870274,
+    "empty_normalized_hypotheses": 0,
+    "n_error_spans": 614
+  },
+  "wav2vec2-large": {
+    "n_utts": 700,
+    "n_ref_words": 9347,
+    "n_ref_chars_excluding_spaces": 36076,
+    "word_substitutions": 1135,
+    "word_deletions": 723,
+    "word_insertions": 245,
+    "wer": 0.22499197603509147,
+    "cer": 0.11567246923162212,
+    "empty_normalized_hypotheses": 1,
+    "n_error_spans": 1159
+  },
+  "parakeet-tdt-0.6b-v2": {
+    "n_utts": 700,
+    "n_ref_words": 9347,
+    "n_ref_chars_excluding_spaces": 36076,
+    "word_substitutions": 340,
+    "word_deletions": 237,
+    "word_insertions": 130,
+    "wer": 0.07563924253771263,
+    "cer": 0.04019292604501608,
+    "empty_normalized_hypotheses": 2,
+    "n_error_spans": 444
+  },
+  "qwen3-asr-0.6b": {
+    "n_utts": 700,
+    "n_ref_words": 9347,
+    "n_ref_chars_excluding_spaces": 36076,
+    "word_substitutions": 310,
+    "word_deletions": 377,
+    "word_insertions": 80,
+    "wer": 0.08205841446453407,
+    "cer": 0.04737221421443619,
+    "empty_normalized_hypotheses": 0,
+    "n_error_spans": 522
+  }
+}

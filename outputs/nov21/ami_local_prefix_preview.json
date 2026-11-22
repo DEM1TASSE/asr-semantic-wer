@@ -1,0 +1,8 @@
+{
+  "purpose": "Unrepresentative local AMI prefix from the interrupted run. Not full-test result.",
+  "n_utts": 126,
+  "matched_wer_percent": {
+    "0.6b": 11.580294305822136,
+    "1.7b": 10.044785668586051
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "whisper-large-v3": {
+    "student_semwer_lin": 0.03721386839441275,
+    "student_semwer_hard": 0.017470582524148924,
+    "student_semwer_max": 0.0933631267292159,
+    "rounded_severity_counts": {
+      "1": 437,
+      "2": 97,
+      "3": 61,
+      "4": 19
+    },
+    "teacher_agreement_on_matching_spans": {
+      "n": 594,
+      "qwk": 0.7472274233040472,
+      "spearman": 0.6224418380906017,
+      "mae": 0.27094283529403634,
+      "within_1": 0.9141414141414141,
+      "acc_rounded": 0.7845117845117845
+    }
+  },
+  "wav2vec2-large": {
+    "student_semwer_lin": 0.10426499110511943,
+    "student_semwer_hard": 0.07408324487262631,
+    "student_semwer_max": 0.3004333467994417,
+    "rounded_severity_counts": {
+      "1": 582,
+      "2": 200,
+      "3": 259,
+      "4": 115,
+      "5": 3
+    },
+    "teacher_agreement_on_matching_spans": {
+      "n": 1150,
+      "qwk": 0.7437902065909825,
+      "spearman": 0.7412803257220764,
+      "mae": 0.4372430810721024,
+      "within_1": 0.8521739130434782,
+      "acc_rounded": 0.668695652173913
+    }
+  },
+  "parakeet-tdt-0.6b-v2": {
+    "student_semwer_lin": 0.028469811047514924,
+    "student_semwer_hard": 0.016677453174965516,
+    "student_semwer_max": 0.08883958216224398,
+    "rounded_severity_counts": {
+      "1": 278,
+      "2": 78,
+      "3": 68,
+      "4": 19,
+      "5": 1
+    },
+    "teacher_agreement_on_matching_spans": {
+      "n": 430,
+      "qwk": 0.8126757766203481,
+      "spearman": 0.7207685182543738,
+      "mae": 0.28067847656649214,
+      "within_1": 0.9186046511627907,
+      "acc_rounded": 0.772093023255814
+    }
+  },
+  "qwen3-asr-0.6b": {
+    "student_semwer_lin": 0.029863761327630692,
+    "student_semwer_hard": 0.01681509804340484,
+    "student_semwer_max": 0.10383466554539544,
+    "rounded_severity_counts": {
+      "1": 333,
+      "2": 85,
+      "3": 81,
+      "4": 22,
+      "5": 1
+    }
+  }
+}
