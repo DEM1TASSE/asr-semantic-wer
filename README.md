@@ -12,7 +12,7 @@ ready. Next: train and evaluate the student (section 3) and annotate the 200-err
 
 ## November 21 checkpoint
 
-[Experiment results and project slides](docs/experiment_update_2026-11-21.md) cover the local DistilBERT objective comparison, four-system AMI evaluation, and LibriSpeech spot check.
+[Experiment results and project slides](docs/experiment_update_2026-11-21.md) cover the local DistilBERT objective comparison, four-system AMI evaluation, and LibriSpeech spot check. [Semantic baselines and five-system comparison](docs/baselines_five_systems_2026-11-21.md) adds Qwen3-ASR 1.7B, BERTScore / SemDist baselines, and bootstrap CIs.
 
 ## 1. Data
 

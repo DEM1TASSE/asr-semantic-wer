@@ -1,0 +1,333 @@
+{
+  "n_utts": 700,
+  "n_ref_words": 9347,
+  "bootstrap": 2000,
+  "systems": {
+    "parakeet-tdt-0.6b-v2": {
+      "wer": {
+        "value": 0.07563924253771263,
+        "ci95": [
+          0.06719045849354192,
+          0.0845212060746158
+        ]
+      },
+      "semwer_hard": {
+        "value": 0.016677453174965516,
+        "ci95": [
+          0.012964359322394434,
+          0.02077728980639928
+        ]
+      },
+      "semwer_lin": {
+        "value": 0.02846981104751494,
+        "ci95": [
+          0.024036854632252715,
+          0.033167075287052296
+        ]
+      },
+      "semwer_max": {
+        "value": 0.08883958216224398,
+        "ci95": [
+          0.0759207525114928,
+          0.10305929499225956
+        ]
+      },
+      "bertscore_dist": {
+        "value": 0.11200665261064256,
+        "ci95": [
+          0.09807000018017634,
+          0.12664315279466765
+        ]
+      },
+      "semdist": {
+        "value": 0.06923960064138684,
+        "ci95": [
+          0.058592440454023224,
+          0.08083333040348122
+        ]
+      }
+    },
+    "whisper-large-v3": {
+      "wer": {
+        "value": 0.11618701187546807,
+        "ci95": [
+          0.10630778785276322,
+          0.12690957944473447
+        ]
+      },
+      "semwer_hard": {
+        "value": 0.017470582524148924,
+        "ci95": [
+          0.013990247491642023,
+          0.021419876753540422
+        ]
+      },
+      "semwer_lin": {
+        "value": 0.03721386839441275,
+        "ci95": [
+          0.03300881983033571,
+          0.04199969174567998
+        ]
+      },
+      "semwer_max": {
+        "value": 0.0933631267292159,
+        "ci95": [
+          0.08014060452261142,
+          0.10678504243067333
+        ]
+      },
+      "bertscore_dist": {
+        "value": 0.14534523623330253,
+        "ci95": [
+          0.13105129844163146,
+          0.1601695682278701
+        ]
+      },
+      "semdist": {
+        "value": 0.07757068387099675,
+        "ci95": [
+          0.06735548798952784,
+          0.0880922729479415
+        ]
+      }
+    },
+    "wav2vec2-large": {
+      "wer": {
+        "value": 0.22499197603509147,
+        "ci95": [
+          0.21105488662558994,
+          0.23925411517081588
+        ]
+      },
+      "semwer_hard": {
+        "value": 0.07408324487262631,
+        "ci95": [
+          0.06609324996032027,
+          0.08269776976950705
+        ]
+      },
+      "semwer_lin": {
+        "value": 0.10426499110511935,
+        "ci95": [
+          0.09558196604298658,
+          0.11372211402636224
+        ]
+      },
+      "semwer_max": {
+        "value": 0.3004333467994417,
+        "ci95": [
+          0.2806004657990166,
+          0.3214140850816454
+        ]
+      },
+      "bertscore_dist": {
+        "value": 0.35697647597108567,
+        "ci95": [
+          0.3358782154960292,
+          0.38053848426043985
+        ]
+      },
+      "semdist": {
+        "value": 0.2498720281464713,
+        "ci95": [
+          0.2316385659447738,
+          0.26922968018267834
+        ]
+      }
+    },
+    "qwen3-asr-0.6b": {
+      "wer": {
+        "value": 0.08205841446453407,
+        "ci95": [
+          0.07427126558641534,
+          0.09046402949586592
+        ]
+      },
+      "semwer_hard": {
+        "value": 0.01681509804340484,
+        "ci95": [
+          0.013449721965006479,
+          0.020548655827046926
+        ]
+      },
+      "semwer_lin": {
+        "value": 0.029863761327630686,
+        "ci95": [
+          0.025904176985762292,
+          0.03413867343162714
+        ]
+      },
+      "semwer_max": {
+        "value": 0.10383466554539544,
+        "ci95": [
+          0.09000264690390654,
+          0.11930884246208835
+        ]
+      },
+      "bertscore_dist": {
+        "value": 0.12416350185871124,
+        "ci95": [
+          0.11042130686342716,
+          0.13864699202137332
+        ]
+      },
+      "semdist": {
+        "value": 0.07526578920228141,
+        "ci95": [
+          0.0647571805034365,
+          0.08602931930337633
+        ]
+      }
+    },
+    "qwen3-asr-1.7b": {
+      "wer": {
+        "value": 0.07403444955600727,
+        "ci95": [
+          0.06656761443511103,
+          0.0820304754684175
+        ]
+      },
+      "semwer_hard": {
+        "value": 0.014491552214603623,
+        "ci95": [
+          0.011534963115569367,
+          0.01810953559311854
+        ]
+      },
+      "semwer_lin": {
+        "value": 0.026400131682884357,
+        "ci95": [
+          0.022778008519344615,
+          0.030563278810030205
+        ]
+      },
+      "semwer_max": {
+        "value": 0.08831600078514644,
+        "ci95": [
+          0.07592124230521066,
+          0.1020142992841346
+        ]
+      },
+      "bertscore_dist": {
+        "value": 0.10922906807490758,
+        "ci95": [
+          0.0968339012584516,
+          0.12285554510780741
+        ]
+      },
+      "semdist": {
+        "value": 0.06471889495849609,
+        "ci95": [
+          0.055763713713203156,
+          0.07535449227477822
+        ]
+      }
+    }
+  },
+  "ranks": {
+    "wer": [
+      "qwen3-asr-1.7b",
+      "parakeet-tdt-0.6b-v2",
+      "qwen3-asr-0.6b",
+      "whisper-large-v3",
+      "wav2vec2-large"
+    ],
+    "semwer_hard": [
+      "qwen3-asr-1.7b",
+      "parakeet-tdt-0.6b-v2",
+      "qwen3-asr-0.6b",
+      "whisper-large-v3",
+      "wav2vec2-large"
+    ],
+    "semwer_lin": [
+      "qwen3-asr-1.7b",
+      "parakeet-tdt-0.6b-v2",
+      "qwen3-asr-0.6b",
+      "whisper-large-v3",
+      "wav2vec2-large"
+    ],
+    "semwer_max": [
+      "qwen3-asr-1.7b",
+      "parakeet-tdt-0.6b-v2",
+      "whisper-large-v3",
+      "qwen3-asr-0.6b",
+      "wav2vec2-large"
+    ],
+    "bertscore_dist": [
+      "qwen3-asr-1.7b",
+      "parakeet-tdt-0.6b-v2",
+      "qwen3-asr-0.6b",
+      "whisper-large-v3",
+      "wav2vec2-large"
+    ],
+    "semdist": [
+      "qwen3-asr-1.7b",
+      "parakeet-tdt-0.6b-v2",
+      "qwen3-asr-0.6b",
+      "whisper-large-v3",
+      "wav2vec2-large"
+    ]
+  },
+  "paired_bootstrap_p_lower": {
+    "wer: parakeet-tdt-0.6b-v2 < whisper-large-v3": 1.0,
+    "wer: parakeet-tdt-0.6b-v2 < wav2vec2-large": 1.0,
+    "wer: parakeet-tdt-0.6b-v2 < qwen3-asr-0.6b": 0.9715,
+    "wer: parakeet-tdt-0.6b-v2 < qwen3-asr-1.7b": 0.307,
+    "wer: whisper-large-v3 < wav2vec2-large": 1.0,
+    "wer: whisper-large-v3 < qwen3-asr-0.6b": 0.0,
+    "wer: whisper-large-v3 < qwen3-asr-1.7b": 0.0,
+    "wer: wav2vec2-large < qwen3-asr-0.6b": 0.0,
+    "wer: wav2vec2-large < qwen3-asr-1.7b": 0.0,
+    "wer: qwen3-asr-0.6b < qwen3-asr-1.7b": 0.0,
+    "semwer_hard: parakeet-tdt-0.6b-v2 < whisper-large-v3": 0.6575,
+    "semwer_hard: parakeet-tdt-0.6b-v2 < wav2vec2-large": 1.0,
+    "semwer_hard: parakeet-tdt-0.6b-v2 < qwen3-asr-0.6b": 0.5455,
+    "semwer_hard: parakeet-tdt-0.6b-v2 < qwen3-asr-1.7b": 0.078,
+    "semwer_hard: whisper-large-v3 < wav2vec2-large": 1.0,
+    "semwer_hard: whisper-large-v3 < qwen3-asr-0.6b": 0.3575,
+    "semwer_hard: whisper-large-v3 < qwen3-asr-1.7b": 0.0285,
+    "semwer_hard: wav2vec2-large < qwen3-asr-0.6b": 0.0,
+    "semwer_hard: wav2vec2-large < qwen3-asr-1.7b": 0.0,
+    "semwer_hard: qwen3-asr-0.6b < qwen3-asr-1.7b": 0.012,
+    "semwer_lin: parakeet-tdt-0.6b-v2 < whisper-large-v3": 0.9995,
+    "semwer_lin: parakeet-tdt-0.6b-v2 < wav2vec2-large": 1.0,
+    "semwer_lin: parakeet-tdt-0.6b-v2 < qwen3-asr-0.6b": 0.7995,
+    "semwer_lin: parakeet-tdt-0.6b-v2 < qwen3-asr-1.7b": 0.1255,
+    "semwer_lin: whisper-large-v3 < wav2vec2-large": 1.0,
+    "semwer_lin: whisper-large-v3 < qwen3-asr-0.6b": 0.0,
+    "semwer_lin: whisper-large-v3 < qwen3-asr-1.7b": 0.0,
+    "semwer_lin: wav2vec2-large < qwen3-asr-0.6b": 0.0,
+    "semwer_lin: wav2vec2-large < qwen3-asr-1.7b": 0.0,
+    "semwer_lin: qwen3-asr-0.6b < qwen3-asr-1.7b": 0.0,
+    "semwer_max: parakeet-tdt-0.6b-v2 < whisper-large-v3": 0.7425,
+    "semwer_max: parakeet-tdt-0.6b-v2 < wav2vec2-large": 1.0,
+    "semwer_max: parakeet-tdt-0.6b-v2 < qwen3-asr-0.6b": 0.989,
+    "semwer_max: parakeet-tdt-0.6b-v2 < qwen3-asr-1.7b": 0.464,
+    "semwer_max: whisper-large-v3 < wav2vec2-large": 1.0,
+    "semwer_max: whisper-large-v3 < qwen3-asr-0.6b": 0.9435,
+    "semwer_max: whisper-large-v3 < qwen3-asr-1.7b": 0.204,
+    "semwer_max: wav2vec2-large < qwen3-asr-0.6b": 0.0,
+    "semwer_max: wav2vec2-large < qwen3-asr-1.7b": 0.0,
+    "semwer_max: qwen3-asr-0.6b < qwen3-asr-1.7b": 0.002,
+    "bertscore_dist: parakeet-tdt-0.6b-v2 < whisper-large-v3": 1.0,
+    "bertscore_dist: parakeet-tdt-0.6b-v2 < wav2vec2-large": 1.0,
+    "bertscore_dist: parakeet-tdt-0.6b-v2 < qwen3-asr-0.6b": 0.985,
+    "bertscore_dist: parakeet-tdt-0.6b-v2 < qwen3-asr-1.7b": 0.307,
+    "bertscore_dist: whisper-large-v3 < wav2vec2-large": 1.0,
+    "bertscore_dist: whisper-large-v3 < qwen3-asr-0.6b": 0.0,
+    "bertscore_dist: whisper-large-v3 < qwen3-asr-1.7b": 0.0,
+    "bertscore_dist: wav2vec2-large < qwen3-asr-0.6b": 0.0,
+    "bertscore_dist: wav2vec2-large < qwen3-asr-1.7b": 0.0,
+    "bertscore_dist: qwen3-asr-0.6b < qwen3-asr-1.7b": 0.0,
+    "semdist: parakeet-tdt-0.6b-v2 < whisper-large-v3": 0.956,
+    "semdist: parakeet-tdt-0.6b-v2 < wav2vec2-large": 1.0,
+    "semdist: parakeet-tdt-0.6b-v2 < qwen3-asr-0.6b": 0.9005,
+    "semdist: parakeet-tdt-0.6b-v2 < qwen3-asr-1.7b": 0.1495,
+    "semdist: whisper-large-v3 < wav2vec2-large": 1.0,
+    "semdist: whisper-large-v3 < qwen3-asr-0.6b": 0.312,
+    "semdist: whisper-large-v3 < qwen3-asr-1.7b": 0.0005,
+    "semdist: wav2vec2-large < qwen3-asr-0.6b": 0.0,
+    "semdist: wav2vec2-large < qwen3-asr-1.7b": 0.0,
+    "semdist: qwen3-asr-0.6b < qwen3-asr-1.7b": 0.0015
+  }
+}
