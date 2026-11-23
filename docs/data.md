@@ -101,3 +101,19 @@ Whisper / wav2vec2 error span or id (checked).
   (7 digits/negation, 7 long spans ≥ 3 words, 6 substitutions). Never selected by teacher labels.
   200 items from all 16 test meetings. Sampling type per item: `outputs/human_test_sampling.csv`.
 - Sheets `annotation/human_test_{A,B}.xlsx` (same layout as the pilot; ids in `data/splits/human_test.txt`).
+
+## 8. Changes on Nov 22 (test subsets only)
+- **Qwen3-ASR 0.6B / 1.7B added to the test error files** (`outputs/errors.jsonl`, `errors_test_extra.jsonl`;
+  hypotheses from the local MLX runs, copied to `outputs/hyp_qwen3-asr-*.jsonl`). All 1,002 Qwen spans have
+  DeepSeek labels, so every test span of all five systems now has a teacher label.
+- **Fix 1, digit words:** Whisper's number normalizer merged adjacent digit words ("two two different" -> "22",
+  "five six designs" -> "56"); `common.normalize` now normalizes such runs word by word ("2 2", "5 6").
+- **Fix 2, empty ASR output:** an empty hypothesis was aligned with the placeholder `<empty>` as a word; it is
+  now one deletion span (`[[... → ∅]]`). WER counts are unchanged.
+- Test and test_extra were re-aligned; 46 spans in 10 utterances changed and were re-labeled. All other spans
+  (ids and content) are unchanged. **Train and dev were not re-aligned** (27 train / 4 dev utterances contain
+  adjacent digit words, 10 train/dev spans have the placeholder) so the trained student and the splits stay valid.
+- New human test set: 100 errors, 20 per system (5 systems), `annotation/human_test_{A,B}.xlsx`
+  (`src/make_human_test.py`). New blind pairwise sheets: `annotation/pairwise_{A,B}.xlsx`, 50 utterances
+  (Whisper vs Parakeet 25, Whisper vs Qwen3-ASR 0.6B 25) where WER prefers the other system but Semantic-WER
+  prefers Whisper (18) or sees a tie (32) (`src/make_pairwise.py`; hidden key `outputs/pairwise_key.csv`).

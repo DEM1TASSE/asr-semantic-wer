@@ -1,8 +1,8 @@
-"""Sample the 200-error human test set and write blank annotation sheets for annotators A and B.
+"""Sample the 100-error human test set and write blank annotation sheets for annotators A and B.
 
 - Source: AMI test only (subsets test + test_extra), so it never overlaps train or dev meetings.
 - Excludes the 50 pilot errors (used to tune the rubric / prompt / teacher).
-- Equal per ASR system (200 / 3 systems -> 67/67/66), ~70% random + ~30% targeted by SURFACE features
+- Equal per ASR system (100 / 5 systems -> 20 each: Whisper, wav2vec2, Parakeet, Qwen3-ASR 0.6B / 1.7B), ~70% random + ~30% targeted by SURFACE features
   (digits/negation words, long spans, substitutions), as in the pilot. Never selected by LLM labels.
 - If two systems made the identical error on the same utterance, only one copy can be picked.
 Outputs: annotation/human_test_{A,B}.xlsx (never overwritten), data/splits/human_test.txt,
@@ -18,7 +18,7 @@ from make_sets import fmt_context, targeted_pool, write_sheet
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--n", type=int, default=200)
+    ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--frac_targeted", type=float, default=0.3)
     ap.add_argument("--seed", type=int, default=751)
     args = ap.parse_args()

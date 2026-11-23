@@ -54,7 +54,14 @@ def normalize(text: str) -> str:
     text = re.sub(r"\b(?:[a-z]\. ?){2,}", lambda m: m.group(0).replace(".", "").replace(" ", "") + " ", text)
     # The Whisper number normalizer reads "oh"/"o" as zero ("oh no" -> "0 no", "ten o'clock" -> "100 clock").
     text = re.sub(r"\bo(h)?\b(?!')", "ohh", text).replace("o'clock", "oclock")
-    out = _normalizer(text)
+    # The number normalizer also merges adjacent digit words into one number ("two two different" -> "22",
+    # "five six designs" -> "56", "eight eight pm" -> "88 pm"). Normalize such runs word by word instead.
+    words, segs = text.split(), [[]]
+    for i, w in enumerate(words):
+        if i and _DIGIT_WORD.fullmatch(w) and _DIGIT_WORD.fullmatch(words[i - 1]):
+            segs.append([])
+        segs[-1].append(w)
+    out = " ".join(_normalizer(" ".join(seg)) for seg in segs)
     out = re.sub(r"([€£$])\s?(\d[\d.,]*)", r"\2 \1", out)  # "€12.5" -> "12.5 €"
     for sym, word in (("€", " euro "), ("£", " pound "), ("$", " dollar "), ("%", " percent ")):
         out = out.replace(sym, word)
@@ -63,6 +70,8 @@ def normalize(text: str) -> str:
     out = " ".join(_EXTRA.get(w, w) for w in out.split())
     return re.sub(r"\s+", " ", out).strip()
 
+
+_DIGIT_WORD = re.compile(r"(zero|one|two|three|four|five|six|seven|eight|nine)[.,!?]?")
 
 # Spelling variants that differ between AMI references and ASR output but are not recognition errors.
 _EXTRA = {"cause": "because", "'cause": "because", "kinda": "kind of", "alright": "all right",

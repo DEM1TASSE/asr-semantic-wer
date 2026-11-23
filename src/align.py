@@ -11,8 +11,10 @@ import jiwer
 
 from common import SUBSETS, normalize, subset_paths
 
-SYSTEMS = ["whisper-large-v3", "wav2vec2-large", "parakeet-tdt-0.6b-v2"]
-MODEL_IDS = {"whisper-large-v3": "openai/whisper-large-v3", "parakeet-tdt-0.6b-v2": "nvidia/parakeet-tdt-0.6b-v2",
+SYSTEMS = ["whisper-large-v3", "wav2vec2-large", "parakeet-tdt-0.6b-v2", "qwen3-asr-0.6b", "qwen3-asr-1.7b"]  # Qwen: test only (run locally with MLX)
+MODEL_IDS = {"whisper-large-v3": "openai/whisper-large-v3", "qwen3-asr-0.6b": "mlx-community/Qwen3-ASR-0.6B-bf16",
+             "qwen3-asr-1.7b": "mlx-community/Qwen3-ASR-1.7B-bf16",
+             "parakeet-tdt-0.6b-v2": "nvidia/parakeet-tdt-0.6b-v2",
              "wav2vec2-large": "facebook/wav2vec2-large-960h-lv60-self"}
 
 
@@ -67,13 +69,21 @@ def main():
         hs_safe = [h if h else "<empty>" for h in hs]
         out = jiwer.process_words(refs, hs_safe)
         n_ref = sum(len(r.split()) for r in refs)
+        # jiwer aligns the placeholder as one substitution; count it as the deletion it really is.
+        n_empty = sum(1 for r, h in zip(refs, hs) if r and not h)
         summary[sysname] = {"n_utts": len(ids), "n_ref_words": n_ref, "wer": out.wer,
-                            "sub": out.substitutions / n_ref, "del": out.deletions / n_ref,
+                            "sub": (out.substitutions - n_empty) / n_ref, "del": (out.deletions + n_empty) / n_ref,
                             "ins": out.insertions / n_ref}
         n_spans = 0
         for k, a in enumerate(ids):
             ref_w, hyp_w = out.references[k], out.hypotheses[k]
-            for j, s in enumerate(extract_spans(ref_w, hyp_w, out.alignments[k])):
+            spans = extract_spans(ref_w, hyp_w, out.alignments[k])
+            if not hs[k]:  # empty ASR output: the whole reference is one deletion, not "<empty>" as a word
+                spans = [{"ref_start": 0, "hyp_start": 0, "ref_end": len(ref_w), "hyp_end": 0,
+                          "S": 0, "D": len(ref_w), "I": 0, "ref_span": " ".join(ref_w), "hyp_span": "",
+                          "n_word_errors": len(ref_w), "op": "deletion",
+                          "ref_marked": f"[[{' '.join(ref_w)} → ∅]]"}]
+            for j, s in enumerate(spans):
                 u = utts[a]
                 errors.append({"error_id": f"{sysname}|{a}|{j}", "subset": args.subset,
                                "ami_split": u.get("ami_split", "test"), "system": sysname,
