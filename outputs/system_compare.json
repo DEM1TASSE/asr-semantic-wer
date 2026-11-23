@@ -1,0 +1,263 @@
+{
+  "n_utts": 700,
+  "n_ref_words": 9355,
+  "systems": {
+    "qwen3-asr-1.7b": {
+      "wer": {
+        "value": 0.07386424371993586,
+        "ci95": [
+          0.06644833854448304,
+          0.0817860092203128
+        ]
+      },
+      "semwer_hard_teacher": {
+        "value": 0.013361838588989846,
+        "ci95": [
+          0.010288975342796762,
+          0.016876894413117245
+        ]
+      },
+      "semwer_hard_student": {
+        "value": 0.01267909449029899,
+        "ci95": [
+          0.009895022170862182,
+          0.0158102814438751
+        ]
+      },
+      "R_teacher": {
+        "value": 0.18089725036179452,
+        "ci95": [
+          0.14683408033330927,
+          0.21711514423824985
+        ]
+      },
+      "R_student": {
+        "value": 0.17165402164507534,
+        "ci95": [
+          0.14283601446950533,
+          0.20431964322815507
+        ]
+      }
+    },
+    "parakeet-tdt-0.6b-v2": {
+      "wer": {
+        "value": 0.07568145376803848,
+        "ci95": [
+          0.06716107277799975,
+          0.0845557384570212
+        ]
+      },
+      "semwer_hard_teacher": {
+        "value": 0.015633351149118117,
+        "ci95": [
+          0.012077033110919788,
+          0.01954615470751085
+        ]
+      },
+      "semwer_hard_student": {
+        "value": 0.01575968672667258,
+        "ci95": [
+          0.012212360184324889,
+          0.019827555332981025
+        ]
+      },
+      "R_teacher": {
+        "value": 0.2065677966101695,
+        "ci95": [
+          0.16899157979149962,
+          0.2464759710840939
+        ]
+      },
+      "R_student": {
+        "value": 0.20823710357065256,
+        "ci95": [
+          0.17073473533590997,
+          0.24741906072894398
+        ]
+      }
+    },
+    "qwen3-asr-0.6b": {
+      "wer": {
+        "value": 0.08188134687332976,
+        "ci95": [
+          0.07413129069934761,
+          0.09027953447820694
+        ]
+      },
+      "semwer_hard_teacher": {
+        "value": 0.015847140566541955,
+        "ci95": [
+          0.012606716546978234,
+          0.019518271624357268
+        ]
+      },
+      "semwer_hard_student": {
+        "value": 0.0154381839971629,
+        "ci95": [
+          0.012449618401953981,
+          0.01884367169230534
+        ]
+      },
+      "R_teacher": {
+        "value": 0.1935378590078329,
+        "ci95": [
+          0.1626966411564626,
+          0.22615196078431368
+        ]
+      },
+      "R_student": {
+        "value": 0.1885433567799725,
+        "ci95": [
+          0.15930957756998823,
+          0.22032031925643109
+        ]
+      }
+    },
+    "whisper-large-v3": {
+      "wer": {
+        "value": 0.11630144307856762,
+        "ci95": [
+          0.10650757332476986,
+          0.12699716404110964
+        ]
+      },
+      "semwer_hard_teacher": {
+        "value": 0.014190272581507216,
+        "ci95": [
+          0.011184503219563172,
+          0.01772434920842559
+        ]
+      },
+      "semwer_hard_student": {
+        "value": 0.015378912765670116,
+        "ci95": [
+          0.012158529823470684,
+          0.019075312978827932
+        ]
+      },
+      "R_teacher": {
+        "value": 0.12201286764705882,
+        "ci95": [
+          0.09922408707055107,
+          0.14857534135060713
+        ]
+      },
+      "R_student": {
+        "value": 0.13223320673055508,
+        "ci95": [
+          0.10650909913261188,
+          0.158046656461631
+        ]
+      }
+    },
+    "wav2vec2-large": {
+      "wer": {
+        "value": 0.22490646712987708,
+        "ci95": [
+          0.2110215718599068,
+          0.23922607442633254
+        ]
+      },
+      "semwer_hard_teacher": {
+        "value": 0.07316942811330839,
+        "ci95": [
+          0.06516970543383792,
+          0.08208109070726319
+        ]
+      },
+      "semwer_hard_student": {
+        "value": 0.07342832395254387,
+        "ci95": [
+          0.06547061650060217,
+          0.08212653399542151
+        ]
+      },
+      "R_teacher": {
+        "value": 0.32533269961977185,
+        "ci95": [
+          0.3027403530647067,
+          0.34946978564462855
+        ]
+      },
+      "R_student": {
+        "value": 0.32648382631941436,
+        "ci95": [
+          0.3057289082532284,
+          0.3483549033674807
+        ]
+      }
+    }
+  },
+  "paired_p_lower": {
+    "qwen3-asr-1.7b < whisper-large-v3": {
+      "wer": 1.0,
+      "semwer_hard_teacher": 0.675,
+      "semwer_hard_student": 0.9545,
+      "R_teacher": 0.0,
+      "R_student": 0.0035
+    },
+    "qwen3-asr-1.7b < wav2vec2-large": {
+      "wer": 1.0,
+      "semwer_hard_teacher": 1.0,
+      "semwer_hard_student": 1.0,
+      "R_teacher": 1.0,
+      "R_student": 1.0
+    },
+    "parakeet-tdt-0.6b-v2 < qwen3-asr-1.7b": {
+      "wer": 0.2875,
+      "semwer_hard_teacher": 0.087,
+      "semwer_hard_student": 0.025,
+      "R_teacher": 0.0785,
+      "R_student": 0.021
+    },
+    "parakeet-tdt-0.6b-v2 < qwen3-asr-0.6b": {
+      "wer": 0.968,
+      "semwer_hard_teacher": 0.5675,
+      "semwer_hard_student": 0.425,
+      "R_teacher": 0.2085,
+      "R_student": 0.1205
+    },
+    "parakeet-tdt-0.6b-v2 < whisper-large-v3": {
+      "wer": 1.0,
+      "semwer_hard_teacher": 0.1955,
+      "semwer_hard_student": 0.429,
+      "R_teacher": 0.0,
+      "R_student": 0.0
+    },
+    "parakeet-tdt-0.6b-v2 < wav2vec2-large": {
+      "wer": 1.0,
+      "semwer_hard_teacher": 1.0,
+      "semwer_hard_student": 1.0,
+      "R_teacher": 1.0,
+      "R_student": 1.0
+    },
+    "qwen3-asr-0.6b < qwen3-asr-1.7b": {
+      "wer": 0.0,
+      "semwer_hard_teacher": 0.022,
+      "semwer_hard_student": 0.006,
+      "R_teacher": 0.197,
+      "R_student": 0.0755
+    },
+    "qwen3-asr-0.6b < whisper-large-v3": {
+      "wer": 1.0,
+      "semwer_hard_teacher": 0.1365,
+      "semwer_hard_student": 0.4595,
+      "R_teacher": 0.0,
+      "R_student": 0.0005
+    },
+    "qwen3-asr-0.6b < wav2vec2-large": {
+      "wer": 1.0,
+      "semwer_hard_teacher": 1.0,
+      "semwer_hard_student": 1.0,
+      "R_teacher": 1.0,
+      "R_student": 1.0
+    },
+    "wav2vec2-large < whisper-large-v3": {
+      "wer": 0.0,
+      "semwer_hard_teacher": 0.0,
+      "semwer_hard_student": 0.0,
+      "R_teacher": 0.0,
+      "R_student": 0.0
+    }
+  }
+}
