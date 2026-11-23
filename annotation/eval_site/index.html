@@ -1,0 +1,373 @@
+<meta charset="utf-8">
+<title>ASR 人工评测</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+/* Layout: a work-surface tool — sticky header with rater + task, item rail on the left, one item at a time on the right. */
+:root{
+  --bg:#f3f5f4; --panel:#ffffff; --ink:#18211f; --muted:#5d6b67; --line:#d9e0dd;
+  --accent:#0f6b5c; --accent-soft:#e1f0ec; --mark:#fbe7b5; --mark-ink:#5a3d00;
+  --del:#a3382b; --ins:#1d5f9a; --done:#0f6b5c; --todo:#c3ccc9; --warn:#a15c00; --warn-soft:#fdf0dc;
+  --sans:"IBM Plex Sans","Noto Sans SC",system-ui,sans-serif; --zh:"Noto Sans SC","PingFang SC",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121816; --panel:#1a2220; --ink:#e3ebe8; --muted:#97a6a1; --line:#2c3835;
+  --accent:#5cc4ae; --accent-soft:#1d332e; --mark:#4a3a12; --mark-ink:#f6dc9c;
+  --del:#f08a7c; --ins:#86bdf0; --done:#5cc4ae; --todo:#3a4744; --warn:#f0b35c; --warn-soft:#3a2c14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121816; --panel:#1a2220; --ink:#e3ebe8; --muted:#97a6a1; --line:#2c3835;
+  --accent:#5cc4ae; --accent-soft:#1d332e; --mark:#4a3a12; --mark-ink:#f6dc9c;
+  --del:#f08a7c; --ins:#86bdf0; --done:#5cc4ae; --todo:#3a4744; --warn:#f0b35c; --warn-soft:#3a2c14; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+button,select,textarea,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line);
+  padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;max-width:1240px;margin:0 auto}
+h1{font-size:17px;font-weight:700;margin:0;font-family:var(--zh);letter-spacing:.02em}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:6px 12px;font-family:var(--zh)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--panel)}
+.seg button+button{border-left:1px solid var(--line)}
+label.inline{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-family:var(--zh);font-size:14px}
+.status{font-size:13px;color:var(--muted);font-family:var(--zh);margin-left:auto}
+.status.warn{color:var(--warn)}
+.ghost{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 12px;font-family:var(--zh)}
+main{display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px;max-width:1240px;margin:0 auto;
+  padding-block:20px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.rail{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 100px);overflow:auto}
+.rail h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:600}
+.progress{height:6px;border-radius:3px;background:var(--todo);overflow:hidden;margin-bottom:6px}
+.progress i{display:block;height:100%;background:var(--done);width:0}
+.count{font-size:13px;color:var(--muted);margin-bottom:12px;font-variant-numeric:tabular-nums;font-family:var(--zh)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.grid button{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:4px 0;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.grid button.done{background:var(--accent-soft);border-color:var(--done);color:var(--done)}
+.grid button.cur{outline:2px solid var(--ink);outline-offset:-1px}
+.railbtns{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;min-width:0}
+.itemhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.itemhead .no{font-family:var(--mono);font-size:22px;font-weight:500}
+.itemhead .of{color:var(--muted);font-family:var(--mono);font-size:13px}
+.chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font-family:var(--zh)}
+.sec{font-size:12px;letter-spacing:.06em;color:var(--muted);margin:18px 0 6px;font-weight:600;font-family:var(--zh)}
+.ctx{display:grid;gap:8px;border-left:2px solid var(--line);padding-left:12px}
+.utt{min-width:0}
+.utt .en{font-family:var(--mono);font-size:13.5px;overflow-wrap:anywhere}
+.utt .zh{font-family:var(--zh);font-size:13px;color:var(--muted);margin-top:1px}
+.utt.target{background:var(--accent-soft);border-radius:8px;padding:8px 10px;margin-left:-14px;border-left:2px solid var(--accent)}
+.utt.target .tag{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.06em;font-family:var(--zh)}
+mark.err{background:var(--mark);color:var(--mark-ink);border-radius:4px;padding:0 3px}
+mark.err del{color:var(--del);text-decoration-thickness:2px}
+mark.err ins{color:var(--ins);text-decoration:none;font-weight:500}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.box h3{margin:0 0 6px;font-size:13px;font-family:var(--zh);font-weight:600;color:var(--muted)}
+.box .en{font-family:var(--mono);font-size:14px;overflow-wrap:anywhere}
+.box .zh{font-family:var(--zh);font-size:13px;color:var(--muted);margin-top:4px}
+.box.pick{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.rate{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:14px}
+.row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:start}
+.row>span{font-family:var(--zh);font-size:14px;color:var(--muted);padding-top:6px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts button{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 11px;font-family:var(--zh);font-size:14px;line-height:1.3;text-align:left}
+.opts button b{font-family:var(--mono);margin-right:6px}
+.opts button small{display:block;color:var(--muted);font-size:12px}
+.opts button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.opts button[aria-pressed="true"] small{color:var(--panel);opacity:.85}
+.opts.sev button{min-width:96px}
+textarea{width:100%;min-height:58px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px 10px;resize:vertical;font-family:var(--zh);font-size:14px}
+.nav{display:flex;justify-content:space-between;gap:8px;margin-top:18px;flex-wrap:wrap}
+.nav .hint{color:var(--muted);font-size:12.5px;font-family:var(--zh);align-self:center}
+.primary{background:var(--accent);color:var(--panel);border:0;border-radius:8px;padding:8px 16px;font-family:var(--zh)}
+.notice{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:10px 14px;font-family:var(--zh);font-size:14px;margin-bottom:14px}
+.intro{font-family:var(--zh);font-size:14px;color:var(--muted);margin:0 0 4px;max-width:70ch}
+.empty{font-family:var(--zh);color:var(--muted);padding:40px 0;text-align:center}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);max-width:min(860px,calc(100vw - 32px));width:100%;padding:0}
+dialog::backdrop{background:rgb(0 0 0 / .35)}
+.dhead{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
+.dbody{padding:4px 22px 22px;max-height:75vh;overflow:auto;font-family:var(--zh);font-size:14px}
+.dbody table{border-collapse:collapse;width:100%;margin:8px 0;display:block;overflow-x:auto}
+.dbody td{border:1px solid var(--line);padding:5px 8px;vertical-align:top}
+.dbody code{font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:0 4px;border-radius:4px}
+.dbody h2{font-size:17px;margin:18px 0 6px}.dbody h3{font-size:15px;margin:14px 0 4px}.dbody h4{font-size:14px;margin:12px 0 4px}
+.ref{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px 18px 16px;min-width:0;font-family:var(--zh);font-size:13.5px}
+.ref .rhead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:10px 0 6px;border-bottom:1px solid var(--line)}
+.ref .rhead strong{font-size:14px}
+.ref .seg button{padding:4px 10px;font-size:13px}
+.ref table{border-collapse:collapse;width:100%;margin:8px 0;display:block;overflow-x:auto}
+.ref td{border:1px solid var(--line);padding:5px 8px;vertical-align:top}
+.ref tr:first-child td{color:var(--muted);font-size:12.5px}
+.ref code{font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:0 4px;border-radius:4px;overflow-wrap:anywhere}
+.ref h3,.ref h4{font-size:14px;margin:14px 0 4px}
+.ref h3.hit,.ref h4.hit{color:var(--accent)}
+.ref p,.ref li{margin:6px 0}
+@media (min-width:1280px){
+  main{grid-template-columns:190px minmax(0,1fr) minmax(0,380px);max-width:1500px}
+  .ref{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 100px);overflow:auto}
+}
+@media (max-width:1279px){.ref{grid-column:2}}
+@media (max-width:760px){.ref{grid-column:auto}
+  main{grid-template-columns:1fr}
+  .rail{position:static;max-height:none}
+  .grid{grid-template-columns:repeat(10,1fr)}
+  .compare{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}.row>span{padding-top:0}
+  .card{padding:16px}
+  .status{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="bar">
+    <h1>ASR 人工评测</h1>
+    <div class="seg" role="group" aria-label="任务">
+      <button id="tabSev" aria-pressed="true">严重度标注 · 100</button>
+      <button id="tabPair" aria-pressed="false">盲测对比 · 60</button>
+    </div>
+    <label class="inline" for="rater">标注员
+      <select id="rater"><option value="">请选择</option><option value="1">标注员 1</option><option value="2">标注员 2</option></select>
+    </label>
+    <label class="inline" for="showZh"><input type="checkbox" id="showZh" checked>中文参考译文</label>
+    <button class="ghost" id="openRubric">评分规则</button>
+    <span class="status" id="status">正在加载数据…</span>
+  </div>
+</header>
+
+<main>
+  <aside class="rail">
+    <h2 id="railTitle">进度</h2>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="count" id="count">—</div>
+    <div class="grid" id="grid"></div>
+    <div class="railbtns">
+      <button class="ghost" id="nextTodo">下一条未完成</button>
+      <button class="ghost" id="exportBtn" hidden>导出备份</button>
+    </div>
+  </aside>
+  <section class="card" id="card"><div class="empty">正在加载题目…</div></section>
+  <aside class="ref" id="ref" hidden>
+    <div class="rhead"><strong>对照样例</strong>
+      <div class="seg" role="group" aria-label="对照内容">
+        <button id="refSev" aria-pressed="true">严重度样例</button>
+        <button id="refCt" aria-pressed="false">内容类型</button>
+      </div>
+    </div>
+    <div id="refBody"></div>
+  </aside>
+</main>
+
+<dialog id="rubric">
+  <div class="dhead"><strong>评分规则 v2.4（严重度标注用）</strong><button class="ghost" id="closeRubric">关闭</button></div>
+  <div class="dbody" id="rubricBody"></div>
+</dialog>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SEV=[[1,'可忽略','意思没有变化'],[2,'轻微','意思略有变化'],[3,'中等','具体信息改变或丢失'],[4,'严重','主要意思改变或丢失'],[5,'反转','核心意思反了']];
+const CT=[['disfluency','不流畅/填充'],['negation','否定'],['number','数字'],['named_entity','专名'],['function_word','虚词'],['content_word','实词'],['other','其他']];
+const FL=[['ref_issue','参考转写有问题'],['crosstalk','串音'],['uncertain','不确定'],['multi_issue','多个问题']];
+const PICK=[['A','A 更好','A 更好地保留了原意'],['Same','差不多','两者保留的意思相同'],['B','B 更好','B 更好地保留了原意']];
+const OPS={substitution:'替换',deletion:'删除',insertion:'插入'};
+
+let DATA=null, db=null, dbState='pending', task='sev', rater='', cur={sev:1,pair:1};
+let answers={sev:{},pair:{}}, unsub=[], showZh=true;
+
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+const coll=t=>(t==='sev'?'sev':'pair')+rater;
+const localKey=t=>`asr-eval:${DATA?.version}:${coll(t)}`;
+
+function items(){return task==='sev'?DATA.severity:DATA.pairwise}
+function done(t,n){const a=answers[t][n];return t==='sev'?!!(a&&a.severity&&a.content_type):!!(a&&a.choice)}
+
+function setStatus(text,warn){const s=$('status');s.textContent=text;s.classList.toggle('warn',!!warn)}
+function statusIdle(){
+  if(!rater)return setStatus('先在上方选择你的标注员编号',true);
+  if(dbState==='ok')return setStatus('已连接，每次选择会自动保存');
+  if(dbState==='pending')return setStatus('正在连接保存服务…');
+  setStatus('无法连接保存服务：请登录 claude.ai 后打开本页。当前只保存在这个浏览器里',true);
+}
+
+function zhLine(s){return showZh&&DATA.zh[s]?`<div class="zh">${esc(DATA.zh[s])}</div>`:''}
+function marked(s){return esc(s).replace(/\[\[(.*?) → (.*?)\]\]/g,(m,a,b)=>`<mark class="err"><del>${a}</del> → <ins>${b}</ins></mark>`)}
+
+function renderRail(){
+  const list=items(), t=task, n=list.filter(x=>done(t,x.n)).length;
+  $('railTitle').textContent=t==='sev'?'严重度标注':'盲测对比';
+  $('bar').style.width=(100*n/list.length)+'%';
+  $('count').textContent=`已完成 ${n} / ${list.length}`;
+  $('grid').innerHTML=list.map(x=>`<button data-n="${x.n}" class="${done(t,x.n)?'done':''} ${cur[t]===x.n?'cur':''}" aria-label="第 ${x.n} 题">${x.n}</button>`).join('');
+}
+
+function optBtns(field,opts,val,cls){return `<div class="opts ${cls||''}" data-field="${field}">`+opts.map(([v,l,s])=>
+  `<button data-v="${v}" aria-pressed="${String(Array.isArray(val)?val.includes(v):val===v)}">${field==='severity'?`<b>${v}</b>`:''}${esc(l)}${s?`<small>${esc(s)}</small>`:''}</button>`).join('')+'</div>'}
+
+function renderSev(){
+  const e=DATA.severity[cur.sev-1], a=answers.sev[e.n]||{};
+  const ctx=[...e.before.map(s=>`<div class="utt"><div class="en">${esc(s)}</div>${zhLine(s)}</div>`),
+    `<div class="utt target"><div class="tag">目标句</div><div class="en">${marked(e.refMarked)}</div>${zhLine(e.ref)}</div>`,
+    ...e.after.map(s=>`<div class="utt"><div class="en">${esc(s)}</div>${zhLine(s)}</div>`)].join('');
+  return `<div class="itemhead"><span class="no">#${e.n}</span><span class="of">/ ${DATA.severity.length}</span>
+      <span class="chip">${OPS[e.op]||e.op}</span><span class="chip">原文：${esc(e.refSpan||'∅')}　→　ASR：${esc(e.hypSpan)}</span></div>
+    <p class="intro">只评标出的这一处错误：比较参考句和“只含这一处错误的 ASR 句”，判断意思变了多少。上下文只用来理解句子。</p>
+    <div class="sec">会议上下文（前 3 句 · 目标句 · 后 1 句）</div><div class="ctx">${ctx}</div>
+    <div class="sec">对比</div>
+    <div class="compare">
+      <div class="box"><h3>参考句（说话人实际说的）</h3><div class="en">${esc(e.ref)}</div>${zhLine(e.ref)}</div>
+      <div class="box"><h3>ASR 句（只含这一处错误）</h3><div class="en">${esc(e.hyp)||'∅'}</div>${zhLine(e.hyp)}</div>
+    </div>
+    <div class="rate">
+      <div class="row"><span>严重度 *</span>${optBtns('severity',SEV,a.severity,'sev')}</div>
+      <div class="row"><span>内容类型 *</span>${optBtns('content_type',CT,a.content_type)}</div>
+      <div class="row"><span>标记（可多选）</span>${optBtns('flag',FL,a.flag||[])}</div>
+      <div class="row"><span>备注</span><textarea id="note" placeholder="可选：为什么难判断">${esc(a.note||'')}</textarea></div>
+    </div>
+    ${navHtml('键盘：1–5 选严重度，← → 换题')}`;
+}
+
+function renderPair(){
+  const p=DATA.pairwise[cur.pair-1], a=answers.pair[p.n]||{};
+  const ctx=p.context.map(s=>`<div class="utt"><div class="en">${esc(s)}</div>${zhLine(s)}</div>`).join('')||'<div class="utt"><div class="zh">（无）</div></div>';
+  return `<div class="itemhead"><span class="no">#${p.n}</span><span class="of">/ ${DATA.pairwise.length}</span><span class="chip">盲测：不显示系统名</span></div>
+    <p class="intro">两个 ASR 系统转写了同一句话。不用评分规则，凭直觉判断：哪个输出更好地保留了说话人的意思？标点和大小写不算。</p>
+    <div class="sec">前文</div><div class="ctx">${ctx}</div>
+    <div class="sec">参考句（说话人实际说的）</div>
+    <div class="box"><div class="en">${esc(p.ref)}</div>${zhLine(p.ref)}</div>
+    <div class="sec">两个输出</div>
+    <div class="compare">
+      <div class="box ${a.choice==='A'?'pick':''}"><h3>输出 A</h3><div class="en">${esc(p.A)}</div>${zhLine(p.A)}</div>
+      <div class="box ${a.choice==='B'?'pick':''}"><h3>输出 B</h3><div class="en">${esc(p.B)}</div>${zhLine(p.B)}</div>
+    </div>
+    <div class="rate">
+      <div class="row"><span>哪个更好 *</span>${optBtns('choice',PICK,a.choice)}</div>
+      <div class="row"><span>备注</span><textarea id="note" placeholder="可选">${esc(a.note||'')}</textarea></div>
+    </div>
+    ${navHtml('键盘：A / S（差不多）/ B，← → 换题')}`;
+}
+
+let refTab='sev';
+function renderRef(){
+  const box=$('ref');box.hidden=task!=='sev';if(box.hidden)return;
+  $('refSev').setAttribute('aria-pressed',String(refTab==='sev'));$('refCt').setAttribute('aria-pressed',String(refTab==='ct'));
+  const html=markdown(refTab==='sev'?DATA.calibZh:DATA.contentZh);
+  if($('refBody').dataset.tab!==refTab){$('refBody').innerHTML=html;$('refBody').dataset.tab=refTab}
+  // highlight the level the rater picked
+  const s=(answers.sev[cur.sev]||{}).severity;
+  $('refBody').querySelectorAll('h3,h4').forEach(h=>h.classList.toggle('hit',refTab==='sev'&&!!s&&h.textContent.trim().startsWith(s+' ')));
+}
+function navHtml(hint){return `<div class="nav"><button class="ghost" id="prev">← 上一题</button><span class="hint">${hint}</span><button class="primary" id="next">下一题 →</button></div>`}
+
+function render(){
+  if(!DATA)return;
+  $('tabSev').setAttribute('aria-pressed',String(task==='sev'));$('tabPair').setAttribute('aria-pressed',String(task==='pair'));
+  renderRail();
+  const notice=rater?'':'<div class="notice">请先在页面顶部选择你的标注员编号（1 或 2），选好后才能保存。两项任务用同一个编号。</div>';
+  $('card').innerHTML=notice+(task==='sev'?renderSev():renderPair());
+  $('card').querySelectorAll('.opts button,textarea').forEach(x=>x.disabled=!rater);
+  renderRef();
+  statusIdle();
+}
+
+let noteTimer=null;
+function update(field,value,rerender=true){
+  if(!rater)return;
+  const t=task,n=cur[t];
+  const rec={...(answers[t][n]||{}),[field]:value,updated:new Date().toISOString()};
+  answers[t][n]=rec; lsSet(localKey(t),answers[t]);
+  if(rerender)render();
+  save(t,n,rec);
+}
+async function save(t,n,rec){
+  if(!db){statusIdle();return}
+  setStatus('正在保存…');
+  try{await db.collection(coll(t)).doc(String(n)).set(rec);setStatus(`已保存 · ${t==='sev'?'严重度':'对比'} #${n}`)}
+  catch(e){setStatus('保存失败：'+(e?.message||e?.code||'请检查是否已登录并有编辑权限')+'。已暂存在本浏览器',true)}
+}
+
+function subscribe(){
+  unsub.forEach(f=>{try{f()}catch(e){}});unsub=[];
+  if(!rater)return;
+  for(const t of ['sev','pair']){
+    answers[t]=lsGet(localKey(t),{});
+    if(!db)continue;
+    const off=db.collection(coll(t)).onSnapshot(snap=>{
+      const remote={};snap.docs.forEach(d=>{remote[d.id]=d.data()});
+      // keep newer local edits that never reached the server
+      for(const [n,a] of Object.entries(answers[t])){if(!remote[n]||(a.updated||'')>(remote[n].updated||'')){remote[n]=a;save(t,n,a)}}
+      answers[t]=remote;lsSet(localKey(t),remote);render();
+    },err=>{dbState='error';statusIdle()});
+    unsub.push(off);
+  }
+}
+
+function go(n){const list=items();if(n<1||n>list.length)return;cur[task]=n;lsSet('asr-eval:cur',cur);render();window.scrollTo({top:0})}
+
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('button');if(!b)return;
+  if(b.closest('#grid'))return go(+b.dataset.n);
+  if(b.id==='prev')return go(cur[task]-1);
+  if(b.id==='next')return go(cur[task]+1);
+  const box=b.closest('.opts');
+  if(box&&!b.disabled){const f=box.dataset.field,v=b.dataset.v;
+    if(f==='flag'){const now=new Set((answers.sev[cur.sev]||{}).flag||[]);now.has(v)?now.delete(v):now.add(v);update('flag',[...now])}
+    else update(f,f==='severity'?+v:v);
+  }
+});
+document.addEventListener('input',ev=>{if(ev.target.id==='note'){clearTimeout(noteTimer);const v=ev.target.value;noteTimer=setTimeout(()=>update('note',v,false),600)}});
+document.addEventListener('keydown',ev=>{
+  if($('rubric').open||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)||ev.metaKey||ev.ctrlKey||ev.altKey||!DATA)return;
+  if(ev.key==='ArrowRight'){ev.preventDefault();go(cur[task]+1)}
+  else if(ev.key==='ArrowLeft'){ev.preventDefault();go(cur[task]-1)}
+  else if(task==='sev'&&/^[1-5]$/.test(ev.key))update('severity',+ev.key);
+  else if(task==='pair'){const k=ev.key.toLowerCase();if(k==='a')update('choice','A');else if(k==='b')update('choice','B');else if(k==='s')update('choice','Same')}
+});
+$('nextTodo').onclick=()=>{const list=items(),i=cur[task];const nx=[...list.slice(i),...list.slice(0,i)].find(x=>!done(task,x.n));if(nx)go(nx.n);else setStatus('这一项任务已全部完成')};
+$('tabSev').onclick=()=>{task='sev';lsSet('asr-eval:task',task);render()};
+$('tabPair').onclick=()=>{task='pair';lsSet('asr-eval:task',task);render()};
+$('rater').onchange=e=>{rater=e.target.value;lsSet('asr-eval:rater',rater);subscribe();render()};
+$('showZh').onchange=e=>{showZh=e.target.checked;lsSet('asr-eval:zh',showZh);render()};
+$('refSev').onclick=()=>{refTab='sev';renderRef()};
+$('refCt').onclick=()=>{refTab='ct';renderRef()};
+$('openRubric').onclick=()=>$('rubric').showModal();
+$('closeRubric').onclick=()=>$('rubric').close();
+
+function inline(s){return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+)\*/g,'<em>$1</em>')}
+function markdown(text){let out='',table=false,list=false;const close=()=>{if(table){out+='</tbody></table>';table=false}if(list){out+='</ul>';list=false}};
+  for(const raw of text.split('\n')){const line=raw.trim();if(!line){close();continue}
+    if(line.startsWith('|')){if(/^\|[\s:|\-]+\|$/.test(line))continue;const cells=line.replace(/^\||\|$/g,'').split('|');if(!table){close();out+='<table><tbody>';table=true}out+='<tr>'+cells.map(c=>'<td>'+inline(c.trim())+'</td>').join('')+'</tr>';continue}
+    if(table){out+='</tbody></table>';table=false}
+    const h=line.match(/^(#{1,4})\s+(.*)$/);if(h){close();const n=Math.min(4,h[1].length+1);out+=`<h${n}>${inline(h[2])}</h${n}>`;continue}
+    const li=line.match(/^(?:[-*]|\d+\.)\s+(.*)$/);if(li){if(!list){out+='<ul>';list=true}out+='<li>'+inline(li[1])+'</li>';continue}
+    close();out+='<p>'+inline(line)+'</p>'}
+  close();return out}
+
+async function exportBackup(){
+  const dl=await window.claude?.use?.('downloads');if(!dl)return;
+  const body=JSON.stringify({version:DATA.version,rubricVersion:DATA.rubricVersion,rater,exported:new Date().toISOString(),severity:answers.sev,pairwise:answers.pair},null,2);
+  try{await dl.save({filename:`asr_eval_rater${rater}_${new Date().toISOString().slice(0,10)}.json`,data:body})}catch(e){}
+}
+$('exportBtn').onclick=()=>{if(rater)exportBackup();else setStatus('先选择标注员编号',true)};
+
+(async function boot(){
+  showZh=lsGet('asr-eval:zh',true);$('showZh').checked=showZh;
+  task=lsGet('asr-eval:task','sev')==='pair'?'pair':'sev';
+  try{DATA=await (await fetch('data.json')).json()}catch(e){$('card').innerHTML='<div class="empty">题目数据没有加载出来，请刷新页面重试。</div>';setStatus('数据加载失败',true);return}
+  const c=lsGet('asr-eval:cur',null);if(c&&c.sev>=1&&c.sev<=DATA.severity.length&&c.pair>=1&&c.pair<=DATA.pairwise.length)cur=c;
+  rater=['1','2'].includes(lsGet('asr-eval:rater',''))?lsGet('asr-eval:rater',''):'';$('rater').value=rater;
+  $('rubricBody').innerHTML=markdown(DATA.rubricZh);
+  subscribe();render();
+  const timer=setTimeout(()=>{if(dbState==='pending'){dbState='none';statusIdle()}},10000);
+  try{db=await window.claude?.use?.('db')}catch(e){db=null}
+  clearTimeout(timer);dbState=db?'ok':'none';
+  subscribe();render();
+  try{if(await window.claude?.use?.('downloads'))$('exportBtn').hidden=false}catch(e){}
+})();
+</script>
