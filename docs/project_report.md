@@ -426,6 +426,10 @@ significantly, so ranks 1–4 are best read as one group with Qwen 1.7B slightly
 Set `HF_HOME` to a local Hugging Face cache for the model-based steps. The teacher step needs an Azure
 API key in `.env` (never committed).
 
+The trained student (ordinal, seed 751) is on Hugging Face at
+[yixiang666/asr-semantic-severity-distilbert](https://huggingface.co/yixiang666/asr-semantic-severity-distilbert),
+so the training step can be skipped. The model card shows how to turn its 4 outputs into a 1–5 severity.
+
 ## Appendix A. Key files
 
 | File | Content |
@@ -442,6 +446,7 @@ API key in `.env` (never committed).
 | `outputs/baselines/span_metrics.json` | Scorer comparison (student vs. baselines) |
 | `outputs/baselines/system_metrics.json` | System metrics, CIs and paired bootstrap |
 | `docs/data.md` | Full data procedure |
+| [HF: yixiang666/asr-semantic-severity-distilbert](https://huggingface.co/yixiang666/asr-semantic-severity-distilbert) | Trained student checkpoint (256 MB, not in git) |
 
 ## Appendix B. Qwen decoding sanity check
 
