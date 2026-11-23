@@ -12,6 +12,8 @@ ready. Next: train and evaluate the student (section 3) and annotate the 200-err
 
 **Full project write-up: [docs/project_report.md](docs/project_report.md)** (motivation, method, all results, limitations, reproduction).
 
+**Trained student model (Hugging Face): [yixiang666/asr-semantic-severity-distilbert](https://huggingface.co/yixiang666/asr-semantic-severity-distilbert)**: ordinal DistilBERT (seed 751, 256 MB, too large for GitHub). The model card gives the input format, the code that turns the 4 outputs into a 1–5 severity, and test results.
+
 ## November 21 checkpoint
 
 [Experiment results and project slides](docs/experiment_update_2026-11-21.md) cover the local DistilBERT objective comparison, four-system AMI evaluation, and LibriSpeech spot check. [Semantic baselines and five-system comparison](docs/baselines_five_systems_2026-11-21.md) adds Qwen3-ASR 1.7B, BERTScore / SemDist baselines, and bootstrap CIs.
