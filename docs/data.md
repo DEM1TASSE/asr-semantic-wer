@@ -114,6 +114,8 @@ Whisper / wav2vec2 error span or id (checked).
   (ids and content) are unchanged. **Train and dev were not re-aligned** (27 train / 4 dev utterances contain
   adjacent digit words, 10 train/dev spans have the placeholder) so the trained student and the splits stay valid.
 - New human test set: 100 errors, 20 per system (5 systems), `annotation/human_test_{A,B}.xlsx`
-  (`src/make_human_test.py`). New blind pairwise sheets: `annotation/pairwise_{A,B}.xlsx`, 50 utterances
-  (Whisper vs Parakeet 25, Whisper vs Qwen3-ASR 0.6B 25) where WER prefers the other system but Semantic-WER
-  prefers Whisper (18) or sees a tie (32) (`src/make_pairwise.py`; hidden key `outputs/pairwise_key.csv`).
+  (`src/make_human_test.py`). New blind pairwise sheets: `annotation/pairwise_rater{1,2}.xlsx`, 60 utterances, four systems (Whisper,
+  Parakeet, Qwen3-ASR 0.6B / 1.7B): 25 where per-utterance WER and Semantic-WER prefer different systems
+  (Whisper pairs), 25 where WER prefers one system but Semantic-WER sees a tie (all six pairs), 10 random.
+  Raters choose A / B / Same (which output keeps the meaning better), no rubric; report the three types
+  separately (`src/make_pairwise.py`; hidden key `outputs/pairwise_key.csv`).
