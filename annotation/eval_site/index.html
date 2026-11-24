@@ -71,6 +71,20 @@ mark.err ins{color:var(--ins);text-decoration:none;font-weight:500}
 .box .en{font-family:var(--mono);font-size:14px;overflow-wrap:anywhere}
 .box .zh{font-family:var(--zh);font-size:13px;color:var(--muted);margin-top:4px}
 .box.pick{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.diff{margin-top:14px;border:1px solid var(--line);border-radius:10px;padding:4px 14px 10px;min-width:0}
+.diff .dh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0 4px}
+.diff .dh strong{font-family:var(--zh);font-size:14px}
+.diff .legend{font-family:var(--zh);font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap}
+.drow{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;padding:7px 0;border-top:1px dashed var(--line)}
+.drow>span{font-family:var(--zh);font-size:13px;color:var(--muted)}
+.drow .toks{font-family:var(--mono);font-size:13.5px;line-height:1.9;overflow-wrap:anywhere}
+.toks .oa{background:var(--mark);color:var(--mark-ink);border-radius:3px;padding:0 3px}
+.toks .ob{background:var(--accent-soft);color:var(--ins);border-radius:3px;padding:0 3px;font-weight:500}
+.toks .miss{color:var(--del);text-decoration:line-through;text-decoration-thickness:2px;opacity:.85}
+.toks .extra{color:var(--ins);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;font-weight:500}
+.toks .same-all{color:var(--muted);font-family:var(--zh);font-size:13px}
+.k{display:inline-block;padding:0 4px;border-radius:3px}
+@media (max-width:760px){.drow{grid-template-columns:1fr;gap:2px}}
 .rate{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:14px}
 .row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:start}
 .row>span{font-family:var(--zh);font-size:14px;color:var(--muted);padding-top:6px}
@@ -246,6 +260,7 @@ function renderPair(){
       <div class="box ${a.choice==='A'?'pick':''}"><h3>输出 A</h3><div class="en">${esc(p.A)}</div>${zhLine(p.A)}</div>
       <div class="box ${a.choice==='B'?'pick':''}"><h3>输出 B</h3><div class="en">${esc(p.B)}</div>${zhLine(p.B)}</div>
     </div>
+    ${diffHtml(p)}
     <div class="rate">
       <div class="row"><span>哪个更好 *</span>${optBtns('choice',PICK,a.choice)}</div>
       <div class="row"><span>备注</span><textarea id="note" placeholder="可选">${esc(a.note||'')}</textarea></div>
@@ -263,6 +278,26 @@ function renderRef(){
   const s=(answers.sev[cur.sev]||{}).severity;
   $('refBody').querySelectorAll('h3,h4').forEach(h=>h.classList.toggle('hit',refTab==='sev'&&!!s&&h.textContent.trim().startsWith(s+' ')));
 }
+const FILLERS=new Set(['hmm','mm','mhm','mmm','uh','um']);
+const norm=s=>String(s||'').toLowerCase().replace(/[’`]/g,"'").replace(/[^a-z0-9'\s-]/g,' ').replace(/-/g,' ').split(/\s+/).filter(w=>w&&!FILLERS.has(w));
+function lcsOps(a,b){const n=a.length,m=b.length,L=Array.from({length:n+1},()=>new Int16Array(m+1));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=a[i]===b[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const ops=[];let i=0,j=0;while(i<n&&j<m){if(a[i]===b[j]){ops.push(['=',a[i]]);i++;j++}else if(L[i+1][j]>=L[i][j+1])ops.push(['-',a[i++]]);else ops.push(['+',b[j++]])}
+  while(i<n)ops.push(['-',a[i++]]);while(j<m)ops.push(['+',b[j++]]);return ops}
+function toks(ops,clsMinus,clsPlus){if(!ops.some(o=>o[0]!=='='))return '<span class="same-all">（去掉标点和大小写后完全相同）</span>';
+  return ops.map(([o,w])=>o==='='?esc(w):`<span class="${o==='-'?clsMinus:clsPlus}">${esc(w)}</span>`).join(' ')}
+let showDiff=true;
+function diffHtml(p){
+  const r=norm(p.ref),a=norm(p.A),b=norm(p.B);
+  const body=showDiff?`
+    <div class="drow"><span>A 和 B 的差别</span><div class="toks">${toks(lcsOps(a,b),'oa','ob')}</div></div>
+    <div class="drow"><span>A 对照参考句</span><div class="toks">${toks(lcsOps(r,a),'miss','extra')}</div></div>
+    <div class="drow"><span>B 对照参考句</span><div class="toks">${toks(lcsOps(r,b),'miss','extra')}</div></div>`:'';
+  return `<div class="diff"><div class="dh"><strong>逐词差异</strong>
+    <label class="inline" for="showDiff"><input type="checkbox" id="showDiff" ${showDiff?'checked':''}>显示</label></div>
+    ${showDiff?`<div class="legend"><span><span class="k toks"><span class="oa">词</span></span> 只在 A 里</span><span><span class="k toks"><span class="ob">词</span></span> 只在 B 里</span><span><span class="k toks"><span class="miss">词</span></span> 参考句有、输出里没有</span><span><span class="k toks"><span class="extra">词</span></span> 输出里多出或识别成的词</span></div>`:''}
+    ${body}
+    ${showDiff?'<div class="legend" style="padding-top:6px">已忽略标点、大小写和 uh / um / mm 等填充词（和 WER 计算一致）。差异多不代表意思差得多，请按意思判断。</div>':''}</div>`}
 function navHtml(hint){return `<div class="nav"><button class="ghost" id="prev">← 上一题</button><span class="hint">${hint}</span><button class="primary" id="next">下一题 →</button></div>`}
 
 function render(){
@@ -333,6 +368,7 @@ $('nextTodo').onclick=()=>{const list=items(),i=cur[task];const nx=[...list.slic
 $('tabSev').onclick=()=>{task='sev';lsSet('asr-eval:task',task);render()};
 $('tabPair').onclick=()=>{task='pair';lsSet('asr-eval:task',task);render()};
 $('rater').onchange=e=>{rater=e.target.value;lsSet('asr-eval:rater',rater);subscribe();render()};
+document.addEventListener('change',ev=>{if(ev.target.id==='showDiff'){showDiff=ev.target.checked;lsSet('asr-eval:diff',showDiff);render()}});
 $('showZh').onchange=e=>{showZh=e.target.checked;lsSet('asr-eval:zh',showZh);render()};
 $('refSev').onclick=()=>{refTab='sev';renderRef()};
 $('refCt').onclick=()=>{refTab='ct';renderRef()};
@@ -357,7 +393,7 @@ async function exportBackup(){
 $('exportBtn').onclick=()=>{if(rater)exportBackup();else setStatus('先选择标注员编号',true)};
 
 (async function boot(){
-  showZh=lsGet('asr-eval:zh',true);$('showZh').checked=showZh;
+  showZh=lsGet('asr-eval:zh',true);showDiff=lsGet('asr-eval:diff',true)!==false;$('showZh').checked=showZh;
   task=lsGet('asr-eval:task','sev')==='pair'?'pair':'sev';
   try{DATA=await (await fetch('data.json')).json()}catch(e){$('card').innerHTML='<div class="empty">题目数据没有加载出来，请刷新页面重试。</div>';setStatus('数据加载失败',true);return}
   const c=lsGet('asr-eval:cur',null);if(c&&c.sev>=1&&c.sev<=DATA.severity.length&&c.pair>=1&&c.pair<=DATA.pairwise.length)cur=c;
