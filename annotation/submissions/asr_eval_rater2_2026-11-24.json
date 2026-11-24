@@ -1,0 +1,777 @@
+{
+  "version": "aac4e708dd84",
+  "rubricVersion": "2.4",
+  "rater": "2",
+  "exported": "2026-11-24T23:07:09.063Z",
+  "severity": {
+    "1": {
+      "severity": 1,
+      "updated": "2026-11-24T22:17:52.649Z",
+      "content_type": "disfluency"
+    },
+    "2": {
+      "severity": 1,
+      "updated": "2026-11-24T22:18:36.730Z",
+      "content_type": "function_word"
+    },
+    "3": {
+      "severity": 1,
+      "updated": "2026-11-24T22:20:47.165Z",
+      "flag": [
+        "ref_issue"
+      ],
+      "content_type": "disfluency"
+    },
+    "4": {
+      "severity": 1,
+      "updated": "2026-11-24T22:21:02.914Z",
+      "content_type": "disfluency"
+    },
+    "5": {
+      "severity": 4,
+      "updated": "2026-11-24T22:21:30.143Z",
+      "content_type": "other"
+    },
+    "6": {
+      "severity": 1,
+      "updated": "2026-11-24T22:21:47.178Z",
+      "content_type": "disfluency"
+    },
+    "7": {
+      "severity": 1,
+      "updated": "2026-11-24T22:21:53.600Z",
+      "content_type": "disfluency"
+    },
+    "8": {
+      "severity": 1,
+      "updated": "2026-11-24T22:22:11.177Z",
+      "content_type": "number"
+    },
+    "9": {
+      "severity": 1,
+      "updated": "2026-11-24T22:22:30.096Z",
+      "content_type": "disfluency"
+    },
+    "10": {
+      "severity": 2,
+      "updated": "2026-11-24T22:23:05.109Z",
+      "content_type": "content_word"
+    },
+    "11": {
+      "severity": 3,
+      "updated": "2026-11-24T22:23:27.959Z",
+      "content_type": "other"
+    },
+    "12": {
+      "severity": 1,
+      "updated": "2026-11-24T22:23:56.365Z",
+      "content_type": "disfluency"
+    },
+    "13": {
+      "severity": 1,
+      "updated": "2026-11-24T22:24:05.793Z",
+      "content_type": "disfluency"
+    },
+    "14": {
+      "severity": 2,
+      "updated": "2026-11-24T22:24:15.691Z",
+      "content_type": "function_word"
+    },
+    "15": {
+      "severity": 1,
+      "updated": "2026-11-24T22:24:48.391Z",
+      "content_type": "disfluency"
+    },
+    "16": {
+      "severity": 1,
+      "updated": "2026-11-24T22:29:08.477Z",
+      "note": "",
+      "content_type": "function_word"
+    },
+    "17": {
+      "severity": 1,
+      "updated": "2026-11-24T22:29:16.906Z",
+      "content_type": "disfluency"
+    },
+    "18": {
+      "severity": 1,
+      "updated": "2026-11-24T22:29:36.707Z",
+      "content_type": "disfluency"
+    },
+    "19": {
+      "severity": 1,
+      "updated": "2026-11-24T22:29:46.326Z",
+      "content_type": "disfluency",
+      "flag": [
+        "ref_issue"
+      ]
+    },
+    "20": {
+      "severity": 3,
+      "updated": "2026-11-24T22:31:02.939Z",
+      "content_type": "other"
+    },
+    "21": {
+      "severity": 3,
+      "updated": "2026-11-24T22:31:21.470Z",
+      "content_type": "content_word"
+    },
+    "22": {
+      "severity": 4,
+      "updated": "2026-11-24T22:31:34.071Z",
+      "content_type": "number"
+    },
+    "23": {
+      "severity": 3,
+      "updated": "2026-11-24T22:31:48.337Z",
+      "content_type": "function_word"
+    },
+    "24": {
+      "severity": 1,
+      "updated": "2026-11-24T22:32:24.652Z",
+      "content_type": "content_word",
+      "flag": [
+        "ref_issue"
+      ]
+    },
+    "25": {
+      "severity": 2,
+      "updated": "2026-11-24T22:32:35.951Z",
+      "content_type": "function_word"
+    },
+    "26": {
+      "severity": 4,
+      "updated": "2026-11-24T22:32:59.535Z",
+      "content_type": "content_word"
+    },
+    "27": {
+      "severity": 1,
+      "updated": "2026-11-24T22:33:16.966Z",
+      "content_type": "disfluency"
+    },
+    "28": {
+      "severity": 3,
+      "updated": "2026-11-24T22:33:32.452Z",
+      "content_type": "content_word"
+    },
+    "29": {
+      "severity": 1,
+      "updated": "2026-11-24T22:33:43.266Z",
+      "content_type": "disfluency"
+    },
+    "30": {
+      "severity": 1,
+      "updated": "2026-11-24T22:33:52.917Z",
+      "content_type": "content_word"
+    },
+    "31": {
+      "severity": 1,
+      "updated": "2026-11-24T22:34:04.354Z",
+      "content_type": "disfluency",
+      "flag": [
+        "ref_issue"
+      ]
+    },
+    "32": {
+      "severity": 1,
+      "updated": "2026-11-24T22:34:20.840Z",
+      "content_type": "function_word"
+    },
+    "33": {
+      "severity": 1,
+      "updated": "2026-11-24T22:34:37.065Z",
+      "content_type": "content_word"
+    },
+    "34": {
+      "severity": 1,
+      "updated": "2026-11-24T22:34:54.683Z",
+      "content_type": "disfluency"
+    },
+    "35": {
+      "severity": 4,
+      "updated": "2026-11-24T22:35:08.166Z",
+      "content_type": "number"
+    },
+    "36": {
+      "severity": 2,
+      "updated": "2026-11-24T22:35:21.332Z",
+      "content_type": "function_word"
+    },
+    "37": {
+      "severity": 1,
+      "updated": "2026-11-24T22:35:36.771Z",
+      "content_type": "disfluency"
+    },
+    "38": {
+      "severity": 1,
+      "updated": "2026-11-24T22:35:45.699Z",
+      "content_type": "disfluency"
+    },
+    "39": {
+      "severity": 1,
+      "updated": "2026-11-24T22:35:50.766Z",
+      "content_type": "disfluency"
+    },
+    "40": {
+      "severity": 4,
+      "updated": "2026-11-24T22:35:58.488Z",
+      "content_type": "other"
+    },
+    "41": {
+      "severity": 1,
+      "updated": "2026-11-24T22:36:06.866Z",
+      "content_type": "disfluency"
+    },
+    "42": {
+      "severity": 2,
+      "updated": "2026-11-24T22:36:31.270Z",
+      "content_type": "disfluency",
+      "flag": []
+    },
+    "43": {
+      "severity": 3,
+      "updated": "2026-11-24T22:37:19.303Z",
+      "content_type": "function_word"
+    },
+    "44": {
+      "severity": 2,
+      "updated": "2026-11-24T22:37:51.432Z",
+      "content_type": "function_word"
+    },
+    "45": {
+      "severity": 2,
+      "updated": "2026-11-24T22:38:07.848Z",
+      "content_type": "content_word"
+    },
+    "46": {
+      "severity": 1,
+      "updated": "2026-11-24T22:38:31.313Z",
+      "content_type": "disfluency"
+    },
+    "47": {
+      "severity": 1,
+      "updated": "2026-11-24T22:38:51.979Z",
+      "content_type": "function_word"
+    },
+    "48": {
+      "severity": 1,
+      "updated": "2026-11-24T22:39:14.846Z",
+      "content_type": "disfluency"
+    },
+    "49": {
+      "severity": 3,
+      "updated": "2026-11-24T22:39:21.268Z",
+      "content_type": "content_word"
+    },
+    "50": {
+      "severity": 3,
+      "updated": "2026-11-24T22:39:38.314Z",
+      "content_type": "function_word"
+    },
+    "51": {
+      "severity": 1,
+      "updated": "2026-11-24T22:41:50.535Z",
+      "content_type": "function_word"
+    },
+    "52": {
+      "severity": 2,
+      "updated": "2026-11-24T22:42:07.919Z",
+      "content_type": "function_word"
+    },
+    "53": {
+      "severity": 1,
+      "updated": "2026-11-24T22:42:17.467Z",
+      "content_type": "disfluency"
+    },
+    "54": {
+      "severity": 1,
+      "updated": "2026-11-24T22:42:22.087Z",
+      "content_type": "function_word"
+    },
+    "55": {
+      "severity": 3,
+      "updated": "2026-11-24T22:42:35.627Z",
+      "content_type": "content_word"
+    },
+    "56": {
+      "severity": 3,
+      "updated": "2026-11-24T22:42:45.133Z",
+      "content_type": "function_word"
+    },
+    "57": {
+      "severity": 1,
+      "updated": "2026-11-24T22:42:55.818Z",
+      "content_type": "disfluency"
+    },
+    "58": {
+      "severity": 1,
+      "updated": "2026-11-24T22:43:07.880Z",
+      "content_type": "function_word"
+    },
+    "59": {
+      "severity": 3,
+      "updated": "2026-11-24T22:43:12.817Z",
+      "content_type": "content_word"
+    },
+    "60": {
+      "severity": 1,
+      "updated": "2026-11-24T22:43:23.445Z",
+      "content_type": "function_word"
+    },
+    "61": {
+      "severity": 1,
+      "updated": "2026-11-24T22:43:35.893Z",
+      "content_type": "disfluency"
+    },
+    "62": {
+      "severity": 1,
+      "updated": "2026-11-24T22:43:49.231Z",
+      "content_type": "function_word"
+    },
+    "63": {
+      "severity": 2,
+      "updated": "2026-11-24T22:43:59.217Z",
+      "content_type": "function_word"
+    },
+    "64": {
+      "severity": 1,
+      "updated": "2026-11-24T22:44:13.826Z",
+      "content_type": "function_word"
+    },
+    "65": {
+      "severity": 4,
+      "updated": "2026-11-24T22:44:29.893Z",
+      "content_type": "content_word"
+    },
+    "66": {
+      "severity": 1,
+      "updated": "2026-11-24T22:44:47.681Z",
+      "content_type": "function_word"
+    },
+    "67": {
+      "severity": 1,
+      "updated": "2026-11-24T22:44:57.433Z",
+      "content_type": "disfluency"
+    },
+    "68": {
+      "severity": 3,
+      "updated": "2026-11-24T22:45:06.372Z",
+      "content_type": "content_word"
+    },
+    "69": {
+      "severity": 4,
+      "updated": "2026-11-24T22:45:37.407Z",
+      "content_type": "other"
+    },
+    "70": {
+      "severity": 1,
+      "updated": "2026-11-24T22:45:46.270Z",
+      "content_type": "disfluency"
+    },
+    "71": {
+      "severity": 1,
+      "updated": "2026-11-24T22:45:55.501Z",
+      "content_type": "function_word"
+    },
+    "72": {
+      "severity": 4,
+      "updated": "2026-11-24T22:46:02.594Z",
+      "content_type": "number"
+    },
+    "73": {
+      "severity": 1,
+      "updated": "2026-11-24T22:46:12.035Z",
+      "content_type": "disfluency"
+    },
+    "74": {
+      "severity": 3,
+      "updated": "2026-11-24T22:46:34.039Z",
+      "content_type": "content_word"
+    },
+    "75": {
+      "flag": [
+        "ref_issue"
+      ],
+      "updated": "2026-11-24T22:47:07.998Z",
+      "severity": 2,
+      "note": "start up是啥，不是初创公司吗",
+      "content_type": "other"
+    },
+    "76": {
+      "severity": 2,
+      "updated": "2026-11-24T22:47:27.058Z",
+      "content_type": "function_word"
+    },
+    "77": {
+      "severity": 1,
+      "updated": "2026-11-24T22:47:44.572Z",
+      "content_type": "disfluency"
+    },
+    "78": {
+      "severity": 1,
+      "updated": "2026-11-24T22:47:55.008Z",
+      "content_type": "disfluency"
+    },
+    "79": {
+      "severity": 2,
+      "updated": "2026-11-24T22:48:08.493Z",
+      "content_type": "function_word"
+    },
+    "80": {
+      "severity": 1,
+      "updated": "2026-11-24T22:48:22.511Z",
+      "content_type": "disfluency"
+    },
+    "81": {
+      "severity": 1,
+      "updated": "2026-11-24T22:48:35.877Z",
+      "content_type": "disfluency"
+    },
+    "82": {
+      "severity": 2,
+      "updated": "2026-11-24T22:48:43.412Z",
+      "content_type": "function_word"
+    },
+    "83": {
+      "severity": 2,
+      "updated": "2026-11-24T22:48:52.306Z",
+      "content_type": "function_word"
+    },
+    "84": {
+      "severity": 2,
+      "updated": "2026-11-24T22:49:02.859Z",
+      "content_type": "function_word"
+    },
+    "85": {
+      "severity": 3,
+      "updated": "2026-11-24T22:49:08.239Z",
+      "content_type": "content_word"
+    },
+    "86": {
+      "severity": 1,
+      "updated": "2026-11-24T22:49:15.172Z",
+      "content_type": "disfluency"
+    },
+    "87": {
+      "severity": 2,
+      "updated": "2026-11-24T22:49:21.393Z",
+      "content_type": "function_word"
+    },
+    "88": {
+      "severity": 1,
+      "updated": "2026-11-24T22:49:33.181Z",
+      "content_type": "disfluency"
+    },
+    "89": {
+      "severity": 2,
+      "updated": "2026-11-24T22:49:45.061Z",
+      "content_type": "function_word"
+    },
+    "90": {
+      "severity": 1,
+      "updated": "2026-11-24T22:50:04.540Z",
+      "content_type": "disfluency"
+    },
+    "91": {
+      "severity": 3,
+      "updated": "2026-11-24T22:50:25.884Z",
+      "flag": [
+        "ref_issue"
+      ],
+      "content_type": "other"
+    },
+    "92": {
+      "severity": 1,
+      "updated": "2026-11-24T22:50:35.673Z",
+      "content_type": "disfluency"
+    },
+    "93": {
+      "severity": 3,
+      "updated": "2026-11-24T22:50:45.573Z",
+      "content_type": "function_word"
+    },
+    "94": {
+      "severity": 1,
+      "updated": "2026-11-24T22:50:50.662Z",
+      "content_type": "disfluency"
+    },
+    "95": {
+      "severity": 1,
+      "updated": "2026-11-24T22:50:57.555Z",
+      "content_type": "disfluency"
+    },
+    "96": {
+      "severity": 4,
+      "updated": "2026-11-24T22:51:04.254Z",
+      "content_type": "other"
+    },
+    "97": {
+      "severity": 2,
+      "updated": "2026-11-24T22:51:19.984Z",
+      "content_type": "function_word"
+    },
+    "98": {
+      "severity": 4,
+      "updated": "2026-11-24T22:51:28.797Z",
+      "content_type": "number"
+    },
+    "99": {
+      "severity": 3,
+      "updated": "2026-11-24T22:51:39.938Z",
+      "content_type": "content_word"
+    },
+    "100": {
+      "severity": 1,
+      "updated": "2026-11-24T22:51:54.550Z",
+      "content_type": "content_word"
+    }
+  },
+  "pairwise": {
+    "1": {
+      "choice": "B",
+      "updated": "2026-11-24T22:52:39.038Z"
+    },
+    "2": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:53:00.443Z"
+    },
+    "3": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:53:24.341Z"
+    },
+    "4": {
+      "choice": "B",
+      "updated": "2026-11-24T22:53:35.088Z"
+    },
+    "5": {
+      "choice": "B",
+      "updated": "2026-11-24T22:53:42.753Z"
+    },
+    "6": {
+      "choice": "A",
+      "updated": "2026-11-24T22:53:57.487Z"
+    },
+    "7": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:54:10.719Z"
+    },
+    "8": {
+      "choice": "A",
+      "updated": "2026-11-24T22:54:39.489Z"
+    },
+    "9": {
+      "choice": "A",
+      "updated": "2026-11-24T22:54:49.436Z"
+    },
+    "10": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:55:30.275Z"
+    },
+    "11": {
+      "choice": "B",
+      "updated": "2026-11-24T22:55:38.796Z"
+    },
+    "12": {
+      "choice": "A",
+      "updated": "2026-11-24T22:56:13.871Z"
+    },
+    "13": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:56:37.497Z"
+    },
+    "14": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:56:41.054Z"
+    },
+    "15": {
+      "choice": "A",
+      "updated": "2026-11-24T22:56:46.943Z"
+    },
+    "16": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:56:55.928Z"
+    },
+    "17": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:57:24.789Z"
+    },
+    "18": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:57:37.778Z"
+    },
+    "19": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:57:50.103Z"
+    },
+    "20": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:57:53.643Z"
+    },
+    "21": {
+      "note": "都有问题",
+      "updated": "2026-11-24T22:58:05.212Z",
+      "choice": "Same"
+    },
+    "22": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:58:16.692Z",
+      "note": "都有问题"
+    },
+    "23": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:58:24.982Z"
+    },
+    "24": {
+      "note": "参考转写有问题",
+      "updated": "2026-11-24T22:59:13.542Z",
+      "choice": "Same"
+    },
+    "25": {
+      "choice": "A",
+      "updated": "2026-11-24T22:59:31.564Z"
+    },
+    "26": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:59:37.469Z"
+    },
+    "27": {
+      "choice": "Same",
+      "updated": "2026-11-24T22:59:51.092Z"
+    },
+    "28": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:00:03.972Z"
+    },
+    "29": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:00:36.744Z",
+      "note": "我发现有很多这种，有的模型倾向于保留重复/不流畅的，有的模型倾向于合并？但是都不影响意思\n"
+    },
+    "30": {
+      "choice": "A",
+      "updated": "2026-11-24T23:00:50.033Z"
+    },
+    "31": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:00:56.206Z"
+    },
+    "32": {
+      "choice": "A",
+      "updated": "2026-11-24T23:01:14.581Z"
+    },
+    "33": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:01:23.075Z"
+    },
+    "34": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:01:52.913Z",
+      "note": "参考句有问题"
+    },
+    "35": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:01:56.449Z"
+    },
+    "36": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:02:02.657Z"
+    },
+    "37": {
+      "choice": "A",
+      "updated": "2026-11-24T23:02:15.982Z"
+    },
+    "38": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:02:21.484Z"
+    },
+    "39": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:02:27.540Z"
+    },
+    "40": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:02:35.817Z"
+    },
+    "41": {
+      "choice": "B",
+      "updated": "2026-11-24T23:02:45.880Z"
+    },
+    "42": {
+      "choice": "A",
+      "updated": "2026-11-24T23:03:27.312Z"
+    },
+    "43": {
+      "choice": "A",
+      "updated": "2026-11-24T23:03:39.326Z"
+    },
+    "44": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:03:47.521Z"
+    },
+    "45": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:03:52.898Z"
+    },
+    "46": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:04:01.974Z"
+    },
+    "47": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:04:06.418Z"
+    },
+    "48": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:04:11.621Z"
+    },
+    "49": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:04:19.222Z"
+    },
+    "50": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:04:34.845Z",
+      "note": "都有问题"
+    },
+    "51": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:04:51.316Z"
+    },
+    "52": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:05:01.416Z"
+    },
+    "53": {
+      "choice": "A",
+      "updated": "2026-11-24T23:05:09.802Z"
+    },
+    "54": {
+      "choice": "B",
+      "updated": "2026-11-24T23:05:43.208Z"
+    },
+    "55": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:05:52.144Z"
+    },
+    "56": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:06:03.439Z"
+    },
+    "57": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:06:07.213Z"
+    },
+    "58": {
+      "choice": "Same",
+      "updated": "2026-11-24T23:06:15.606Z"
+    },
+    "59": {
+      "choice": "B",
+      "updated": "2026-11-24T23:06:24.833Z"
+    },
+    "60": {
+      "choice": "B",
+      "updated": "2026-11-24T23:06:34.044Z"
+    }
+  }
+}
