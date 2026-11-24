@@ -10,6 +10,10 @@ import json
 from pathlib import Path
 
 import openpyxl
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
+from common import single_error_hyp  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'annotation/eval_site'
@@ -37,7 +41,7 @@ for n, eid in enumerate(ids, 1):
         'n': n, 'id': eid,
         'before': e['context_before'], 'after': e['context_after'],
         'ref': e['ref'], 'refMarked': e['ref_marked'], 'refSpan': e['ref_span'], 'hypSpan': e['hyp_span'] or '∅',
-        'op': e['op'], 'hyp': e['hyp'],
+        'op': e['op'], 'hyp': single_error_hyp(e),  # only this error; all others corrected
     })
 
 pairwise = []

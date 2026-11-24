@@ -162,7 +162,7 @@ dialog::backdrop{background:rgb(0 0 0 / .35)}
     <div class="grid" id="grid"></div>
     <div class="railbtns">
       <button class="ghost" id="nextTodo">下一条未完成</button>
-      <button class="ghost" id="exportBtn" hidden>导出备份</button>
+      <button class="ghost" id="exportBtn">导出备份</button>
     </div>
   </aside>
   <section class="card" id="card"><div class="empty">正在加载题目…</div></section>
@@ -386,9 +386,11 @@ function markdown(text){let out='',table=false,list=false;const close=()=>{if(ta
   close();return out}
 
 async function exportBackup(){
-  const dl=await window.claude?.use?.('downloads');if(!dl)return;
+  let dl=null;try{dl=await window.claude?.use?.('downloads')}catch(e){}
   const body=JSON.stringify({version:DATA.version,rubricVersion:DATA.rubricVersion,rater,exported:new Date().toISOString(),severity:answers.sev,pairwise:answers.pair},null,2);
-  try{await dl.save({filename:`asr_eval_rater${rater}_${new Date().toISOString().slice(0,10)}.json`,data:body})}catch(e){}
+  const filename=`asr_eval_rater${rater}_${new Date().toISOString().slice(0,10)}.json`;
+  if(dl){try{await dl.save({filename,data:body})}catch(e){}return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([body],{type:'application/json'}));a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);setStatus('已下载 '+filename)
 }
 $('exportBtn').onclick=()=>{if(rater)exportBackup();else setStatus('先选择标注员编号',true)};
 
