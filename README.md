@@ -44,7 +44,7 @@ Source: `outputs/human_test_eval.json`.
 | Human A vs. human B | 0.85 | 0.79 | 0.32 |
 | Teacher (DeepSeek-V4.1-Flash) | 0.84 | 0.82 | 0.37 |
 | Student (DistilBERT, ordinal) | 0.82 | 0.83 | 0.39 |
-| SemDist (Sentence-BERT) | 0.64 | 0.67 | 0.54 |
+| Sentence-BERT cosine distance | 0.64 | 0.67 | 0.54 |
 | BERTScore | 0.59 | 0.61 | 0.60 |
 | Span length (what WER uses) | 0.33 | 0.31 | 0.73 |
 
@@ -97,7 +97,7 @@ Numbers per system are error spans. Audio is not included; it comes from the Hug
 |---|---|
 | [Hugging Face model](https://huggingface.co/yixiang666/asr-semantic-severity-distilbert) | DistilBERT with an ordinal head (4 cumulative logits; severity = 1 + Σ sigmoid), trained on `train_all3_9k` |
 | `outputs/student_predictions_test+test_extra.jsonl` | student severity for every test span of all five systems |
-| `outputs/baselines/` | BERTScore / SemDist / span-length scores and metrics |
+| `outputs/baselines/` | BERTScore / Sentence-BERT distance / span-length scores and metrics |
 | `outputs/system_compare.json` | the five-system table above, with bootstrap intervals |
 
 ## Quick start
