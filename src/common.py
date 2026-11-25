@@ -36,7 +36,8 @@ def load_errors(subsets=None):
 for d in (DATA, OUT):
     d.mkdir(exist_ok=True)
 
-os.environ.setdefault("HF_HOME", str(WORK / "hf_cache"))
+if os.access(WORK / "hf_cache", os.W_OK):  # shared cache on Delta; elsewhere keep the user's default cache
+    os.environ.setdefault("HF_HOME", str(WORK / "hf_cache"))
 
 _normalizer = None
 
