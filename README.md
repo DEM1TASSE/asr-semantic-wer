@@ -54,8 +54,9 @@ The student was trained on Whisper, wav2vec2 and Parakeet only; on the two Qwen3
 equally good (QWK 0.77–0.82 against the teacher).
 
 **Blind pairwise test** (60 utterances, two raters choose which of two outputs keeps the meaning better, or
-Same). When WER prefers one output and Semantic-WER scores both equally, raters answer Same 78% of the time;
-when the two metrics prefer different outputs, raters side with Semantic-WER 42% and with WER 16%.
+Same). A choice agrees with a metric if it is the output the metric prefers, or Same when the metric scores a
+tie. Human choices agree with Semantic-WER vs. WER 42% vs. 16% where the metrics prefer different outputs,
+82% vs. 16% where only WER sees a difference, and 70% vs. 40% on random utterances.
 
 ## What is in this repository
 
