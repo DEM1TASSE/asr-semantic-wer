@@ -6,7 +6,7 @@ Demi Wang, Yixiang Dai; TA: Chin-Jou Li.
 Word error rate (WER) counts every wrong word the same, although dropping a repeated "the" changes nothing
 and dropping a "not" reverses the speaker. We cut ASR errors into spans, score how much each span changes
 the meaning (severity 1–5, judged in meeting context), and use the scores for a severity-weighted WER,
-**Semantic-WER**. An LLM (**teacher**, DeepSeek-V4.1-Flash) labels 29.6k error spans from five ASR systems
+**SemWER** (to distinguish it from the entity-weighted Semantic-WER of Roy, 2021). An LLM (**teacher**, DeepSeek-V4.1-Flash) labels 29.6k error spans from five ASR systems
 on the AMI meeting corpus, and a fine-tuned DistilBERT (**student**) reproduces the labels cheaply and
 without any API.
 
@@ -20,11 +20,11 @@ without any API.
 
 ## Main results
 
-**Five ASR systems on 700 AMI test utterances (9,355 reference words), %.** Semantic-WER
+**Five ASR systems on 700 AMI test utterances (9,355 reference words), %.** SemWER
 $= \sum_j n_j\,(v_j-1)/4 \,/\, N$ for error spans $j$ with $n_j$ word edits and severity $v_j$;
-R = Semantic-WER / WER = average severity weight per edited word. Source: `outputs/system_compare.json`.
+R = SemWER / WER = average severity weight per edited word. Source: `outputs/system_compare.json`.
 
-| System | WER | CER | Semantic-WER (teacher) | Semantic-WER (student) | R (teacher) |
+| System | WER | CER | SemWER (teacher) | SemWER (student) | R (teacher) |
 |---|---|---|---|---|---|
 | Qwen3-ASR 1.7B | 7.39 | 4.21 | 1.34 | 1.27 | 0.18 |
 | Parakeet-TDT 0.6B v2 | 7.57 | 4.02 | 1.56 | 1.58 | 0.21 |
@@ -32,7 +32,7 @@ R = Semantic-WER / WER = average severity weight per edited word. Source: `outpu
 | Whisper large-v3 | 11.63 | 7.58 | 1.42 | 1.54 | 0.12 |
 | wav2vec2-large-960h-lv60-self | 22.49 | 11.57 | 7.32 | 7.34 | 0.33 |
 
-Whisper has 4 points more WER than Parakeet but about the same Semantic-WER: its extra errors are almost all
+Whisper has 4 points more WER than Parakeet but about the same SemWER: its extra errors are almost all
 deletions of repetitions, fillers and false starts that the AMI references keep (6.0 deleted disfluent words
 per 100 reference words, vs. 1.0 for Parakeet).
 
@@ -55,7 +55,7 @@ equally good (QWK 0.77–0.82 against the teacher).
 
 **Blind pairwise test** (60 utterances, two raters choose which of two outputs keeps the meaning better, or
 Same). A choice agrees with a metric if it is the output the metric prefers, or Same when the metric scores a
-tie. Human choices agree with Semantic-WER vs. WER 42% vs. 16% where the metrics prefer different outputs,
+tie. Human choices agree with SemWER vs. WER 42% vs. 16% where the metrics prefer different outputs,
 82% vs. 16% where only WER sees a difference, and 70% vs. 40% on random utterances.
 
 ## What is in this repository
@@ -73,7 +73,7 @@ System names: `whisper-large-v3`, `wav2vec2-large`, `parakeet-tdt-0.6b-v2`, `qwe
 | `outputs/errors[_subset].jsonl` | one line per error span: marked reference `[[ref → asr]]`, edit type, context |
 | `outputs/llm_annotations_deepseek-v4-1-flash_v2.4.jsonl` | **teacher labels** for all 29,568 spans: severity, content type, flags, rationale |
 | `data/splits/*.txt`, `manifest.json` | fixed train / dev / test id lists for the student (meeting-disjoint) |
-| `outputs/wer_summary*.json`, `outputs/semwer_summary*.json` | WER and Semantic-WER per subset |
+| `outputs/wer_summary*.json`, `outputs/semwer_summary*.json` | WER and SemWER per subset |
 
 | Subset | AMI split | Utterances | Whisper | wav2vec2 | Parakeet | Qwen 0.6B | Qwen 1.7B |
 |---|---|---|---|---|---|---|---|
@@ -139,7 +139,7 @@ To score a new ASR system: write its output as `outputs/hyp_<system>.jsonl` (`au
 | ASR | `python src/run_asr.py --model <system> --subset <subset>` (Slurm wrappers in `slurm/`; Parakeet needs NeMo) |
 | align, error spans | `python src/align.py --subset <subset>` |
 | teacher labels (needs `AZURE_API_KEY` in `.env`) | `python src/annotate_llm.py --backend azure_v1 --model deepseek-v4-1-flash --ids subset:<subset> --tag deepseek-v4-1-flash_v2.4` |
-| Semantic-WER, figures | `python src/semwer.py --subset <subset>` |
+| SemWER, figures | `python src/semwer.py --subset <subset>` |
 | student splits | `python src/make_splits.py` |
 | train the student | `python src/train_severity_cpu.py --train-split train_all3_9k --objective ordinal --epochs 10 --patience 3 --lr 3e-5 --bs 16` |
 | baselines | `python src/semantic_baselines.py --student outputs/student_predictions_test+test_extra.jsonl` |
