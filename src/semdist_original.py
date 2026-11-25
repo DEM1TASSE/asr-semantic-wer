@@ -7,8 +7,10 @@ metric below). Mapped to 1-5 by isotonic regression on dev_balanced (teacher lab
 Evaluated against: the teacher on test_balanced, the human mean on the 50 pilot spans and on the 100-span
 human test. Prints the SBERT-dist numbers from the same run for comparison.
 
-Usage: python src/semdist_original.py [--model roberta-large] [--bs 64]
-Outputs: outputs/baselines/semdist_roberta_scores.jsonl, outputs/baselines/semdist_roberta_metrics.json
+The paper names RoBERTa but describes a BERT-base configuration, so run both:
+  python src/semdist_original.py --model roberta-large
+  python src/semdist_original.py --model bert-base-uncased
+Outputs: outputs/baselines/semdist_<model>_scores.jsonl, outputs/baselines/semdist_<model>_metrics.json
 """
 import argparse
 import json
@@ -60,7 +62,7 @@ def main():
     sb = semdist(refs, hyps, args.bs)  # SBERT-dist (all-mpnet-base-v2), recomputed for a like-for-like comparison
 
     rows = {}
-    with open(OUT / "baselines" / "semdist_roberta_scores.jsonl", "w") as f:
+    with open(OUT / "baselines" / f"semdist_{args.model.split('/')[-1]}_scores.jsonl", "w") as f:
         for k, i in enumerate(ids):
             t = teacher.get(i)
             rows[i] = {"error_id": i, "system": errors[i]["system"], "semdist_roberta": float(rob[k]),
@@ -87,7 +89,7 @@ def main():
         for s in scorers:
             m = res[name][s]
             print(f"{name:32s} {s:16s} n={m['n']:4d} QWK={m['qwk']:.2f} rho={m['spearman']:.2f} MAE={m['mae']:.2f}")
-    json.dump(res, open(OUT / "baselines" / "semdist_roberta_metrics.json", "w"), indent=1)
+    json.dump(res, open(OUT / "baselines" / f"semdist_{args.model.split('/')[-1]}_metrics.json", "w"), indent=1)
 
 
 if __name__ == "__main__":
