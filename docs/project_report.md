@@ -1,5 +1,5 @@
 > **Superseded.** This is a working write-up from before the final human evaluation; some numbers changed
-> afterwards. The final results are in [`final_report.pdf`](final_report.pdf) and the [README](../README.md).
+> afterwards. The final results are in the [README](../README.md).
 
 # When ASR Errors Change Meaning: Context-Aware Semantic Error Profiling for ASR
 

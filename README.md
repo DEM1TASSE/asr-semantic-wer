@@ -12,7 +12,6 @@ without any API.
 
 | | |
 |---|---|
-| **Report** | [`docs/final_report.pdf`](docs/final_report.pdf) |
 | **Trained model** | [huggingface.co/yixiang666/asr-semantic-severity-distilbert](https://huggingface.co/yixiang666/asr-semantic-severity-distilbert) |
 | **Rubric** | [`annotation/rubric.md`](annotation/rubric.md) (Chinese version: [`rubric_zh.md`](annotation/rubric_zh.md)) |
 | **Teacher prompt** | `SYSTEM` and `USER` in [`src/annotate_llm.py`](src/annotate_llm.py) |
