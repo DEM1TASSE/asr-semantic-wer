@@ -46,6 +46,7 @@ Source: `outputs/human_test_eval.json`.
 | Student (DistilBERT, ordinal) | 0.82 | 0.83 | 0.39 |
 | Sentence-BERT cosine distance (all-mpnet-base-v2) | 0.65 | 0.68 | 0.53 |
 | SemDist (RoBERTa-large mean pooling) | 0.54 | 0.62 | 0.62 |
+| SemDist (BERT-base mean pooling) | 0.63 | 0.62 | 0.60 |
 | BERTScore | 0.59 | 0.61 | 0.60 |
 | Span length (what WER uses) | 0.33 | 0.31 | 0.73 |
 
