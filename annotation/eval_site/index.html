@@ -144,6 +144,7 @@ dialog::backdrop{background:rgb(0 0 0 / .35)}
     <div class="seg" role="group" aria-label="任务">
       <button id="tabSev" aria-pressed="true">严重度标注 · 100</button>
       <button id="tabPair" aria-pressed="false">盲测对比 · 60</button>
+      <button id="tabRelab" aria-pressed="false" hidden>重标 · 57</button>
     </div>
     <label class="inline" for="rater">标注员
       <select id="rater"><option value="">请选择</option><option value="1">标注员 1</option><option value="2">标注员 2</option></select>
@@ -191,16 +192,21 @@ const FL=[['ref_issue','参考转写有问题'],['crosstalk','串音'],['uncerta
 const PICK=[['A','A 更好','A 更好地保留了原意'],['Same','差不多','两者保留的意思相同'],['B','B 更好','B 更好地保留了原意']];
 const OPS={substitution:'替换',deletion:'删除',insertion:'插入'};
 
-let DATA=null, db=null, dbState='pending', task='sev', rater='', cur={sev:1,pair:1};
-let answers={sev:{},pair:{}}, unsub=[], showZh=true;
+// Items rater 1 relabels blind (the 57 that showed the full ASR sentence before commit 8ac3334;
+// same list as annotation/submissions/human_test_A_relabel57.xlsx). Saved to "relab1", old answers never shown.
+const RELAB=new Set([3,4,5,7,12,13,15,16,18,20,23,27,28,29,32,33,35,36,37,38,39,41,43,46,48,50,52,53,54,55,56,57,58,59,62,63,64,65,66,70,74,75,76,77,80,81,82,83,84,86,88,91,93,94,95,97,99]);
+let DATA=null, db=null, dbState='pending', task='sev', rater='', cur={sev:1,pair:1,relab:3};
+let answers={sev:{},pair:{},relab:{}}, unsub=[], showZh=true;
+const TASKS=['sev','pair','relab'];
+const isSev=t=>t!=='pair';
 
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-const coll=t=>(t==='sev'?'sev':'pair')+rater;
+const coll=t=>t+rater;
 const localKey=t=>`asr-eval:${DATA?.version}:${coll(t)}`;
 
-function items(){return task==='sev'?DATA.severity:DATA.pairwise}
-function done(t,n){const a=answers[t][n];return t==='sev'?!!(a&&a.severity&&a.content_type):!!(a&&a.choice)}
+function items(){return task==='pair'?DATA.pairwise:task==='relab'?DATA.severity.filter(x=>RELAB.has(x.n)):DATA.severity}
+function done(t,n){const a=answers[t][n];return isSev(t)?!!(a&&a.severity&&a.content_type):!!(a&&a.choice)}
 
 function setStatus(text,warn){const s=$('status');s.textContent=text;s.classList.toggle('warn',!!warn)}
 function statusIdle(){
@@ -215,7 +221,7 @@ function marked(s){return esc(s).replace(/\[\[(.*?) → (.*?)\]\]/g,(m,a,b)=>`<m
 
 function renderRail(){
   const list=items(), t=task, n=list.filter(x=>done(t,x.n)).length;
-  $('railTitle').textContent=t==='sev'?'严重度标注':'盲测对比';
+  $('railTitle').textContent={sev:'严重度标注',pair:'盲测对比',relab:'重标 57 条'}[t];
   $('bar').style.width=(100*n/list.length)+'%';
   $('count').textContent=`已完成 ${n} / ${list.length}`;
   $('grid').innerHTML=list.map(x=>`<button data-n="${x.n}" class="${done(t,x.n)?'done':''} ${cur[t]===x.n?'cur':''}" aria-label="第 ${x.n} 题">${x.n}</button>`).join('');
@@ -225,11 +231,12 @@ function optBtns(field,opts,val,cls){return `<div class="opts ${cls||''}" data-f
   `<button data-v="${v}" aria-pressed="${String(Array.isArray(val)?val.includes(v):val===v)}">${field==='severity'?`<b>${v}</b>`:''}${esc(l)}${s?`<small>${esc(s)}</small>`:''}</button>`).join('')+'</div>'}
 
 function renderSev(){
-  const e=DATA.severity[cur.sev-1], a=answers.sev[e.n]||{};
+  const e=DATA.severity.find(x=>x.n===cur[task])||items()[0], a=answers[task][e.n]||{};
+  const relabNote=task==='relab'?'<div class="notice">重标模式：这里不显示你之前的答案，请重新判断。只看“只含这一处错误的 ASR 句”。</div>':'';
   const ctx=[...e.before.map(s=>`<div class="utt"><div class="en">${esc(s)}</div>${zhLine(s)}</div>`),
     `<div class="utt target"><div class="tag">目标句</div><div class="en">${marked(e.refMarked)}</div>${zhLine(e.ref)}</div>`,
     ...e.after.map(s=>`<div class="utt"><div class="en">${esc(s)}</div>${zhLine(s)}</div>`)].join('');
-  return `<div class="itemhead"><span class="no">#${e.n}</span><span class="of">/ ${DATA.severity.length}</span>
+  return `${relabNote}<div class="itemhead"><span class="no">#${e.n}</span><span class="of">/ ${DATA.severity.length}</span>
       <span class="chip">${OPS[e.op]||e.op}</span><span class="chip">原文：${esc(e.refSpan||'∅')}　→　ASR：${esc(e.hypSpan)}</span></div>
     <p class="intro">只评标出的这一处错误：比较参考句和“只含这一处错误的 ASR 句”，判断意思变了多少。上下文只用来理解句子。</p>
     <div class="sec">会议上下文（前 3 句 · 目标句 · 后 1 句）</div><div class="ctx">${ctx}</div>
@@ -270,12 +277,12 @@ function renderPair(){
 
 let refTab='sev';
 function renderRef(){
-  const box=$('ref');box.hidden=task!=='sev';if(box.hidden)return;
+  const box=$('ref');box.hidden=task==='pair';if(box.hidden)return;
   $('refSev').setAttribute('aria-pressed',String(refTab==='sev'));$('refCt').setAttribute('aria-pressed',String(refTab==='ct'));
   const html=markdown(refTab==='sev'?DATA.calibZh:DATA.contentZh);
   if($('refBody').dataset.tab!==refTab){$('refBody').innerHTML=html;$('refBody').dataset.tab=refTab}
   // highlight the level the rater picked
-  const s=(answers.sev[cur.sev]||{}).severity;
+  const s=(answers[task][cur[task]]||{}).severity;
   $('refBody').querySelectorAll('h3,h4').forEach(h=>h.classList.toggle('hit',refTab==='sev'&&!!s&&h.textContent.trim().startsWith(s+' ')));
 }
 const FILLERS=new Set(['hmm','mm','mhm','mmm','uh','um']);
@@ -302,10 +309,11 @@ function navHtml(hint){return `<div class="nav"><button class="ghost" id="prev">
 
 function render(){
   if(!DATA)return;
-  $('tabSev').setAttribute('aria-pressed',String(task==='sev'));$('tabPair').setAttribute('aria-pressed',String(task==='pair'));
+  $('tabRelab').hidden=rater!=='1';if(task==='relab'&&rater!=='1')task='sev';
+  for(const [id,t] of [['tabSev','sev'],['tabPair','pair'],['tabRelab','relab']])$(id).setAttribute('aria-pressed',String(task===t));
   renderRail();
   const notice=rater?'':'<div class="notice">请先在页面顶部选择你的标注员编号（1 或 2），选好后才能保存。两项任务用同一个编号。</div>';
-  $('card').innerHTML=notice+(task==='sev'?renderSev():renderPair());
+  $('card').innerHTML=notice+(isSev(task)?renderSev():renderPair());
   $('card').querySelectorAll('.opts button,textarea').forEach(x=>x.disabled=!rater);
   renderRef();
   statusIdle();
@@ -323,14 +331,14 @@ function update(field,value,rerender=true){
 async function save(t,n,rec){
   if(!db){statusIdle();return}
   setStatus('正在保存…');
-  try{await db.collection(coll(t)).doc(String(n)).set(rec);setStatus(`已保存 · ${t==='sev'?'严重度':'对比'} #${n}`)}
+  try{await db.collection(coll(t)).doc(String(n)).set(rec);setStatus(`已保存 · ${{sev:'严重度',pair:'对比',relab:'重标'}[t]} #${n}`)}
   catch(e){setStatus('保存失败：'+(e?.message||e?.code||'请检查是否已登录并有编辑权限')+'。已暂存在本浏览器',true)}
 }
 
 function subscribe(){
   unsub.forEach(f=>{try{f()}catch(e){}});unsub=[];
   if(!rater)return;
-  for(const t of ['sev','pair']){
+  for(const t of TASKS){
     answers[t]=lsGet(localKey(t),{});
     if(!db)continue;
     const off=db.collection(coll(t)).onSnapshot(snap=>{
@@ -343,30 +351,32 @@ function subscribe(){
   }
 }
 
-function go(n){const list=items();if(n<1||n>list.length)return;cur[task]=n;lsSet('asr-eval:cur',cur);render();window.scrollTo({top:0})}
+function step(d){const list=items(),i=list.findIndex(x=>x.n===cur[task]);const nx=list[i+d];if(nx)go(nx.n)}
+function go(n){const list=items();if(!list.some(x=>x.n===n))return;cur[task]=n;lsSet('asr-eval:cur',cur);render();window.scrollTo({top:0})}
 
 document.addEventListener('click',ev=>{
   const b=ev.target.closest('button');if(!b)return;
   if(b.closest('#grid'))return go(+b.dataset.n);
-  if(b.id==='prev')return go(cur[task]-1);
-  if(b.id==='next')return go(cur[task]+1);
+  if(b.id==='prev')return step(-1);
+  if(b.id==='next')return step(1);
   const box=b.closest('.opts');
   if(box&&!b.disabled){const f=box.dataset.field,v=b.dataset.v;
-    if(f==='flag'){const now=new Set((answers.sev[cur.sev]||{}).flag||[]);now.has(v)?now.delete(v):now.add(v);update('flag',[...now])}
+    if(f==='flag'){const now=new Set((answers[task][cur[task]]||{}).flag||[]);now.has(v)?now.delete(v):now.add(v);update('flag',[...now])}
     else update(f,f==='severity'?+v:v);
   }
 });
 document.addEventListener('input',ev=>{if(ev.target.id==='note'){clearTimeout(noteTimer);const v=ev.target.value;noteTimer=setTimeout(()=>update('note',v,false),600)}});
 document.addEventListener('keydown',ev=>{
   if($('rubric').open||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)||ev.metaKey||ev.ctrlKey||ev.altKey||!DATA)return;
-  if(ev.key==='ArrowRight'){ev.preventDefault();go(cur[task]+1)}
-  else if(ev.key==='ArrowLeft'){ev.preventDefault();go(cur[task]-1)}
-  else if(task==='sev'&&/^[1-5]$/.test(ev.key))update('severity',+ev.key);
+  if(ev.key==='ArrowRight'){ev.preventDefault();step(1)}
+  else if(ev.key==='ArrowLeft'){ev.preventDefault();step(-1)}
+  else if(isSev(task)&&/^[1-5]$/.test(ev.key))update('severity',+ev.key);
   else if(task==='pair'){const k=ev.key.toLowerCase();if(k==='a')update('choice','A');else if(k==='b')update('choice','B');else if(k==='s')update('choice','Same')}
 });
-$('nextTodo').onclick=()=>{const list=items(),i=cur[task];const nx=[...list.slice(i),...list.slice(0,i)].find(x=>!done(task,x.n));if(nx)go(nx.n);else setStatus('这一项任务已全部完成')};
+$('nextTodo').onclick=()=>{const list=items(),i=list.findIndex(x=>x.n===cur[task])+1;const nx=[...list.slice(i),...list.slice(0,i)].find(x=>!done(task,x.n));if(nx)go(nx.n);else setStatus('这一项任务已全部完成')};
 $('tabSev').onclick=()=>{task='sev';lsSet('asr-eval:task',task);render()};
 $('tabPair').onclick=()=>{task='pair';lsSet('asr-eval:task',task);render()};
+$('tabRelab').onclick=()=>{task='relab';lsSet('asr-eval:task',task);render()};
 $('rater').onchange=e=>{rater=e.target.value;lsSet('asr-eval:rater',rater);subscribe();render()};
 document.addEventListener('change',ev=>{if(ev.target.id==='showDiff'){showDiff=ev.target.checked;lsSet('asr-eval:diff',showDiff);render()}});
 $('showZh').onchange=e=>{showZh=e.target.checked;lsSet('asr-eval:zh',showZh);render()};
@@ -387,7 +397,7 @@ function markdown(text){let out='',table=false,list=false;const close=()=>{if(ta
 
 async function exportBackup(){
   let dl=null;try{dl=await window.claude?.use?.('downloads')}catch(e){}
-  const body=JSON.stringify({version:DATA.version,rubricVersion:DATA.rubricVersion,rater,exported:new Date().toISOString(),severity:answers.sev,pairwise:answers.pair},null,2);
+  const body=JSON.stringify({version:DATA.version,rubricVersion:DATA.rubricVersion,rater,exported:new Date().toISOString(),severity:answers.sev,pairwise:answers.pair,relabel:answers.relab},null,2);
   const filename=`asr_eval_rater${rater}_${new Date().toISOString().slice(0,10)}.json`;
   if(dl){try{await dl.save({filename,data:body})}catch(e){}return}
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([body],{type:'application/json'}));a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);setStatus('已下载 '+filename)
@@ -396,9 +406,9 @@ $('exportBtn').onclick=()=>{if(rater)exportBackup();else setStatus('先选择标
 
 (async function boot(){
   showZh=lsGet('asr-eval:zh',true);showDiff=lsGet('asr-eval:diff',true)!==false;$('showZh').checked=showZh;
-  task=lsGet('asr-eval:task','sev')==='pair'?'pair':'sev';
+  task=TASKS.includes(lsGet('asr-eval:task','sev'))?lsGet('asr-eval:task','sev'):'sev';
   try{DATA=await (await fetch('data.json')).json()}catch(e){$('card').innerHTML='<div class="empty">题目数据没有加载出来，请刷新页面重试。</div>';setStatus('数据加载失败',true);return}
-  const c=lsGet('asr-eval:cur',null);if(c&&c.sev>=1&&c.sev<=DATA.severity.length&&c.pair>=1&&c.pair<=DATA.pairwise.length)cur=c;
+  const c=lsGet('asr-eval:cur',null);if(c&&c.sev>=1&&c.sev<=DATA.severity.length&&c.pair>=1&&c.pair<=DATA.pairwise.length)cur={...cur,...c,relab:RELAB.has(c.relab)?c.relab:3};
   rater=['1','2'].includes(lsGet('asr-eval:rater',''))?lsGet('asr-eval:rater',''):'';$('rater').value=rater;
   $('rubricBody').innerHTML=markdown(DATA.rubricZh);
   subscribe();render();

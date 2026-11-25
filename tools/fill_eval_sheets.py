@@ -6,7 +6,8 @@ Input, either or both:
                  (one JSON object per item, as saved by annotation/eval_site/index.html)
   --backup FILE  a JSON backup exported from the site's "导出备份" button (one rater; may be repeated)
 
-Rater 1 -> human_test_A.xlsx + pairwise_rater1.xlsx, rater 2 -> human_test_B.xlsx + pairwise_rater2.xlsx.
+Rater 1 -> human_test_A.xlsx + pairwise_rater1.xlsx (+ relabel: submissions/human_test_A_relabel57.xlsx),
+rater 2 -> human_test_B.xlsx + pairwise_rater2.xlsx.
 The templates stay untouched; filled copies go to --out (default annotation/submissions/).
 """
 import argparse
@@ -18,13 +19,14 @@ import openpyxl
 ROOT = Path(__file__).resolve().parents[1]
 SEV = {'1': 'human_test_A.xlsx', '2': 'human_test_B.xlsx'}
 PAIR = {'1': 'pairwise_rater1.xlsx', '2': 'pairwise_rater2.xlsx'}
+RELAB = {'1': 'submissions/human_test_A_relabel57.xlsx'}  # blind relabel of 57 display-affected items
 CONTENT = {'disfluency', 'function_word', 'content_word', 'named_entity', 'number', 'negation', 'other'}
 FLAGS = {'ref_issue', 'crosstalk', 'uncertain', 'multi_issue'}
 
 
 def load_db(d):
     out = {}
-    for kind in ('sev', 'pair'):
+    for kind in ('sev', 'pair', 'relab'):
         for r in '12':
             folder = Path(d) / f'{kind}{r}'
             if folder.is_dir():
@@ -35,7 +37,7 @@ def load_db(d):
 def load_backup(f):
     b = json.loads(Path(f).read_text())
     r = str(b['rater'])
-    return {('sev', r): b.get('severity', {}), ('pair', r): b.get('pairwise', {})}
+    return {('sev', r): b.get('severity', {}), ('pair', r): b.get('pairwise', {}), ('relab', r): b.get('relabel', {})}
 
 
 def newer(a, b):
@@ -54,7 +56,7 @@ def fill(template, labels, kind, out_dir):
         a = labels.get(n)
         if not a:
             continue
-        if kind == 'sev':
+        if kind in ('sev', 'relab'):
             sev, ct = a.get('severity'), a.get('content_type')
             flags = [f for f in a.get('flag') or [] if f in FLAGS]
             if sev not in (1, 2, 3, 4, 5):
@@ -77,7 +79,7 @@ def fill(template, labels, kind, out_dir):
             done = choice in ('A', 'B', 'Same')
         ws.cell(row, col['note']).value = (a.get('note') or '').strip() or None
         filled += done
-    out = out_dir / template.replace('.xlsx', '_filled.xlsx')
+    out = out_dir / Path(template).name.replace('.xlsx', '_filled.xlsx')
     wb.save(out)
     return out, filled, n_rows, problems
 
@@ -100,7 +102,7 @@ def main():
     for (kind, r), items in sorted(labels.items()):
         if not items:
             continue
-        template = (SEV if kind == 'sev' else PAIR)[r]
+        template = {'sev': SEV, 'pair': PAIR, 'relab': RELAB}[kind][r]
         out, filled, total, problems = fill(template, items, kind, out_dir)
         print(f'{out}: {filled}/{total} complete')
         for p in problems:
